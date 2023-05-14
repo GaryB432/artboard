@@ -1,0 +1,28 @@
+name: Build
+on:
+  push:
+    branches:
+      - master
+      - release/*
+  pull_request:
+
+jobs:
+  main:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: svelte-kit sync
+        run: |
+          npm ci
+          npx svelte-kit sync
+      - name: lint and build
+        run: |
+          nx format:check
+          nx lint
+          nx test
+          nx build
