@@ -1,0 +1,28 @@
+{
+  "tasksRunnerOptions": {
+    "default": {
+      "runner": "nx/tasks-runners/default",
+      "options": {
+        "cacheableOperations": ["build", "test"]
+      }
+    }
+  },
+  "defaultBase": "property-not-used-see-affected-defaultBase",
+  "defaultProject": "artboard",
+  "affected": {
+    "defaultBase": "master"
+  },
+  "generators": {
+    "@gb-nx/svelte:component": {
+      "directory": "components",
+      "language": "ts"
+    },
+    "@gb-nx/svelte:route": {
+      "language": "ts"
+    },
+    "@gb-nx/workspace:module": {
+      "directory": "src/lib",
+      "unitTestRunner": "vitest"
+    }
+  }
+}
