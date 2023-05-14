@@ -22,7 +22,7 @@ jobs:
           npx svelte-kit sync
       - name: lint and build
         run: |
-          nx format:check
-          nx lint
-          nx test
-          nx build
+          npx nx format:check
+          npx nx lint
+          npx nx test
+          npx nx build
