@@ -108,6 +108,10 @@
   }
 </script>
 
+<svelte:head>
+  <title>artboard - carnivals</title>
+</svelte:head>
+
 <div class="content">
   <div class="canvas-box">
     <canvas bind:this={canvas} />

@@ -6,4 +6,12 @@
 <p>
   Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation
 </p>
-<a href="{base}/carnivals">carnivals</a>
+<p>
+  <a href="{base}/carnivals">carnivals</a>
+</p>
+
+<style>
+  a {
+    text-decoration: underline;
+  }
+</style>
