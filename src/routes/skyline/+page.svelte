@@ -68,16 +68,19 @@
   });
 </script>
 
-<section class="main">
-  <canvas bind:this={canvas} />
+<section class="container">
+  <canvas
+    bind:this={canvas}
+    style="width: {canvasWidth}px; height: {canvasHeight}px"
+  />
   <input bind:value={overallSpeed} type="range" max="10" min="0" />
 </section>
 
 <style>
-  .main {
+  .container {
     display: flex;
     flex-direction: column;
-    height: 80vh;
+    align-items: center;
   }
 
   input[type="range" i] {
