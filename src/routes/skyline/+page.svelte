@@ -2,10 +2,10 @@
   // http://thenewcode.com/757/Playing-With-The-HTML5-range-Slider-Input
   import { onMount } from "svelte";
   import { layers } from "./street";
+  import { Vector } from "$lib/Vector";
 
   let canvas: HTMLCanvasElement;
-  let canvasHeight = 400;
-  let canvasWidth = 600;
+  let canvasSize = new Vector(600, 400);
   let ctx: CanvasRenderingContext2D;
   let fps = 0;
   let lastCalledTime = 0;
@@ -16,7 +16,7 @@
     ctx.beginPath();
     const rx = 80;
     const ry = 30;
-    const wmid = canvasWidth / 2;
+    const wmid = canvasSize.x / 2;
     const grd = ctx.createLinearGradient(wmid, ry * 2, wmid, ry * 3);
     grd.addColorStop(0.5, "white");
     grd.addColorStop(1, "gray");
@@ -30,17 +30,17 @@
     fps = 1 / delta;
     const elapsed = timestamp - start;
     ctx.fillStyle = "skyblue";
-    ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+    ctx.fillRect(0, 0, canvasSize.x, canvasSize.y);
 
     drawCloud();
     for (const layer of layers) {
       const edge = elapsed * layer.speed * overallSpeed;
-      for (let i = 0; i * layer.width < canvasWidth + layer.width; i++) {
+      for (let i = 0; i * layer.width < canvasSize.x + layer.width; i++) {
         const slot = (Math.floor(edge / layer.width) + i) % layer.ys.length;
         const x = (-edge % layer.width) + i * layer.width;
         const val = layer.ys[slot];
         const h = val * layer.storey;
-        const y = canvasHeight - h;
+        const y = canvasSize.y - h;
         const w = layer.width;
         ctx.beginPath();
         ctx.strokeStyle = ctx.fillStyle = layer.fillStyle;
@@ -59,8 +59,11 @@
       throw new Error("no context ");
     }
     ctx = ct;
-    canvas.height = canvasHeight;
-    canvas.width = canvasWidth;
+    const h = document.body.clientHeight;
+    const w = document.body.clientWidth;
+    console.log(h, w);
+    canvas.height = canvasSize.y;
+    canvas.width = canvasSize.x;
     setTimeout(() => {
       requestAnimationFrame((timer) => {
         start = timer;
@@ -71,10 +74,7 @@
 </script>
 
 <section class="container">
-  <canvas
-    bind:this={canvas}
-    style="width: {canvasWidth}px; height: {canvasHeight}px"
-  />
+  <canvas bind:this={canvas} />
   <input bind:value={overallSpeed} type="range" max="30" min="0" />
   <div>fps: {fps.toPrecision(2)}</div>
 </section>
