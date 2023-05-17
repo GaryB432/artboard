@@ -3,12 +3,12 @@
   import { onMount } from "svelte";
   import { layers } from "./street";
 
-  const times: number[] = [];
-  let canvasWidth = 600;
-  let canvasHeight = 400;
   let canvas: HTMLCanvasElement;
+  let canvasHeight = 400;
+  let canvasWidth = 600;
   let ctx: CanvasRenderingContext2D;
   let fps = 0;
+  let lastCalledTime = 0;
   let overallSpeed = 5;
   let start = 0;
 
@@ -25,12 +25,9 @@
     ctx.fill();
   }
   const step = (timestamp: number): void => {
-    const now = performance.now();
-    while (times.length > 0 && times[0] <= now - 1000) {
-      times.shift();
-    }
-    times.push(now);
-    fps = times.length;
+    const delta = (timestamp - lastCalledTime) / 1000;
+    lastCalledTime = timestamp;
+    fps = 1 / delta;
     const elapsed = timestamp - start;
     ctx.fillStyle = "skyblue";
     ctx.fillRect(0, 0, canvasWidth, canvasHeight);
@@ -79,7 +76,7 @@
     style="width: {canvasWidth}px; height: {canvasHeight}px"
   />
   <input bind:value={overallSpeed} type="range" max="30" min="0" />
-  <div>fps: {fps}</div>
+  <div>fps: {fps.toPrecision(2)}</div>
 </section>
 
 <style>
