@@ -3,9 +3,11 @@
   import { onMount } from "svelte";
   import { layers } from "./street";
   import { Vector } from "$lib/Vector";
+  import { fitToAspectRatio } from "$lib/utilities";
 
+  const aspect = new Vector(16, 9);
   let canvas: HTMLCanvasElement;
-  let canvasSize = new Vector(600, 400);
+  let canvasSize: Vector;
   let ctx: CanvasRenderingContext2D;
   let fps = 0;
   let lastCalledTime = 0;
@@ -59,9 +61,10 @@
       throw new Error("no context ");
     }
     ctx = ct;
-    const h = document.body.clientHeight;
-    const w = document.body.clientWidth;
-    console.log(h, w);
+    canvasSize = fitToAspectRatio(
+      new Vector(document.body.clientWidth, document.body.clientHeight),
+      aspect
+    );
     canvas.height = canvasSize.y;
     canvas.width = canvasSize.x;
     setTimeout(() => {
