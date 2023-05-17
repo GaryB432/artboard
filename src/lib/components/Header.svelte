@@ -1,11 +1,12 @@
 <script>
+  import { base } from "$app/paths";
   import GithubAnchor from "./GithubAnchor.svelte";
   let activeTab = 1;
 </script>
 
 <header>
   <span class="text-xl">
-    <a href="./">Artboard</a>
+    <a href="{base}/">Artboard</a>
     <span class="label">A web app for fun</span>
   </span><span class="button-list">
     <GithubAnchor />
@@ -20,8 +21,8 @@
         activeTab = 1;
       }}
       class:active={activeTab === 1}>View Markup</button
-    >
-  </span>
+    ></span
+  >
 </header>
 
 <style>
