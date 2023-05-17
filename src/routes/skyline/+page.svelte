@@ -3,14 +3,15 @@
   import { onMount } from "svelte";
   import { layers } from "./street";
 
-  let start = 0;
-  let frame = 0;
-  let overallSpeed = 5;
+  const times: number[] = [];
   let canvasWidth = 600;
   let canvasHeight = 400;
-
   let canvas: HTMLCanvasElement;
   let ctx: CanvasRenderingContext2D;
+  let fps = 0;
+  let overallSpeed = 5;
+  let start = 0;
+
   function drawCloud() {
     ctx.beginPath();
     const rx = 80;
@@ -24,6 +25,12 @@
     ctx.fill();
   }
   const step = (timestamp: number): void => {
+    const now = performance.now();
+    while (times.length > 0 && times[0] <= now - 1000) {
+      times.shift();
+    }
+    times.push(now);
+    fps = times.length;
     const elapsed = timestamp - start;
     ctx.fillStyle = "skyblue";
     ctx.fillRect(0, 0, canvasWidth, canvasHeight);
@@ -46,7 +53,6 @@
       }
     }
 
-    frame++;
     requestAnimationFrame(step);
   };
 
@@ -61,7 +67,6 @@
     setTimeout(() => {
       requestAnimationFrame((timer) => {
         start = timer;
-        frame = 0;
         step(timer);
       });
     }, 10);
@@ -73,8 +78,8 @@
     bind:this={canvas}
     style="width: {canvasWidth}px; height: {canvasHeight}px"
   />
-  <input bind:value={overallSpeed} type="range" max="10" min="0" />
-  {frame}
+  <input bind:value={overallSpeed} type="range" max="30" min="0" />
+  <div>fps: {fps}</div>
 </section>
 
 <style>
