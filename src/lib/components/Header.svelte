@@ -1,5 +1,6 @@
 <script>
   import GithubAnchor from "./GithubAnchor.svelte";
+  let activeTab = 1;
 </script>
 
 <header>
@@ -8,8 +9,18 @@
     <span class="label">A web app for fun</span>
   </span><span class="button-list">
     <GithubAnchor />
-    <button>Reset to Defaults</button>
-    <button class="active">View Markup</button>
+    <button
+      on:click={() => {
+        activeTab = 0;
+      }}
+      class:active={activeTab === 0}>Reset to Defaults</button
+    >
+    <button
+      on:click={() => {
+        activeTab = 1;
+      }}
+      class:active={activeTab === 1}>View Markup</button
+    >
   </span>
 </header>
 
