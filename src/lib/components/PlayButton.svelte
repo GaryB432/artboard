@@ -31,7 +31,18 @@
   }
 
   button {
+    border: 1px solid #000;
+    border-radius: 5px;
+    background-image: linear-gradient(
+      0deg,
+      rgb(207, 207, 207) 16%,
+      rgb(252, 252, 252) 79%
+    );
     height: 50px;
     width: 50px;
+  }
+
+  button:focus {
+    box-shadow: none;
   }
 </style>
