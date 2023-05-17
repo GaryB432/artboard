@@ -74,6 +74,7 @@
     style="width: {canvasWidth}px; height: {canvasHeight}px"
   />
   <input bind:value={overallSpeed} type="range" max="10" min="0" />
+  {frame}
 </section>
 
 <style>
