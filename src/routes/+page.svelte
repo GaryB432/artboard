@@ -13,6 +13,9 @@
   <li>
     <a href="{base}/skyline">Skyline</a>
   </li>
+  <li>
+    <a href="{base}/three/cuber">ThreeJS Cube</a>
+  </li>
 </ul>
 
 <style>
