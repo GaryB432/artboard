@@ -18,7 +18,7 @@
     "three": "^0.153.0"
   },
   "devDependencies": {
-    "@gb-nx/svelte": "^5.0.0",
+    "@gb-nx/svelte": "^5.1.0",
     "@gb-nx/workspace": "^3.0.0",
     "@sveltejs/adapter-static": "^2.0.2",
     "@sveltejs/kit": "^1.20.2",
