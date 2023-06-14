@@ -7,8 +7,6 @@
       }
     }
   },
-  "defaultBase": "property-not-used-see-affected-defaultBase",
-  "defaultProject": "artboard",
   "affected": {
     "defaultBase": "master"
   },
