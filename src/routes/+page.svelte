@@ -2,10 +2,6 @@
   import { base } from "$app/paths";
 </script>
 
-<h1>Welcome to SvelteKit</h1>
-<p>
-  Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation
-</p>
 <ul>
   <li>
     <a href="{base}/carnivals">Random shapes</a>
@@ -16,6 +12,9 @@
   <li>
     <a href="{base}/three/cuber">ThreeJS Cube</a>
   </li>
+  <li>
+    <a href="{base}/three/cinematic">ThreeJS Cinematic Camera</a>
+  </li>
 </ul>
 
 <style>
@@ -25,6 +24,6 @@
   li {
     background-color: antiquewhite;
     margin: 1em;
-    padding: 1em;
+    padding: 0.5em;
   }
 </style>
