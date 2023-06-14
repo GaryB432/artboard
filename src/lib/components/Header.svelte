@@ -19,7 +19,8 @@
   <span class="text-xl">
     <a href="{base}/">Artboard</a>
     <span class="label">A web app for fun</span>
-  </span><span class="button-list">
+  </span>
+  <span class="button-list">
     <GithubAnchor />
     <button
       on:click={() => {
@@ -34,8 +35,8 @@
         dialog.showModal();
       }}
       class:active={activeTab === 1}>View Markup</button
-    ></span
-  >
+    >
+  </span>
 </header>
 
 <style>

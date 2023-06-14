@@ -17,7 +17,6 @@ let theta = 0;
 // init();
 // animate();
 
-
 function init() {
   camera = new CinematicCamera(
     60,
