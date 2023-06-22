@@ -1,14 +1,14 @@
 <script lang="ts">
   // http://thenewcode.com/757/Playing-With-The-HTML5-range-Slider-Input
-  import { Vector } from "$lib/Vector";
   import { fitToAspectRatio } from "$lib/utilities";
   import { onMount } from "svelte";
+  import { Vector2 } from "three";
   import { layers } from "./street";
 
-  const aspect = new Vector(16, 9);
+  const aspect = new Vector2(16, 9);
   const roughHeaderAndFooterHeight = 100;
   let canvas: HTMLCanvasElement;
-  let canvasSize: Vector;
+  let canvasSize: Vector2;
   let ctx: CanvasRenderingContext2D;
   let fps = 0;
   let lastCalledTime = 0;
@@ -63,7 +63,7 @@
     }
     ctx = ct;
     canvasSize = fitToAspectRatio(
-      new Vector(
+      new Vector2(
         document.body.clientWidth,
         document.body.clientHeight - roughHeaderAndFooterHeight
       ),

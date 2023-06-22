@@ -1,4 +1,4 @@
-import { Vector } from "./Vector";
+import { Vector2 } from "three";
 
 export function clamp(num: number, min: number, max: number): number {
   return Math.min(Math.max(num, min), max);
@@ -27,7 +27,7 @@ export function shuffle<T>(array: T[]): T[] {
   return array;
 }
 
-export function vectorMin(v: Vector): number {
+export function vectorMin(v: Vector2): number {
   return Math.min(v.x, v.y);
 }
 
@@ -37,7 +37,7 @@ export function vectorMin(v: Vector): number {
  * @param aspect The aspect ratio to fit
  * @returns a new Vector for the sized element
  */
-export function fitToAspectRatio(container: Vector, aspect: Vector): Vector {
+export function fitToAspectRatio(container: Vector2, aspect: Vector2): Vector2 {
   const margin = 0.9;
   let x = container.x * margin;
   let y = (x / aspect.x) * aspect.y;
@@ -45,7 +45,7 @@ export function fitToAspectRatio(container: Vector, aspect: Vector): Vector {
     y = container.y * margin;
     x = (y / aspect.y) * aspect.x;
   }
-  return new Vector(x, y);
+  return new Vector2(x, y);
 }
 
 /**

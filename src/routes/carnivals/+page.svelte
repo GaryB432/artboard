@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { Vector } from "$lib/Vector";
   import EasingSelect from "$lib/components/EasingSelect.svelte";
   import PlayButton from "$lib/components/PlayButton.svelte";
   import type { EasingFunction } from "$lib/easings";
@@ -12,6 +11,7 @@
   } from "$lib/shapes";
   import { shuffle } from "$lib/utilities";
   import { onMount } from "svelte";
+  import { Vector2 } from "three";
 
   interface Morph {
     fillStyle: string;
@@ -21,7 +21,7 @@
   }
 
   let canvas: HTMLCanvasElement;
-  let canvasSize: Vector;
+  let canvasSize: Vector2;
   let context: CanvasRenderingContext2D | null;
   let easing: EasingFunction = (n) => n;
   let loopDuration = 3000;
@@ -38,8 +38,8 @@
       throw new Error("shouldn't lerp those");
     }
 
-    const origin = morf.from.origin.clone().mix(morf.to.origin, amount);
-    const size = morf.from.size.clone().mix(morf.to.size, amount);
+    const origin = morf.from.origin.clone().lerp(morf.to.origin, amount);
+    const size = morf.from.size.clone().lerp(morf.to.size, amount);
 
     return {
       type: morf.from.type,
@@ -55,7 +55,7 @@
     }
     canvas.width = cp.offsetWidth;
     canvas.height = cp.offsetHeight - 8;
-    canvasSize = new Vector(canvas.width, canvas.height);
+    canvasSize = new Vector2(canvas.width, canvas.height);
   }
 
   function moveSomeShapes() {

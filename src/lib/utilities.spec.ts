@@ -1,5 +1,5 @@
+import { Vector2 } from "three";
 import { describe, expect, test } from "vitest";
-import { Vector } from "./Vector";
 import {
   clamp,
   fitToAspectRatio,
@@ -18,7 +18,7 @@ describe("Utilities", () => {
   });
 
   test("vectorMin", () => {
-    expect(vectorMin(new Vector(5, 6))).toEqual(5);
+    expect(vectorMin(new Vector2(5, 6))).toEqual(5);
   });
 
   test("ranger", () => {
@@ -40,23 +40,23 @@ describe("Utilities", () => {
 
   test("fitToAspectRatio", (): void => {
     expect(
-      fitToAspectRatio(new Vector(1000, 600), new Vector(16, 9)).toString()
-    ).toEqual("(900,506.25)");
-    expect(fitToAspectRatio(new Vector(1000, 600), new Vector(16, 9))).toEqual(
-      new Vector(900, (900 / 16) * 9)
-    );
-    expect(fitToAspectRatio(new Vector(400, 800), new Vector(8.5, 11))).toEqual(
-      new Vector(360, (360 / 8.5) * 11)
-    );
+      fitToAspectRatio(new Vector2(1000, 600), new Vector2(16, 9))
+    ).toEqual(new Vector2(900, 506.25));
+    expect(
+      fitToAspectRatio(new Vector2(1000, 600), new Vector2(16, 9)).toArray()
+    ).toEqual([900, (900 / 16) * 9]);
+    expect(
+      fitToAspectRatio(new Vector2(400, 800), new Vector2(8.5, 11))
+    ).toEqual(new Vector2(360, (360 / 8.5) * 11));
   });
 
-  test("fitToAspectRatio", (): void => {
-    const res = fitToAspectRatio(new Vector(1000, 600), new Vector(16, 9));
+  test("fitToAspectRatio 2", (): void => {
+    const res = fitToAspectRatio(new Vector2(1000, 600), new Vector2(16, 9));
     expect(res.x).toBeCloseTo(900);
     expect(res.y).toBeCloseTo(506.25);
   });
   test("fitToAspectRatio overflow y", (): void => {
-    const res = fitToAspectRatio(new Vector(100, 100), new Vector(8, 20));
+    const res = fitToAspectRatio(new Vector2(100, 100), new Vector2(8, 20));
     expect(res.x).toBeCloseTo(36);
     expect(res.y).toBeCloseTo((36 / 8) * 20);
   });
