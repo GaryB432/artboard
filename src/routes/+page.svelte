@@ -1,5 +1,6 @@
 <script lang="ts">
   import { base } from "$app/paths";
+  import Typewriter from "$lib/components/Typewriter.svelte";
 </script>
 
 <ul>
@@ -16,6 +17,8 @@
     <a href="{base}/three/cinematic">ThreeJS Cinematic Camera</a>
   </li>
 </ul>
+
+<Typewriter />
 
 <style>
   a {
