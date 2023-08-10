@@ -1,8 +1,9 @@
 <script lang="ts">
+  import easings from "$lib/easings";
   import { onMount } from "svelte";
-  // import { draw } from "svelte/types/runtime/transition";
+  import type { Vec2 } from "three";
 
-  type Particle = { pos: THREE.Vec2 };
+  type Particle = { pos: Vec2 };
 
   const blips: Particle[] = [
     { pos: { x: 50, y: 50 } },
@@ -34,18 +35,61 @@
 
   function wipe() {
     if (!ctx) return;
-    const s = 10;
     ctx.clearRect(0, 0, cvs.width, cvs.height);
 
-    ctx.beginPath;
-    const left = "red";
-    const right = "orange";
-    const steps = 20;
-    for (let y = 0; y < cvs.width; y++) {
+    // ctx.beginPath;
+    const left = "#29BF12";
+    const right = "#ABFF4F";
+    const canvasSize = { x: cvs.width, y: cvs.height };
+    const duration = 4000;
+
+    let starttime: number;
+
+    const drawFrame = (timer: number) => {
+      if (!ctx) {
+        return;
+      }
+      ctx.clearRect(0, 0, canvasSize.x, canvasSize.y);
+      const runtime = timer - starttime;
+      const progress = Math.min(runtime / duration, 1);
+      // const eased = easing(progress);
+      // const eased = progress;
+      const eased = easings["easeInOutQuad"](progress);
+      const xd = canvasSize.x * eased;
       ctx.fillStyle = left;
-      ctx.fillRect(0, 0, y, cvs.height);
-      console.log(y);
-    }
+      ctx.fillRect(0, 0, xd, canvasSize.y);
+      ctx.fillStyle = right;
+      ctx.fillRect(xd + 1, 0, canvasSize.x - xd, canvasSize.y);
+
+      // for (let y = 0; y < cvs.width; y++) {
+      //   ctx.fillStyle = left;
+      //   ctx.fillRect(0, 0, y, cvs.height);
+      //   // console.log(y);
+      // }
+      // for (const morf of morfs) {
+      //   context.fillStyle = morf.fillStyle;
+      //   context.beginPath();
+      //   const shape = clampShape(lerpMorph(morf, eased), canvasSize);
+      //   if (morf.isCircle) {
+      //     let { x, y } = shape.origin;
+      //     context.arc(x, y, shape.size.x, 0, 2 * Math.PI);
+      //     context.fill();
+      //   } else {
+      //     const { x, y } = upperLeft(shape);
+      //     const { x: w, y: h } = shape.size;
+      //     context.fillRect(x, y, w, h);
+      //   }
+      // }
+      if (progress < 1) {
+        requestAnimationFrame((timer) => drawFrame(timer));
+      }
+    };
+
+    requestAnimationFrame((timer) => {
+      starttime = timer;
+      drawFrame(timer);
+    });
+
     // for (const blip of blips) {
     //   console.log(blip);
 
@@ -87,9 +131,9 @@
     </div>
   </div>
   <nav>
-    <button on:click={drawRandoFrame}>go</button>
-    <button on:click={wipe}>stop</button>
-    <button>moar</button>
+    <button on:click={drawRandoFrame}>Go</button>
+    <button on:click={wipe}>Wipe</button>
+    <button disabled>Moar</button>
   </nav>
 </article>
 
@@ -130,13 +174,5 @@
 
   button:hover {
     background-color: rgb(239, 246, 255);
-  }
-  .active {
-    background-color: var(--blue);
-    color: rgb(243, 244, 246);
-  }
-
-  .active:hover {
-    background-color: var(--blue);
   }
 </style>
