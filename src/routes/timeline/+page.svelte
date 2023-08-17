@@ -3,6 +3,7 @@
   import { onMount } from "svelte";
   import { Vector2 } from "three";
 
+  const yearsPerFrame = 4;
   const aspect = new Vector2(16, 9);
   const roughHeaderAndFooterHeight = 100;
   const wheelSpeed = 0.25;
@@ -19,11 +20,19 @@
     drawFrame();
   }
 
-  function drawTicks() {
-    const yearsPerFrame = 6;
-    const yearSize = canvasSize.y / yearsPerFrame;
+  function mousemove(e: MouseEvent) {
+    e.preventDefault();
+    viewPortTop -= e.buttons === 1 ? e.movementY : 0;
+    drawFrame();
+  }
 
-    const year0 = Math.floor(viewPortTop / yearSize);
+  function drawTicks() {
+    const yearSize = canvasSize.y / yearsPerFrame;
+    const fontSize = Math.max(20, yearSize * 0.8);
+    let year0 = Math.floor(viewPortTop / yearSize);
+    if (year0 < 0) {
+      viewPortTop = year0 = 0;
+    }
     const yeary = viewPortTop - year0 * yearSize;
     for (let i = 0; i < yearsPerFrame + 1; i++) {
       const yr = year0 + i;
@@ -33,11 +42,11 @@
       ctx.lineTo(canvasSize.x, topy + yearSize);
       ctx.strokeStyle = "gray";
       ctx.stroke();
-      ctx.save();
-      ctx.font = "20px Tahoma";
+      // ctx.save();
+      ctx.font = `${fontSize}px Tahoma`;
       ctx.fillStyle = "green";
-      ctx.fillText(yr.toString(), 2, topy + yearSize - 10);
-      ctx.restore();
+      ctx.fillText(yr.toString(), fontSize / 4, topy + fontSize);
+      // ctx.restore();
     }
   }
 
@@ -63,6 +72,7 @@
     canvas.height = canvasSize.y;
     canvas.width = canvasSize.x;
     canvas.onwheel = wheel;
+    canvas.onmousemove = mousemove;
     setTimeout(() => {
       requestAnimationFrame(() => {
         drawFrame();
@@ -75,6 +85,7 @@
   <canvas bind:this={canvas} />
   <input bind:value={overallSpeed} type="range" max="30" min="0" />
   <div>fps: {fps.toPrecision(2)}</div>
+  <div>top: {viewPortTop.toFixed(0)}</div>
 </section>
 
 <style>
