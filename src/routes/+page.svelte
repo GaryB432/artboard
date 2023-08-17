@@ -16,6 +16,9 @@
   <li>
     <a href="{base}/three/cinematic">ThreeJS Cinematic Camera</a>
   </li>
+  <li>
+    <a href="{base}/timeline">Timeline Canvas</a>
+  </li>
 </ul>
 
 <Typewriter />
