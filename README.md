@@ -46,8 +46,6 @@ nx dev
 
 [w3c animate](https://www.w3.org/TR/SVG11/animate.html)
 
-[fiddle](http://jsfiddle.net/2pvSX/1/)
-
 [SVG Attribute reference](https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute)
 
 ### elements
