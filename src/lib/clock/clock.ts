@@ -18,7 +18,7 @@ export class Clock {
     if (container) {
       this.context = canvas.getContext('2d');
       if (this.context) {
-        container.className = 'clock';
+        container.classList.add('clock');
         this.context.translate(this.center.x, this.center.y);
         this.context.rotate(-Math.PI / 2);
         container.appendChild(canvas);

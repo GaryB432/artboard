@@ -1,8 +1,18 @@
 <script lang="ts">
   import { base } from "$app/paths";
+  import { Clock } from "$lib/clock/clock";
+  import { onMount } from "svelte";
   import GithubAnchor from "./GithubAnchor.svelte";
+
   let activeTab = 1;
+  let clockContainer: HTMLDivElement | null;
+  let clockOpen = true;
   let dialog: HTMLDialogElement;
+  const clock = new Clock();
+  onMount(() => {
+    clock.init(clockContainer, 36);
+    clock.start();
+  });
 </script>
 
 <dialog bind:this={dialog}>
@@ -20,7 +30,20 @@
     <a href="{base}/">Artboard</a>
     <span class="label">A web app for fun</span>
   </span>
+  <span> here we are </span>
   <span class="button-list">
+    <button
+      on:click={() => {
+        if (clockOpen) {
+          clock.stop();
+          clockOpen = false;
+        } else {
+          clock.start();
+          clockOpen = true;
+        }
+      }}>Go</button
+    >
+    <div class="clocker" bind:this={clockContainer} class:open={clockOpen} />
     <GithubAnchor />
     <button
       on:click={() => {
@@ -106,5 +129,14 @@
   dialog h2 {
     font-weight: 700;
     margin-bottom: 0.5rem;
+  }
+
+  .clocker {
+    transform: scale(0.8);
+    background-color: #ccc;
+  }
+  .clocker.open {
+    transform: scale(1);
+    background-color: unset;
   }
 </style>
