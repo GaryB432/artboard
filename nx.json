@@ -16,7 +16,8 @@
       "language": "ts"
     },
     "@gb-nx/svelte:route": {
-      "language": "ts"
+      "language": "ts",
+      "skipTests": true
     },
     "@gb-nx/workspace:module": {
       "directory": "src/lib",
