@@ -37,10 +37,10 @@
     /* height: 500px; */
     /* height: fit-content; */
 
-    padding: 20px;
-    border: 4px solid var(--blue);
+    padding: 6px;
+    border: 1em solid var(--blue);
     background-color: #8cb7f2;
-    border-radius: 4%;
+    border-radius: 50%;
   }
 
   .button-bar {
