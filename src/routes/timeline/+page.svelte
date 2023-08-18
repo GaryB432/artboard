@@ -3,7 +3,7 @@
   import { onMount } from "svelte";
   import { Vector2 } from "three";
 
-  const yearsPerFrame = 4;
+  const yearsPerFrame = 18;
   const aspect = new Vector2(16, 9);
   const roughHeaderAndFooterHeight = 100;
   const wheelSpeed = 0.25;
@@ -28,7 +28,7 @@
 
   function drawTicks() {
     const yearSize = canvasSize.y / yearsPerFrame;
-    const fontSize = Math.max(20, yearSize * 0.8);
+    const fontSize = Math.max(20, yearSize * 0.5);
     let year0 = Math.floor(viewPortTop / yearSize);
     if (year0 < 0) {
       viewPortTop = year0 = 0;
@@ -37,6 +37,7 @@
     for (let i = 0; i < yearsPerFrame + 1; i++) {
       const yr = year0 + i;
       const topy = yearSize * i - yeary;
+      const padz = (yearSize - fontSize) / 2;
       ctx.beginPath();
       ctx.moveTo(0, topy + yearSize);
       ctx.lineTo(canvasSize.x, topy + yearSize);
@@ -45,7 +46,12 @@
       // ctx.save();
       ctx.font = `${fontSize}px Tahoma`;
       ctx.fillStyle = "green";
-      ctx.fillText(yr.toString(), fontSize / 4, topy + fontSize);
+      ctx.fillText(
+        yr.toString(),
+        2,
+        topy + yearSize - padz,
+        canvasSize.y * 0.7
+      );
       // ctx.restore();
     }
   }
@@ -81,18 +87,34 @@
   });
 </script>
 
-<section class="container">
+<section class="two-up">
   <canvas bind:this={canvas} />
+  <div class="right">
+    <div>I guess we'll be putting some controls or something over here.</div>
+  </div>
+</section>
+<section class="container">
   <input bind:value={overallSpeed} type="range" max="30" min="0" />
   <div>fps: {fps.toPrecision(2)}</div>
   <div>top: {viewPortTop.toFixed(0)}</div>
 </section>
 
 <style>
+  .two-up {
+    margin: 1em 0;
+    display: flex;
+    align-items: flex-start;
+    gap: 2em;
+    justify-content: space-around;
+  }
   .container {
     display: flex;
     flex-direction: column;
     align-items: center;
+  }
+
+  .right {
+    border: thin solid silver;
   }
 
   input[type="range" i] {
