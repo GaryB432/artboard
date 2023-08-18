@@ -130,7 +130,7 @@
       <canvas bind:this={cvs} />
     </div>
   </div>
-  <nav>
+  <nav class="button-bar">
     <button on:click={drawRandoFrame}>Go</button>
     <button on:click={wipe}>Wipe</button>
     <button disabled>Moar</button>
@@ -152,27 +152,5 @@
   canvas {
     border: thin solid green;
   }
-  nav {
-    padding: 0.5em;
-    display: flex;
-    gap: 1em;
-    align-self: center;
-    justify-content: space-around;
-  }
-  button {
-    font-size: 0.875rem;
-    line-height: 1.25rem;
-    cursor: pointer;
-    border-style: none;
-    border-radius: 0.25rem;
-    padding: 0.5rem 1rem;
-    display: inline-block;
-    font-weight: 600;
-    background-color: rgb(243, 244, 246);
-    color: var(--blue);
-  }
-
-  button:hover {
-    background-color: rgb(239, 246, 255);
-  }
+  
 </style>

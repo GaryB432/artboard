@@ -22,3 +22,27 @@ select:focus {
   font-size: 1.25rem;
   line-height: 1.75rem;
 }
+
+nav.button-bar {
+  padding: 0.5em;
+  display: flex;
+  gap: 1em;
+  align-self: center;
+  justify-content: space-around;
+}
+nav.button-bar button {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  cursor: pointer;
+  border-style: none;
+  border-radius: 0.25rem;
+  padding: 0.5rem 1rem;
+  display: inline-block;
+  font-weight: 600;
+  background-color: rgb(243, 244, 246);
+  color: var(--blue);
+}
+
+nav.button-bar button:hover {
+  background-color: rgb(239, 246, 255);
+}
