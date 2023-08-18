@@ -7,10 +7,11 @@
   let activeTab = 1;
   let clockContainer: HTMLDivElement | null;
   let clockOpen = true;
+  $: label = clockOpen ? "Stop Clock" : "Start Clock";
   let dialog: HTMLDialogElement;
   const clock = new Clock();
   onMount(() => {
-    clock.init(clockContainer, 36);
+    clock.init(clockContainer, 100);
     clock.start();
   });
 </script>
@@ -30,18 +31,17 @@
     <a href="{base}/">Artboard</a>
     <span class="label">A web app for fun</span>
   </span>
-  <span> here we are </span>
   <span class="button-list">
     <button
+      class:active={clockOpen}
       on:click={() => {
+        clockOpen = !clockOpen;
         if (clockOpen) {
-          clock.stop();
-          clockOpen = false;
-        } else {
           clock.start();
-          clockOpen = true;
+        } else {
+          clock.stop();
         }
-      }}>Go</button
+      }}>{label}</button
     >
     <div class="clocker" bind:this={clockContainer} class:open={clockOpen} />
     <GithubAnchor />
@@ -108,7 +108,8 @@
   button:hover {
     background-color: rgb(239, 246, 255);
   }
-  .active {
+  .active,
+  .open {
     background-color: var(--blue);
     color: rgb(243, 244, 246);
   }
@@ -132,11 +133,11 @@
   }
 
   .clocker {
-    transform: scale(0.8);
+    display: flex;
+    height: 36px;
     background-color: #ccc;
   }
   .clocker.open {
-    transform: scale(1);
     background-color: unset;
   }
 </style>
