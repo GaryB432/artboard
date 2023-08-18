@@ -1,5 +1,4 @@
-import { Point } from './point';
-import { Clock } from './clock';
+import { Point } from "./point";
 
 export const strokeLine = (
   ctx: CanvasRenderingContext2D,
@@ -9,7 +8,7 @@ export const strokeLine = (
 ): void => {
   ctx.beginPath();
   ctx.lineWidth = drawingStyles.lineWidth || 1;
-  ctx.lineCap = drawingStyles.lineCap || 'round';
+  ctx.lineCap = drawingStyles.lineCap || "round";
   a.moveTo(ctx);
   b.lineTo(ctx);
   ctx.stroke();
@@ -24,7 +23,7 @@ abstract class Hand {
   ) {}
   public draw(ctx: CanvasRenderingContext2D): void {
     strokeLine(ctx, this.tail(), this.head(), {
-      lineCap: 'round',
+      lineCap: "round",
       lineWidth: this.width,
     });
   }

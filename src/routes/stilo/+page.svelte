@@ -152,5 +152,4 @@
   canvas {
     border: thin solid green;
   }
-  
 </style>

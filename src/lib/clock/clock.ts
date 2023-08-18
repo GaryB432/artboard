@@ -1,5 +1,5 @@
-import { HourHand, MilliSecondHand, MinuteHand, SecondHand } from './hand';
-import { Point } from './point';
+import { HourHand, MilliSecondHand, MinuteHand, SecondHand } from "./hand";
+import { Point } from "./point";
 
 export class Clock {
   public hourHand!: HourHand;
@@ -12,13 +12,13 @@ export class Clock {
   private running = false;
   public init(container: HTMLElement | null, size = 200): void {
     this.setSize(size);
-    const canvas = document.createElement('canvas');
-    canvas.setAttribute('width', size.toString());
-    canvas.setAttribute('height', size.toString());
+    const canvas = document.createElement("canvas");
+    canvas.setAttribute("width", size.toString());
+    canvas.setAttribute("height", size.toString());
     if (container) {
-      this.context = canvas.getContext('2d');
+      this.context = canvas.getContext("2d");
       if (this.context) {
-        container.classList.add('clock');
+        container.classList.add("clock");
         this.context.translate(this.center.x, this.center.y);
         this.context.rotate(-Math.PI / 2);
         container.appendChild(canvas);
