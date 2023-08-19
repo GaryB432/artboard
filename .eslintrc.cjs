@@ -4,9 +4,10 @@ module.exports = {
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:svelte/recommended",
+    "plugin:gb/recommended",
   ],
   parser: "@typescript-eslint/parser",
-  plugins: ["@typescript-eslint"],
+  plugins: ["@typescript-eslint", "gb"],
   parserOptions: {
     sourceType: "module",
     ecmaVersion: 2020,
@@ -23,6 +24,9 @@ module.exports = {
       parser: "svelte-eslint-parser",
       parserOptions: {
         parser: "@typescript-eslint/parser",
+      },
+      rules: {
+        "no-inner-declarations": "off",
       },
     },
   ],

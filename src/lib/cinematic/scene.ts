@@ -217,11 +217,11 @@ const resize = () => {
   camera.updateProjectionMatrix();
 };
 
-export const createScene = (el: HTMLCanvasElement) => {
+export function createScene(el: HTMLCanvasElement): void {
   renderer = new THREE.WebGLRenderer({ antialias: true, canvas: el });
   init();
   resize();
   animate();
-};
+}
 
 window.addEventListener("resize", resize);

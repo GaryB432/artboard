@@ -1,9 +1,9 @@
 interface Skyline {
-  storey: number;
+  fillStyle: string;
   speed: number;
+  storey: number;
   width: number;
   ys: number[];
-  fillStyle: string;
 }
 
 export const layers: Skyline[] = [

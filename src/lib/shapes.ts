@@ -4,9 +4,9 @@ import { clamp, ranger, vectorMin } from "./utilities";
 export type ShapeType = "arc" | "rect";
 
 export type Shape = {
-  type: ShapeType;
   origin: Vector2;
   size: Vector2;
+  type: ShapeType;
 };
 
 export function clampVector(vector: Vector2, boundary: Vector2): Vector2 {

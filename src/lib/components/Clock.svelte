@@ -9,7 +9,9 @@
     c.init(container, 400);
     c.start();
   });
-  function drawRandoFrame() {}
+  function drawRandoFrame() {
+    console.log("not yet");
+  }
   function wipe() {
     if (container) {
       wiping = true;
@@ -50,7 +52,7 @@
     border: 1em solid var(--blue);
     background-color: #8cb7f2;
     border-radius: 50%;
-    transition: all 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transition: all 1s cubic-bezier(0.2, 0.9, 0.3, 1.2);
   }
 
   .container.wiping {
