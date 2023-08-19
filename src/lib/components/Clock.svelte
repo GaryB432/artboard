@@ -6,7 +6,7 @@
   let wiping = false;
   const c = new Clock();
   onMount(() => {
-    c.init(container, 400);
+    c.init(container, 100);
     c.start();
   });
   function drawRandoFrame() {}
@@ -47,14 +47,14 @@
 
     padding: 6px;
     /* transform: scale(1); */
-    border: 1em solid var(--blue);
+    border: 4px solid var(--blue);
     background-color: #8cb7f2;
     border-radius: 50%;
-    transition: all 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transition: all 1s ease-in-out;
   }
 
   .container.wiping {
-    transform: scale(1.2) translate(-100px, 15px);
+    transform: scale(2) translate(-80px, 30px);
     /* background-color: orange; */
   }
 
