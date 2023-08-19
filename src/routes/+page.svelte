@@ -1,6 +1,7 @@
 <script lang="ts">
   import { base } from "$app/paths";
   import Clock from "$lib/components/Clock.svelte";
+  import Toner from "$lib/components/Toner.svelte";
   import Typewriter from "$lib/components/Typewriter.svelte";
 </script>
 
@@ -22,7 +23,10 @@
       <a href="{base}/timeline">Timeline Canvas</a>
     </li>
   </ul>
-  <Clock />
+  <section>
+    <Clock />
+    <Toner />
+  </section>
 </section>
 
 <Typewriter />

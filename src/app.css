@@ -24,6 +24,7 @@ select:focus {
 }
 
 nav.button-bar {
+  background-color: white;
   padding: 0.5em;
   display: flex;
   gap: 1em;
@@ -45,4 +46,9 @@ nav.button-bar button {
 
 nav.button-bar button:hover {
   background-color: rgb(239, 246, 255);
+}
+
+.right-bar {
+  background-color: #8cb7f2;
+  padding: 6px;
 }
