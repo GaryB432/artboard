@@ -20,6 +20,17 @@ module.exports = {
   },
   overrides: [
     {
+      files: ["*.ts"],
+      rules: {
+        "no-restricted-imports": [
+          "error",
+          {
+            patterns: ["rxjs", "rxjs/*"],
+          },
+        ],
+      },
+    },
+    {
       files: ["*.svelte"],
       parser: "svelte-eslint-parser",
       parserOptions: {
