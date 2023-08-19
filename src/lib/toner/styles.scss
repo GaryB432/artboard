@@ -1,0 +1,16 @@
+/* You can add global styles to this file, and also import other style files */
+@import url("https://fonts.googleapis.com/css?family=Lato&display=swap");
+
+body {
+  font: 20px "Lato", sans-serif;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  // width: 100vw;
+  gap: 1em;
+}
+
+.meter-container {
+  font-size: 14px;
+  font-weight: bold;
+}
