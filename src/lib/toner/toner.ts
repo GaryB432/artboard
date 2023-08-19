@@ -5,7 +5,7 @@ interface TonePart {
 }
 
 export class Toner {
-  public play(): void {
+  public async play(): Promise<void> {
     const song: TonePart[] = [
       { delay: 0, duration: 0.2, frequency: 523.25 },
       { delay: 0, duration: 0.2, frequency: 440 },
@@ -32,5 +32,12 @@ export class Toner {
       o.stop(stop);
       start += tone.duration;
     }
+
+    return new Promise<void>((success) => {
+      console.log(start);
+      setTimeout(() => {
+        success(void 0);
+      }, start * 1000);
+    });
   }
 }
