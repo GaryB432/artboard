@@ -3,7 +3,6 @@
   import { Clock } from "$lib/clock/clock";
   import { onMount } from "svelte";
   import GithubAnchor from "./GithubAnchor.svelte";
-
   let activeTab = 1;
   let clockContainer: HTMLDivElement | null;
   let clockOpen = true;
