@@ -62,6 +62,9 @@
             S 40.506 11.2 34.766 9.54
             z"
           />
+          <path class="mutey"
+            d="M 7 38 l 34 -34 c 1 -1 2 0 1 1 l -34 34 c -1 1 -2 0 -1 -1 z"
+          />
         </g>
       </svg>
     </button>
@@ -93,23 +96,29 @@
   .button-bar button svg {
     fill: currentColor;
     height: 1em;
-    transform: scale(2);
+    transform: scale(2) translateY(1px);
     border-width: 0;
   }
 
   .button-bar button.mutey {
-    /* border: 2px solid red; */
     /* padding: 2px; */
   }
 
+  .button-bar button svg path.mutey {
+    opacity: 0;
+  }
+
   .button-bar button.muted {
-    background-color: silver;
+    /* background-color: silver; */
   }
 
   .button-bar button.muted svg {
     /* background-color: red; */
-    /* transform: translate(2px, 2px); */
+    transform: scale(2) translate(1px, 1px);
     /* border-style: solid; */
     /* border-width: 2px 0 0 2px; */
+  }
+  .button-bar button.muted svg path.mutey {
+    opacity: 1;
   }
 </style>
