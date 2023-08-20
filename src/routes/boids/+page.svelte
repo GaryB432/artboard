@@ -1,10 +1,10 @@
 <script lang="ts">
   import type { Vec2 } from "three";
 
-  let data = { subject: "boids" };
   interface Boid {
     pos: Vec2;
   }
+
   let boids: Boid[] = [
     { pos: { x: 0, y: 4 } },
     { pos: { x: 10, y: 24 } },
@@ -24,6 +24,11 @@
     // console.log(b);
     // boids = b;
   }
+
+  // const canvasSize = fitToAspectRatio(
+  //   new Vector2(document.body.clientWidth, document.body.clientHeight - 100),
+  //   aspect
+  // );
 </script>
 
 <svelte:head>
@@ -38,25 +43,21 @@
       {/each}
     </svg>
   </div>
-  <div class="buttons">
+  <nav class="button-bar">
     <button on:click={randomOne}>Random</button>
-  </div>
+  </nav>
 </div>
 
-<article class="container">
-  {data.subject} works
-</article>
-
 <style>
-  .container {
-    padding: 1em;
-    border: thin solid silver;
-  }
   .board {
-    border: thin solid green;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1em;
   }
   .board svg {
-    border: thin solid orange;
+    display: block;
+    border: thin solid silver;
     height: 400px;
     width: 600px;
   }
