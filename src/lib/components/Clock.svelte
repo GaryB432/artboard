@@ -4,11 +4,15 @@
 
   let container: HTMLElement | null = null;
   let wiping = false;
+  let muted = true;
   const c = new Clock();
   onMount(() => {
     c.init(container, 100);
     c.start();
   });
+  function toggleMute() {
+    muted = !muted;
+  }
   function drawRandoFrame() {
     console.log("not yet");
   }
@@ -27,16 +31,12 @@
   <nav class="button-bar">
     <button on:click={drawRandoFrame}>Go</button>
     <button on:click={wipe}>Wipe</button>
-    <button>
+    <button on:click={toggleMute} class="mutey" class:muted>
       <svg
         version="1.1"
-        id="Capa_1"
         xmlns="http://www.w3.org/2000/svg"
         xmlns:xlink="http://www.w3.org/1999/xlink"
-        x="0px"
-        y="0px"
-        viewBox="0 0 46.004 46.004"
-        style="enable-background:new 0 0 46.004 46.004;"
+        viewBox="0 0 46 46"
         xml:space="preserve"
       >
         <g>
@@ -46,7 +46,7 @@
 		c0.05,0.046,0.104,0.086,0.161,0.12c0.492,0.297,1.037,0.446,1.582,0.446c0.517-0.001,1.033-0.134,1.508-0.402
 		c0.999-0.564,1.596-1.595,1.596-2.756V3.158C31.489,1.997,30.892,0.967,29.893,0.402z M29.489,42.845
 		c0,0.431-0.217,0.81-0.579,1.015c-0.155,0.087-0.548,0.255-1,0.026L14.489,31.557v-4.556c0-0.553-0.447-1-1-1s-1,0.447-1,1v3.996
-		l-9,0.004v-17h9v4c0,0.553,0.447,1,1,1s1-0.447,1-1v-4.536l13.405-11.34c0.461-0.242,0.86-0.07,1.016,0.018
+		l-9,0v-17h9v4c0,0.553,0.447,1,1,1s1-0.447,1-1v-4.536l13.405-11.34c0.461-0.242,0.86-0.07,1.016,0.018
 		c0.362,0.205,0.579,0.584,0.579,1.015V42.845z"
           />
           <path
@@ -85,7 +85,24 @@
 
   .button-bar button svg {
     fill: currentColor;
-    stroke-width: 4px;
     height: 1em;
+    transform: scale(2);
+    border-width: 0;
+  }
+
+  .button-bar button.mutey {
+    /* border: 2px solid red; */
+    /* padding: 2px; */
+  }
+
+  .button-bar button.muted {
+    background-color: silver;
+  }
+
+  .button-bar button.muted svg {
+    /* background-color: red; */
+    /* transform: translate(2px, 2px); */
+    /* border-style: solid; */
+    /* border-width: 2px 0 0 2px; */
   }
 </style>
