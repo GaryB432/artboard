@@ -62,8 +62,10 @@
             S 40.506 11.2 34.766 9.54
             z"
           />
-          <path class="mutey"
-            d="M 7 38 l 34 -34 c 1 -1 2 0 1 1 l -34 34 c -1 1 -2 0 -1 -1 z"
+          <path
+            class="mutey"
+            transform="translate(0 41) rotate(-45)"
+            d="M 0 0 v 5 h 59 v -5 z"
           />
         </g>
       </svg>
