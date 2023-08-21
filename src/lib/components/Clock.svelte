@@ -109,12 +109,12 @@
   }
 
   .button-bar button.muted {
-    /* background-color: silver; */
+    background-color: #cfcfcf;
   }
 
   .button-bar button.muted svg {
     /* background-color: red; */
-    transform: scale(2) translate(1px, 1px);
+    transform: scale(2) translate(1px, 2px);
     /* border-style: solid; */
     /* border-width: 2px 0 0 2px; */
   }
