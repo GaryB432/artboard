@@ -2,9 +2,26 @@
   import { Clock } from "$lib/clock/clock";
   import { onMount } from "svelte";
 
+  interface Point {
+    x: number;
+    y: number;
+  }
+
   let container: HTMLElement | null = null;
   let wiping = false;
   let muted = true;
+  const v = 2;
+  const t = 46;
+  const diag = t - 3.835;
+
+  const muteyd = [
+    `M ${0.835} ${t - 2.835}`,
+    `c ${-v} ${v} 0 ${v * 2} ${v} ${v}`,
+    `l ${diag} ${-diag}`,
+    `c ${v} ${-v} 0 ${-v * 2} ${-v} ${-v} `,
+    `z`,
+  ].join(" ");
+  console.log(muteyd);
   const c = new Clock();
   onMount(() => {
     c.init(container, 100);
@@ -62,11 +79,7 @@
             S 40.506 11.2 34.766 9.54
             z"
           />
-          <path
-            class="mutey"
-            transform="translate(0 41) rotate(-45)"
-            d="M 0 0 v 5 h 59 v -5 z"
-          />
+          <path class="mutey" d={muteyd} />
         </g>
       </svg>
     </button>
@@ -99,7 +112,6 @@
     fill: currentColor;
     height: 1em;
     transform: scale(2) translateY(1px);
-    border-width: 0;
   }
 
   .button-bar button.mutey {
@@ -110,17 +122,20 @@
     opacity: 0;
   }
 
+  /*
   .button-bar button.muted {
     background-color: #cfcfcf;
   }
 
   .button-bar button.muted svg {
-    /* background-color: red; */
+    background-color: red;
     transform: scale(2) translate(1px, 2px);
-    /* border-style: solid; */
-    /* border-width: 2px 0 0 2px; */
+    border-style: solid;
+    border-width: 2px 0 0 2px;
   }
+ */
+
   .button-bar button.muted svg path.mutey {
-    opacity: 1;
+    opacity: 0.75;
   }
 </style>
