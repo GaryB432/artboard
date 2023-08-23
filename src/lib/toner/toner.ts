@@ -1,24 +1,18 @@
-interface TonePart {
+export interface TonePart {
   delay: number;
   duration: number;
   frequency: number;
 }
 
 export class Toner {
-  public async play(): Promise<void> {
-    const song: TonePart[] = [
-      { delay: 0, duration: 0.2, frequency: 523.25 },
-      { delay: 0, duration: 0.2, frequency: 440 },
-      { delay: 0, duration: 0.3, frequency: 523.25 },
-      { delay: 0, duration: 0.2, frequency: 493.88 },
-    ];
-    const attack = 0.005;
+  public async play(tune: TonePart[]): Promise<void> {
+    const attack = 0.0005;
     const decay = attack;
     let start = 0;
     const ctx = new AudioContext();
     const g = ctx.createGain();
     g.connect(ctx.destination);
-    for (const tone of song) {
+    for (const tone of tune) {
       start += tone.delay;
       const stop = start + tone.duration;
       const o = ctx.createOscillator();
@@ -34,7 +28,6 @@ export class Toner {
     }
 
     return new Promise<void>((success) => {
-      console.log(start);
       setTimeout(() => {
         success(void 0);
       }, start * 1000);

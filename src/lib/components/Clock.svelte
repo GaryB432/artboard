@@ -1,5 +1,6 @@
 <script lang="ts">
   import { Clock } from "$lib/clock/clock";
+  import { Toner } from "$lib/toner/toner";
   import { onMount } from "svelte";
 
   interface Point {
@@ -10,6 +11,7 @@
   let container: HTMLElement | null = null;
   let wiping = false;
   let muted = true;
+  const clock = new Clock();
   const v = 2;
   const t = 46;
   const diag = t - 3.835;
@@ -22,10 +24,27 @@
     `z`,
   ].join(" ");
   console.log(muteyd);
-  const c = new Clock();
   onMount(() => {
-    c.init(container, 100);
-    c.start();
+    clock.init(container, 100);
+    clock.onTick = (tick) => {
+      if (muted) {
+        return;
+      }
+      const toner = new Toner();
+      const sounds = [{ delay: 0, duration: 0.2, frequency: 180 }];
+      if (tick.second < 1) {
+        void sounds.splice(0, 1, { delay: 0, duration: 0.8, frequency: 440 });
+        console.log("beep");
+      }
+      if (tick.second > 49) {
+        sounds.unshift({ delay: 0, duration: 0.3, frequency: 230 });
+      }
+      if (tick.second < 56) {
+        toner.play(sounds);
+      }
+      // console.log(tick);
+    };
+    clock.start();
   });
   function toggleMute() {
     muted = !muted;

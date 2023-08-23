@@ -32,12 +32,10 @@ nav.button-bar {
   justify-content: space-around;
 }
 nav.button-bar button {
-  border-width: 1px;
   font-size: 0.875rem;
   line-height: 1.25rem;
   cursor: pointer;
-  border-color: transparent;
-  border-style: solid;
+  border-style: none;
   border-radius: 0.25rem;
   padding: 0.5rem 1rem;
   display: inline-block;

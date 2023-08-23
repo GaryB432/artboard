@@ -1,15 +1,28 @@
 import { HourHand, MilliSecondHand, MinuteHand, SecondHand } from "./hand";
 import { Point } from "./point";
 
+export interface TickEvent {
+  hour: number;
+  milli: number;
+  minute: number;
+  second: number;
+}
+
 export class Clock {
   public hourHand!: HourHand;
   public minuteHand!: MinuteHand;
   public msHand!: MilliSecondHand;
+  public onTick?: ((e: TickEvent) => void) | null = null;
   public secondHand!: SecondHand;
+  public soundMuted = true;
+
   private center!: Point;
   private context: CanvasRenderingContext2D | null = null;
+  private lastMilli = 0;
   private radius!: number;
   private running = false;
+  private timeStart = 0;
+
   public init(container: HTMLElement | null, size = 200): void {
     this.setSize(size);
     const canvas = document.createElement("canvas");
@@ -44,14 +57,15 @@ export class Clock {
     if (!this.context) {
       return;
     }
+    this.timeStart = 0;
     this.running = true;
-    this.draw(new Date(0, 0, 0, 0, 0, 0, 0));
+    requestAnimationFrame((timer) => {
+      this.timeStart = timer;
+      this.step(timer);
+    });
   }
   public stop(): void {
     this.running = false;
-    window.requestAnimationFrame(() =>
-      this.draw(new Date(0, 0, 0, 0, 0, 0, 0))
-    );
   }
 
   private clearFace(): void {
@@ -62,22 +76,6 @@ export class Clock {
         this.radius * 2,
         this.radius * 2
       );
-    }
-  }
-
-  private draw(now: Date): void {
-    if (!this.context) {
-      return;
-    }
-    this.clearFace();
-    this.initFace();
-    this.setHands(now);
-    this.msHand.draw(this.context);
-    this.secondHand.draw(this.context);
-    this.minuteHand.draw(this.context);
-    this.hourHand.draw(this.context);
-    if (this.running) {
-      window.requestAnimationFrame(() => this.draw(new Date()));
     }
   }
 
@@ -101,14 +99,52 @@ export class Clock {
     }
   }
 
-  private setHands(date: Date): void {
+  private setHands(timeInfo: TickEvent): void {
+    const date = new Date();
+    // const millis = date.getMilliseconds();
     const sweep = true;
-    const seconds = date.getSeconds();
-    const ms = seconds + date.getMilliseconds() / 1000;
-    this.msHand.value = (date.getMilliseconds() / 1000) * 360;
+    const seconds = timeInfo.second;
+    const ms = seconds + timeInfo.milli / 1000;
+    this.msHand.value = (timeInfo.milli / 1000) * 360;
     this.secondHand.value = sweep ? ms : seconds;
-    this.minuteHand.value = date.getMinutes() + ms / 60;
+    this.minuteHand.value = timeInfo.minute + ms / 60;
     this.hourHand.value =
-      ((date.getHours() + 24) % 12 || 12) + this.minuteHand.value / 60;
+      ((timeInfo.hour + 24) % 12 || 12) + this.minuteHand.value / 60;
   }
+
+  private step = (timestamp: number): void => {
+    if (!this.context) {
+      throw new Error("try a context");
+    }
+    // const delta = (timestamp - this.lastCalledTime) / 1000;
+    const now = new Date();
+    const nowInfo: TickEvent = {
+      hour: now.getHours(),
+      minute: now.getMinutes(),
+      second: now.getSeconds(),
+      milli: now.getMilliseconds(),
+    };
+
+    const elapsed = timestamp - this.timeStart;
+
+    const fel = Math.floor(elapsed / 1000);
+
+    if (nowInfo.milli < this.lastMilli && this.onTick) {
+      // 0-59 so 0 will be less than 59
+      this.onTick(nowInfo);
+    }
+
+    this.clearFace();
+    this.initFace();
+    this.setHands(nowInfo);
+
+    this.msHand.draw(this.context);
+    this.secondHand.draw(this.context);
+    this.minuteHand.draw(this.context);
+    this.hourHand.draw(this.context);
+    this.lastMilli = nowInfo.milli;
+    if (this.running) {
+      requestAnimationFrame(this.step);
+    }
+  };
 }

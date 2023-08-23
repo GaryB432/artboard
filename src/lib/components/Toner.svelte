@@ -45,7 +45,12 @@
     <button
       on:click={async () => {
         playing = true;
-        await toner.play();
+        await toner.play([
+          { delay: 0, duration: 0.2, frequency: 523.25 },
+          { delay: 0, duration: 0.2, frequency: 440 },
+          { delay: 0, duration: 0.3, frequency: 523.25 },
+          { delay: 0, duration: 0.2, frequency: 493.88 },
+        ]);
         playing = false;
       }}>Play</button
     >

@@ -1,9 +1,11 @@
+/* eslint-disable */
+// TODO remove rxjs stuff
 import { Subject } from "rxjs";
 import type {
   AnimationOtherAttributes,
   AnimationTimingAttributes,
   AnimationValueAttributes,
-} from "../app/attributes";
+} from "../attributes";
 
 type AnimateAttributes = AnimationValueAttributes &
   AnimationTimingAttributes &
