@@ -24,19 +24,25 @@ export class Clock {
   private timeStart = 0;
 
   public init(container: HTMLElement | null, size = 200): void {
+    
+    if (!container) {
+      return;
+    }
+    
+    let canvas = container.querySelector<HTMLCanvasElement>("canvas");
+    if (!canvas) {
+      canvas = document.createElement("canvas");
+      container.appendChild(canvas);
+    }
     this.setSize(size);
-    const canvas = document.createElement("canvas");
     canvas.setAttribute("width", size.toString());
     canvas.setAttribute("height", size.toString());
-    if (container) {
-      this.context = canvas.getContext("2d");
-      if (this.context) {
-        container.classList.add("clock");
-        this.context.translate(this.center.x, this.center.y);
-        this.context.rotate(-Math.PI / 2);
-        container.appendChild(canvas);
-        this.stop();
-      }
+    this.context = canvas.getContext("2d");
+    if (this.context) {
+      container.classList.add("clock");
+      this.context.translate(this.center.x, this.center.y);
+      this.context.rotate(-Math.PI / 2);
+      this.stop();
     }
   }
 
