@@ -23,7 +23,6 @@
     `c ${v} ${-v} 0 ${-v * 2} ${-v} ${-v} `,
     `z`,
   ].join(" ");
-  console.log(muteyd);
   onMount(() => {
     clock.init(container, 100);
     clock.onTick = (tick) => {
@@ -34,7 +33,6 @@
       const sounds = [{ delay: 0, duration: 0.2, frequency: 180 }];
       if (tick.second < 1) {
         void sounds.splice(0, 1, { delay: 0, duration: 0.8, frequency: 440 });
-        console.log("beep");
       }
       if (tick.second > 49) {
         sounds.unshift({ delay: 0, duration: 0.3, frequency: 230 });
