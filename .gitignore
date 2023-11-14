@@ -1,4 +1,5 @@
 .DS_Store
+.nx/cache
 node_modules
 /build
 /.svelte-kit
@@ -6,8 +7,6 @@ node_modules
 .env
 .env.*
 !.env.example
+migrations.json
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
-migrations.json
-
-.nx/cache
