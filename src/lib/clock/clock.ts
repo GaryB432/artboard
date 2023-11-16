@@ -24,11 +24,10 @@ export class Clock {
   private timeStart = 0;
 
   public init(container: HTMLElement | null, size = 200): void {
-    
     if (!container) {
       return;
     }
-    
+
     let canvas = container.querySelector<HTMLCanvasElement>("canvas");
     if (!canvas) {
       canvas = document.createElement("canvas");
