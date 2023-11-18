@@ -207,10 +207,15 @@
   function typewritePhrase() {
     phrase = "";
     const n = `${randomMember(adjectives)} ${randomMember(nouns)}`;
+    let spaces = 0;
     for (let c = 0; c < n.length; c++) {
+      const ch = n.charAt(c);
+      if (ch === " ") {
+        spaces += 1;
+      }
       setTimeout(() => {
-        phrase = phrase.concat(n.charAt(c));
-      }, 100 * c);
+        phrase = phrase.concat(ch);
+      }, 100 * (c + spaces * 3));
     }
   }
   typewritePhrase();
@@ -231,6 +236,8 @@
     align-items: center;
     max-width: 30ch;
     font-size: 2rem;
+    padding: 0.5rem;
+    margin: 0.5rem;
   }
   button {
     display: inline-block;
