@@ -12,7 +12,7 @@
       "skipTests": true
     },
     "@gb-nx/workspace:module": {
-      "directory": "src/lib",
+      "directory": "lib",
       "unitTestRunner": "vitest"
     }
   },
