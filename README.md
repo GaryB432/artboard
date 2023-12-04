@@ -2,7 +2,8 @@
 
 svelte-kit playground
 
-[![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/) [![Build](https://github.com/GaryB432/artboard/actions/workflows/azure-static-web-apps-gentle-ground-0eb139010.yml/badge.svg)](https://github.com/GaryB432/artboard/actions/workflows/azure-static-web-apps-gentle-ground-0eb139010.yml)
+[![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
+[![Build](https://github.com/GaryB432/artboard/actions/workflows/ci.yml/badge.svg)](https://github.com/GaryB432/artboard/actions/workflows/ci.yml)
 
 On line at https://gentle-ground-0eb139010.3.azurestaticapps.net/
 and at https://artboard.nabors-place.com through a record at godaddy.
