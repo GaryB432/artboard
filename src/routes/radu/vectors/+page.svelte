@@ -174,9 +174,20 @@
   }
 </script>
 
-<canvas
-  bind:this={myCanvas}
-  width="500px"
-  height="500px"
-  style="background-color: darkred; border: 3px solid green;"
-/>
+<main>
+  <canvas
+    bind:this={myCanvas}
+    width="500px"
+    height="500px"
+    style="background-color: darkred"
+  />
+</main>
+
+<style>
+  main {
+    display: flex;
+    margin: 0 2rem;
+    border: thin solid blue;
+    justify-content: center;
+  }
+</style>
