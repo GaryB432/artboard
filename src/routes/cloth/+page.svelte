@@ -82,17 +82,17 @@
 
       this.vy = this.vx = 0;
 
-      if (this.x >= canvas.width) {
-        this.px = canvas.width + (canvas.width - this.px) * bounce;
-        this.x = canvas.width;
+      if (this.x >= canvasSize.x) {
+        this.px = canvasSize.x + (canvasSize.x - this.px) * bounce;
+        this.x = canvasSize.x;
       } else if (this.x <= 0) {
         this.px *= -1 * bounce;
         this.x = 0;
       }
 
-      if (this.y >= canvas.height) {
-        this.py = canvas.height + (canvas.height - this.py) * bounce;
-        this.y = canvas.height;
+      if (this.y >= canvasSize.y) {
+        this.py = canvasSize.y + (canvasSize.y - this.py) * bounce;
+        this.y = canvasSize.y;
       } else if (this.y <= 0) {
         this.py *= -1 * bounce;
         this.y = 0;
@@ -175,10 +175,9 @@
   class Cloth {
     points: Point[] = [];
     constructor() {
-      console.log(canvas);
       if (!canvas) return;
 
-      let startX = canvas.width / 2 - (clothX * spacing) / 2;
+      let startX = canvasSize.x / 2 - (clothX * spacing) / 2;
 
       for (let y = 0; y <= clothY; y++) {
         for (let x = 0; x <= clothX; x++) {
@@ -211,7 +210,7 @@
     }
   }
 
-  let canvasSize = new Point(800, 600);
+  let canvasSize = new Point(600, 400);
 
   function setMouse(e: MouseEvent) {
     if (!canvas) return;
@@ -222,20 +221,19 @@
     mouse.y = e.clientY - rect.top;
   }
 
-  
   onMount(() => {
     if (!canvas) return;
-    
+
     ctx = canvas.getContext("2d");
-    
+
     if (!ctx) return;
-    
+
     // canvas.width = window.innerWidth;
-    // canvas.height = window.innerHeight;
+    // canvasSize.y = window.innerHeight;
     canvas.width = canvasSize.x;
     canvas.height = canvasSize.y;
     ctx.strokeStyle = "#555";
-    
+
     let cloth = new Cloth();
 
     (function update(_time) {
@@ -256,7 +254,7 @@
   <canvas
     bind:this={canvas}
     on:mousedown={(e) => {
-      mouse.button = e.which;
+      mouse.button = e.button + 1;
       mouse.down = true;
       setMouse(e);
     }}
@@ -265,57 +263,18 @@
     on:contextmenu={(e) => e.preventDefault()}
   />
   <span>Drag with your mouse, right-click to slice.</span>
-  <div>
-    <a href="https://github.com/Dissimulate/Tearable-Cloth">Github</a>
-    <a href="https://twitter.com/abro_oks">@abro_oks</a>
-  </div>
 </div>
 
 <style>
   .container {
-    background: #f2f2f2;
     display: flex;
     flex-direction: column;
+    align-items: center;
   }
 
   canvas {
-    display: block;
-    align-self: center;
-    border: thin solid blue;
+    background: #f2f2f2;
   }
-
-  /* * {
-    margin: 0;
-    padding: 0;
-  }
-
-
- 
-  span,
-  div {
-    position: absolute;
-    color: #aaa;
-    bottom: 100px;
-    left: 0;
-    right: 0;
-    width: 100%;
-    margin: auto;
-    font-family: Helvetica;
-    text-align: center;
-  }
-
-  div {
-    bottom: 60px;
-  }
-
-  div a {
-    text-decoration: none;
-    color: #2266bb;
-  }
-
-  div a:first-child {
-    margin-right: 20px;
-  } */
 
   @media screen and (min-width: 576px) {
     /* landscape phones */
