@@ -5,7 +5,7 @@ svelte-kit playground
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
 [![Build](https://github.com/GaryB432/artboard/actions/workflows/ci.yml/badge.svg)](https://github.com/GaryB432/artboard/actions/workflows/ci.yml)
 
-On line at https://artboard-nu.vercel.app and at https://artboard.nabors-place.com 
+On line at https://artboard-nu.vercel.app and at https://artboard.nabors-place.com
 
 ## Run locally
 
