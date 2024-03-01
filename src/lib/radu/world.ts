@@ -12,6 +12,7 @@ export class World {
   public roadBorders: Segment[] = [];
   public buildings: Building[] = [];
   public trees: Tree[] = [];
+  public markings: unknown[] = [];
   public constructor(
     public graph: Graph,
     public roadWidth = 100,
@@ -32,7 +33,9 @@ export class World {
       );
     }
 
-    this.roadBorders = Polygon.union({ polys: this.envelopes.map((e) => e.poly) });
+    this.roadBorders = Polygon.union({
+      polys: this.envelopes.map((e) => e.poly),
+    });
     this.buildings = this.#generateBuildings();
     this.trees = this.#generateTrees();
   }

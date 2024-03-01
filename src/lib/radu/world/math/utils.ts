@@ -1,4 +1,5 @@
 import { Point } from "../primitives/point";
+import type { Segment } from "../primitives/segment";
 
 export function getNearestPoint(
   loc: Point,
@@ -12,6 +13,23 @@ export function getNearestPoint(
     if (dist < minDist && dist < threshold) {
       minDist = dist;
       nearest = point;
+    }
+  }
+  return nearest;
+}
+
+export function getNearestSegment(
+  loc: Point,
+  segments: Segment[],
+  threshold = Number.MAX_SAFE_INTEGER
+): Segment | null {
+  let minDist = Number.MAX_SAFE_INTEGER;
+  let nearest = null;
+  for (const seg of segments) {
+    const dist = seg.distanceToPoint(loc);
+    if (dist < minDist && dist < threshold) {
+      minDist = dist;
+      nearest = seg;
     }
   }
   return nearest;
@@ -47,6 +65,10 @@ export function normalize(p: Point): Point {
 
 export function magnitude(p: Point): number {
   return Math.hypot(p.x, p.y);
+}
+
+export function perpendicular(p: Point) {
+  return new Point(-p.y, p.x);
 }
 
 export function translate(loc: Point, angle: number, offset: number): Point {
@@ -93,6 +115,14 @@ export function lerp(a: number, b: number, t: number) {
 export function lerp2D(A: Point, B: Point, t: number) {
   return new Point(lerp(A.x, B.x, t), lerp(A.y, B.y, t));
 }
+
+// function invLerp(a: number, b: number, v: number) {
+//   return (v - a) / (b - a);
+// }
+
+// function degToRad(degree: number): number {
+//   return (degree * Math.PI) / 180;
+// }
 
 export function getRandomColor() {
   const hue = 290 + Math.random() * 260;
