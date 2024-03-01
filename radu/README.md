@@ -80,7 +80,7 @@ flowchart TB
     end
     subgraph editors
       markingEditor.js
-      graphEditor.js
+      GE>graphEditor.js]
       crossingEditor.js
       stopEditor.js
       startEditor.js
@@ -90,18 +90,43 @@ flowchart TB
       yieldEditor.js
     end
 	  subgraph items
-      tree.js
-      building.js
+      TREE>tree.js]
+      BUILDING>building.js]
     end
     subgraph math
-      utils.js
-      graphf.js
+      UTILS>utils.js]
+      GRAPHF>graphf.js]
     end
     subgraph primitives
-      point.js
-      segment.js
-      polygon.js
-      envelope.js
+      ENVELOPE>envelope.js]
+      POINT>point.js]
+      POLYGON>polygon.js]
+      SEGMENT>segment.js]
     end
 
 ```
+
+```
+D:\USERS\BORT1\DOCUMENTS\GITHUB\ARTBOARD\SRC\LIB\RADU
+│   viewport.ts
+│   world.ts
+│
+└───world
+    ├───editors
+    │       graphEditor.ts
+    │
+    ├───items
+    │       building.ts
+    │       tree.ts
+    │
+    ├───math
+    │       graph.ts
+    │       utils.ts
+    │
+    └───primitives
+            envelope.ts
+            point.ts
+            polygon.ts
+            segment.ts
+```
+
