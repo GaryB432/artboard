@@ -4,6 +4,7 @@ node_modules
 /.svelte-kit
 /keep
 /package
+/radu
 .env
 .env.*
 !.env.example

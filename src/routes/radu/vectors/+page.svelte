@@ -1,4 +1,5 @@
 <script lang="ts">
+  /* eslint-disable */
   import { onMount } from "svelte";
   import type { Vec2 } from "three";
 
