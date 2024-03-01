@@ -58,7 +58,9 @@ export class GraphEditor {
         this.dragging = true;
         return;
       }
-      this.graph.addPoint(this.mouse!);
+      if (this.mouse) {
+        this.graph.addPoint(this.mouse);
+      }
       this.#select(this.mouse);
       this.hovered = this.mouse;
     }

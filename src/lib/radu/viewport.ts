@@ -3,14 +3,13 @@ import { Point } from "./world/primitives/point";
 
 export class Viewport {
   ctx: CanvasRenderingContext2D | null;
-  zoom: number;
-  center: any;
-  offset: any;
-  drag: { start: any; end: any; offset: any; active: boolean };
+  zoom = 1;
+  center: Point;
+  offset: Point;
+  drag: { start: Point; end: Point; offset: Point; active: boolean };
   constructor(public readonly canvas: HTMLCanvasElement) {
     this.ctx = canvas.getContext("2d");
 
-    this.zoom = 1;
     this.center = new Point(canvas.width / 2, canvas.height / 2);
     this.offset = scale(this.center, -1);
 
@@ -24,7 +23,7 @@ export class Viewport {
     this.#addEventListeners();
   }
 
-  reset() {
+  reset(): void {
     if (!this.ctx) return;
     this.ctx.restore();
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -35,7 +34,7 @@ export class Viewport {
     this.ctx.translate(offset.x, offset.y);
   }
 
-  getMouse(evt: MouseEvent, subtractDragOffset = false) {
+  getMouse(evt: MouseEvent, subtractDragOffset = false): Point {
     const p = new Point(
       (evt.offsetX - this.center.x) * this.zoom - this.offset.x,
       (evt.offsetY - this.center.y) * this.zoom - this.offset.y
@@ -43,18 +42,18 @@ export class Viewport {
     return subtractDragOffset ? subtract(p, this.drag.offset) : p;
   }
 
-  getOffset() {
+  getOffset(): Point {
     return add(this.offset, this.drag.offset);
   }
 
-  #addEventListeners() {
+  #addEventListeners(): void {
     this.canvas.addEventListener("wheel", this.#handleMouseWheel.bind(this));
     this.canvas.addEventListener("mousedown", this.#handleMouseDown.bind(this));
     this.canvas.addEventListener("mousemove", this.#handleMouseMove.bind(this));
     this.canvas.addEventListener("mouseup", this.#handleMouseUp.bind(this));
   }
 
-  #handleMouseDown(evt: MouseEvent) {
+  #handleMouseDown(evt: MouseEvent): void {
     if (evt.button == 1) {
       // middle button
       this.drag.start = this.getMouse(evt);
@@ -62,14 +61,14 @@ export class Viewport {
     }
   }
 
-  #handleMouseMove(evt: MouseEvent) {
+  #handleMouseMove(evt: MouseEvent): void {
     if (this.drag.active) {
       this.drag.end = this.getMouse(evt);
       this.drag.offset = subtract(this.drag.end, this.drag.start);
     }
   }
 
-  #handleMouseUp(evt: MouseEvent) {
+  #handleMouseUp(_evt: MouseEvent): void {
     if (this.drag.active) {
       this.offset = add(this.offset, this.drag.offset);
       this.drag = {
@@ -81,7 +80,7 @@ export class Viewport {
     }
   }
 
-  #handleMouseWheel(evt: WheelEvent) {
+  #handleMouseWheel(evt: WheelEvent): void {
     const dir = Math.sign(evt.deltaY);
     const step = 0.1;
     this.zoom += dir * step;

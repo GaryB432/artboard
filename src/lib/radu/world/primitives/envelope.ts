@@ -9,7 +9,7 @@ export class Envelope {
     this.poly = this.#generatePolygon(width, roundness);
   }
 
-  #generatePolygon(width: number, roundness: number) {
+  #generatePolygon(width: number, roundness: number): Polygon {
     const { p1, p2 } = this.skeleton;
 
     const radius = width / 2;
@@ -38,7 +38,7 @@ export class Envelope {
       fill?: string | undefined;
       join?: CanvasLineJoin | undefined;
     }
-  ) {
+  ): void {
     this.poly.draw(ctx, options);
   }
 }

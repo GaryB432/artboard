@@ -4,7 +4,7 @@ export function getNearestPoint(
   loc: Point,
   points: Point[],
   threshold = Number.MAX_SAFE_INTEGER
-) {
+): Point | null {
   let minDist = Number.MAX_SAFE_INTEGER;
   let nearest = null;
   for (const point of points) {
@@ -17,50 +17,55 @@ export function getNearestPoint(
   return nearest;
 }
 
-export function distance(p1: Point, p2: Point) {
+export function distance(p1: Point, p2: Point): number {
   return Math.hypot(p1.x - p2.x, p1.y - p2.y);
 }
 
-export function average(p1: Point, p2: Point) {
+export function average(p1: Point, p2: Point): Point {
   return new Point((p1.x + p2.x) / 2, (p1.y + p2.y) / 2);
 }
 
-export function dot(p1: Point, p2: Point) {
+export function dot(p1: Point, p2: Point): number {
   return p1.x * p2.x + p1.y * p2.y;
 }
 
-export function add(p1: Point, p2: Point) {
+export function add(p1: Point, p2: Point): Point {
   return new Point(p1.x + p2.x, p1.y + p2.y);
 }
 
-export function subtract(p1: Point, p2: Point) {
+export function subtract(p1: Point, p2: Point): Point {
   return new Point(p1.x - p2.x, p1.y - p2.y);
 }
 
-export function scale(p: Point, scaler: number) {
+export function scale(p: Point, scaler: number): Point {
   return new Point(p.x * scaler, p.y * scaler);
 }
 
-export function normalize(p: Point) {
+export function normalize(p: Point): Point {
   return scale(p, 1 / magnitude(p));
 }
 
-export function magnitude(p: Point) {
+export function magnitude(p: Point): number {
   return Math.hypot(p.x, p.y);
 }
 
-export function translate(loc: Point, angle: number, offset: number) {
+export function translate(loc: Point, angle: number, offset: number): Point {
   return new Point(
     loc.x + Math.cos(angle) * offset,
     loc.y + Math.sin(angle) * offset
   );
 }
 
-export function angle(p: Point) {
+export function angle(p: Point): number {
   return Math.atan2(p.y, p.x);
 }
 
-export function getIntersection(A: Point, B: Point, C: Point, D: Point) {
+export function getIntersection(
+  A: Point,
+  B: Point,
+  C: Point,
+  D: Point
+): { x: number; y: number; offset: number } | null {
   const tTop = (D.x - C.x) * (A.y - C.y) - (D.y - C.y) * (A.x - C.x);
   const uTop = (C.y - A.y) * (A.x - B.x) - (C.x - A.x) * (A.y - B.y);
   const bottom = (D.y - C.y) * (B.x - A.x) - (D.x - C.x) * (B.y - A.y);

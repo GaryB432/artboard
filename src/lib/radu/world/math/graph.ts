@@ -7,7 +7,7 @@ export class Graph {
   static load(info: {
     points: { x: number; y: number }[];
     segments: { p1: Point; p2: Point }[];
-  }) {
+  }): Graph {
     const points = info.points.map((i) => new Point(i.x, i.y));
     const segments = info.segments.map(
       (i) =>
@@ -19,15 +19,15 @@ export class Graph {
     return new Graph(points, segments);
   }
 
-  hash() {
+  hash(): string {
     return JSON.stringify(this);
   }
 
-  addPoint(point: Point) {
+  addPoint(point: Point): void {
     this.points.push(point);
   }
 
-  containsPoint(point: Point) {
+  containsPoint(point: Point): Point | undefined {
     return this.points.find((p) => p.equals(point));
   }
 

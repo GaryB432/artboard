@@ -24,7 +24,7 @@ export class World {
     this.generate();
   }
 
-  public generate() {
+  public generate(): void {
     this.envelopes.length = 0;
     for (const seg of this.graph.segments) {
       this.envelopes.push(
@@ -32,12 +32,12 @@ export class World {
       );
     }
 
-    this.roadBorders = Polygon.union(this.envelopes.map((e) => e.poly));
+    this.roadBorders = Polygon.union({ polys: this.envelopes.map((e) => e.poly) });
     this.buildings = this.#generateBuildings();
     this.trees = this.#generateTrees();
   }
 
-  #generateTrees() {
+  #generateTrees(): Tree[] {
     const points = [
       ...this.roadBorders.map((s) => [s.p1, s.p2]).flat(),
       ...this.buildings.map((b) => b.base.points).flat(),
@@ -103,7 +103,7 @@ export class World {
     return trees;
   }
 
-  #generateBuildings() {
+  #generateBuildings(): Building[] {
     const tmpEnvelopes = [];
     for (const seg of this.graph.segments) {
       tmpEnvelopes.push(
@@ -115,7 +115,7 @@ export class World {
       );
     }
 
-    const guides = Polygon.union(tmpEnvelopes.map((e) => e.poly));
+    const guides = Polygon.union({ polys: tmpEnvelopes.map((e) => e.poly) });
 
     for (let i = 0; i < guides.length; i++) {
       const seg = guides[i];
@@ -126,7 +126,7 @@ export class World {
     }
 
     const supports = [];
-    for (let seg of guides) {
+    for (const seg of guides) {
       const len = seg.length() + this.spacing;
       const buildingCount = Math.floor(
         len / (this.buildingMinLength + this.spacing)
@@ -167,7 +167,7 @@ export class World {
     return bases.map((b) => new Building(b));
   }
 
-  draw(ctx: CanvasRenderingContext2D, viewPoint: Point) {
+  draw(ctx: CanvasRenderingContext2D, viewPoint: Point): void {
     for (const env of this.envelopes) {
       env.draw(ctx, { fill: "#BBB", stroke: "#BBB", lineWidth: 15 });
     }

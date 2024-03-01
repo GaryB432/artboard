@@ -10,7 +10,7 @@ export class Polygon {
     }
   }
 
-  public static union(polys: Polygon[]) {
+  public static union({ polys }: { polys: Polygon[] }): Segment[] {
     Polygon.multiBreak(polys);
     const keptSegments = [];
     for (let i = 0; i < polys.length; i++) {
@@ -32,7 +32,7 @@ export class Polygon {
     return keptSegments;
   }
 
-  public static multiBreak(polys: Polygon[]) {
+  public static multiBreak(polys: Polygon[]): void {
     for (let i = 0; i < polys.length - 1; i++) {
       for (let j = i + 1; j < polys.length; j++) {
         Polygon.break(polys[i], polys[j]);
@@ -40,7 +40,7 @@ export class Polygon {
     }
   }
 
-  public static break(poly1: Polygon, poly2: Polygon) {
+  public static break(poly1: Polygon, poly2: Polygon): void {
     const segs1 = poly1.segments;
     const segs2 = poly2.segments;
     for (let i = 0; i < segs1.length; i++) {
@@ -74,8 +74,8 @@ export class Polygon {
   }
 
   public intersectsPoly(poly: Polygon): boolean {
-    for (let s1 of this.segments) {
-      for (let s2 of poly.segments) {
+    for (const s1 of this.segments) {
+      for (const s2 of poly.segments) {
         if (getIntersection(s1.p1, s1.p2, s2.p1, s2.p2)) {
           return true;
         }
