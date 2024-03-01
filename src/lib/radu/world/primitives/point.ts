@@ -1,17 +1,14 @@
-class Point {
-  constructor(x, y) {
-    this.x = x;
-    this.y = y;
-  }
+export class Point {
+  public constructor(public x: number, public y: number) {}
 
-  equals(point) {
+  public equals(point: Point): boolean {
     return this.x == point.x && this.y == point.y;
   }
 
-  draw(
-    ctx,
+  public draw(
+    ctx: CanvasRenderingContext2D,
     { size = 18, color = "black", outline = false, fill = false } = {}
-  ) {
+  ): void {
     const rad = size / 2;
     ctx.beginPath();
     ctx.fillStyle = color;

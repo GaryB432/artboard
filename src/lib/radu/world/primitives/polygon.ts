@@ -1,13 +1,16 @@
-class Polygon {
-  constructor(points) {
-    this.points = points;
-    this.segments = [];
+import { average, getIntersection, getRandomColor } from "../math/utils";
+import { Point } from "./point";
+import { Segment } from "./segment";
+
+export class Polygon {
+  public segments: Segment[] = [];
+  public constructor(public points: Point[]) {
     for (let i = 1; i <= points.length; i++) {
       this.segments.push(new Segment(points[i - 1], points[i % points.length]));
     }
   }
 
-  static union(polys) {
+  public static union(polys: Polygon[]) {
     Polygon.multiBreak(polys);
     const keptSegments = [];
     for (let i = 0; i < polys.length; i++) {
@@ -29,7 +32,7 @@ class Polygon {
     return keptSegments;
   }
 
-  static multiBreak(polys) {
+  public static multiBreak(polys: Polygon[]) {
     for (let i = 0; i < polys.length - 1; i++) {
       for (let j = i + 1; j < polys.length; j++) {
         Polygon.break(polys[i], polys[j]);
@@ -37,7 +40,7 @@ class Polygon {
     }
   }
 
-  static break(poly1, poly2) {
+  public static break(poly1: Polygon, poly2: Polygon) {
     const segs1 = poly1.segments;
     const segs2 = poly2.segments;
     for (let i = 0; i < segs1.length; i++) {
@@ -62,15 +65,15 @@ class Polygon {
     }
   }
 
-  distanceToPoint(point) {
+  public distanceToPoint(point: Point): number {
     return Math.min(...this.segments.map((s) => s.distanceToPoint(point)));
   }
 
-  distanceToPoly(poly) {
+  public distanceToPoly(poly: Polygon): number {
     return Math.min(...this.points.map((p) => poly.distanceToPoint(p)));
   }
 
-  intersectsPoly(poly) {
+  public intersectsPoly(poly: Polygon): boolean {
     for (let s1 of this.segments) {
       for (let s2 of poly.segments) {
         if (getIntersection(s1.p1, s1.p2, s2.p1, s2.p2)) {
@@ -81,12 +84,12 @@ class Polygon {
     return false;
   }
 
-  containsSegment(seg) {
+  public containsSegment(seg: Segment): boolean {
     const midpoint = average(seg.p1, seg.p2);
     return this.containsPoint(midpoint);
   }
 
-  containsPoint(point) {
+  public containsPoint(point: Point): boolean {
     const outerPoint = new Point(-1000, -1000);
     let intersectionCount = 0;
     for (const seg of this.segments) {
@@ -98,26 +101,31 @@ class Polygon {
     return intersectionCount % 2 == 1;
   }
 
-  drawSegments(ctx) {
+  public drawSegments(ctx: CanvasRenderingContext2D): void {
     for (const seg of this.segments) {
       seg.draw(ctx, { color: getRandomColor(), width: 5 });
     }
   }
 
-  draw(
-    ctx,
+  public draw(
+    ctx: CanvasRenderingContext2D,
     {
-      stroke = "blue",
-      lineWidth = 2,
-      fill = "rgba(0,0,255,0.3)",
-      join = "miter",
-    } = {}
-  ) {
+      stroke,
+      lineWidth,
+      fill,
+      join,
+    }: {
+      stroke?: string;
+      lineWidth?: number;
+      fill?: string;
+      join?: CanvasLineJoin;
+    }
+  ): void {
     ctx.beginPath();
-    ctx.fillStyle = fill;
-    ctx.strokeStyle = stroke;
-    ctx.lineWidth = lineWidth;
-    ctx.lineJoin = join;
+    ctx.fillStyle = fill ?? "rgba(0,0,255,0.3)";
+    ctx.strokeStyle = stroke ?? "blue";
+    ctx.lineWidth = lineWidth ?? 2;
+    ctx.lineJoin = join ?? "miter";
     ctx.moveTo(this.points[0].x, this.points[0].y);
     for (let i = 1; i < this.points.length; i++) {
       ctx.lineTo(this.points[i].x, this.points[i].y);

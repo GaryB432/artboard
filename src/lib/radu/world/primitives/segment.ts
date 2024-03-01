@@ -1,26 +1,34 @@
-class Segment {
-  constructor(p1, p2) {
-    this.p1 = p1;
-    this.p2 = p2;
-  }
+import {
+  add,
+  distance,
+  dot,
+  magnitude,
+  normalize,
+  scale,
+  subtract,
+} from "../math/utils";
+import type { Point } from "./point";
 
-  length() {
+export class Segment {
+  public constructor(public p1: Point, public p2: Point) {}
+
+  public length(): number {
     return distance(this.p1, this.p2);
   }
 
-  directionVector() {
+  public directionVector(): Point {
     return normalize(subtract(this.p2, this.p1));
   }
 
-  equals(seg) {
+  public equals(seg: Segment): boolean {
     return this.includes(seg.p1) && this.includes(seg.p2);
   }
 
-  includes(point) {
+  public includes(point: Point): boolean {
     return this.p1.equals(point) || this.p2.equals(point);
   }
 
-  distanceToPoint(point) {
+  public distanceToPoint(point: Point): number {
     const proj = this.projectPoint(point);
     if (proj.offset > 0 && proj.offset < 1) {
       return distance(point, proj.point);
@@ -30,7 +38,7 @@ class Segment {
     return Math.min(distToP1, distToP2);
   }
 
-  projectPoint(point) {
+  public projectPoint(point: Point): { point: Point; offset: number } {
     const a = subtract(point, this.p1);
     const b = subtract(this.p2, this.p1);
     const normB = normalize(b);
@@ -42,7 +50,14 @@ class Segment {
     return proj;
   }
 
-  draw(ctx, { width = 2, color = "black", dash = [] } = {}) {
+  public draw(
+    ctx: CanvasRenderingContext2D,
+    {
+      width = 2,
+      color = "black",
+      dash = [],
+    }: { width?: number; color?: string; dash?: number[] } = {}
+  ): void {
     ctx.beginPath();
     ctx.lineWidth = width;
     ctx.strokeStyle = color;

@@ -1,10 +1,15 @@
-class Envelope {
-  constructor(skeleton, width, roundness = 1) {
+import { angle, subtract, translate } from "../math/utils";
+import { Polygon } from "./polygon";
+import type { Segment } from "./segment";
+
+export class Envelope {
+  poly: Polygon;
+  constructor(public skeleton: Segment, width: number, roundness = 1) {
     this.skeleton = skeleton;
     this.poly = this.#generatePolygon(width, roundness);
   }
 
-  #generatePolygon(width, roundness) {
+  #generatePolygon(width: number, roundness: number) {
     const { p1, p2 } = this.skeleton;
 
     const radius = width / 2;
@@ -25,7 +30,15 @@ class Envelope {
     return new Polygon(points);
   }
 
-  draw(ctx, options) {
+  draw(
+    ctx: CanvasRenderingContext2D,
+    options: {
+      stroke?: string | undefined;
+      lineWidth?: number | undefined;
+      fill?: string | undefined;
+      join?: CanvasLineJoin | undefined;
+    }
+  ) {
     this.poly.draw(ctx, options);
   }
 }

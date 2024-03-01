@@ -1,30 +1,30 @@
-class World {
-  constructor(
-    graph,
-    roadWidth = 100,
-    roadRoundness = 10,
-    buildingWidth = 150,
-    buildingMinLength = 150,
-    spacing = 50,
-    treeSize = 160
+import { Building } from "./world/items/building";
+import { Tree } from "./world/items/tree";
+import type { Graph } from "./world/math/graph";
+import { add, distance, lerp, scale } from "./world/math/utils";
+import { Envelope } from "./world/primitives/envelope";
+import { Point } from "./world/primitives/point";
+import { Polygon } from "./world/primitives/polygon";
+import { Segment } from "./world/primitives/segment";
+
+export class World {
+  public envelopes: Envelope[] = [];
+  public roadBorders: Segment[] = [];
+  public buildings: Building[] = [];
+  public trees: Tree[] = [];
+  public constructor(
+    public graph: Graph,
+    public roadWidth = 100,
+    public roadRoundness = 10,
+    public buildingWidth = 150,
+    public buildingMinLength = 150,
+    public spacing = 50,
+    public treeSize = 160
   ) {
-    this.graph = graph;
-    this.roadWidth = roadWidth;
-    this.roadRoundness = roadRoundness;
-    this.buildingWidth = buildingWidth;
-    this.buildingMinLength = buildingMinLength;
-    this.spacing = spacing;
-    this.treeSize = treeSize;
-
-    this.envelopes = [];
-    this.roadBorders = [];
-    this.buildings = [];
-    this.trees = [];
-
     this.generate();
   }
 
-  generate() {
+  public generate() {
     this.envelopes.length = 0;
     for (const seg of this.graph.segments) {
       this.envelopes.push(
@@ -167,7 +167,7 @@ class World {
     return bases.map((b) => new Building(b));
   }
 
-  draw(ctx, viewPoint) {
+  draw(ctx: CanvasRenderingContext2D, viewPoint: Point) {
     for (const env of this.envelopes) {
       env.draw(ctx, { fill: "#BBB", stroke: "#BBB", lineWidth: 15 });
     }

@@ -1,10 +1,16 @@
-class Building {
-  constructor(poly, height = 200) {
+import { average, getFake3dPoint } from "../math/utils";
+import type { Point } from "../primitives/point";
+import { Polygon } from "../primitives/polygon";
+
+export class Building {
+  base: Polygon;
+  height: number;
+  constructor(poly: Polygon, height = 200) {
     this.base = poly;
     this.height = height;
   }
 
-  draw(ctx, viewPoint) {
+  draw(ctx: CanvasRenderingContext2D, viewPoint: Point) {
     const topPoints = this.base.points.map((p) =>
       getFake3dPoint(p, viewPoint, this.height * 0.6)
     );

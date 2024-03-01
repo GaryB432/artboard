@@ -1,4 +1,10 @@
-function getNearestPoint(loc, points, threshold = Number.MAX_SAFE_INTEGER) {
+import { Point } from "../primitives/point";
+
+export function getNearestPoint(
+  loc: Point,
+  points: Point[],
+  threshold = Number.MAX_SAFE_INTEGER
+) {
   let minDist = Number.MAX_SAFE_INTEGER;
   let nearest = null;
   for (const point of points) {
@@ -11,50 +17,50 @@ function getNearestPoint(loc, points, threshold = Number.MAX_SAFE_INTEGER) {
   return nearest;
 }
 
-function distance(p1, p2) {
+export function distance(p1: Point, p2: Point) {
   return Math.hypot(p1.x - p2.x, p1.y - p2.y);
 }
 
-function average(p1, p2) {
+export function average(p1: Point, p2: Point) {
   return new Point((p1.x + p2.x) / 2, (p1.y + p2.y) / 2);
 }
 
-function dot(p1, p2) {
+export function dot(p1: Point, p2: Point) {
   return p1.x * p2.x + p1.y * p2.y;
 }
 
-function add(p1, p2) {
+export function add(p1: Point, p2: Point) {
   return new Point(p1.x + p2.x, p1.y + p2.y);
 }
 
-function subtract(p1, p2) {
+export function subtract(p1: Point, p2: Point) {
   return new Point(p1.x - p2.x, p1.y - p2.y);
 }
 
-function scale(p, scaler) {
+export function scale(p: Point, scaler: number) {
   return new Point(p.x * scaler, p.y * scaler);
 }
 
-function normalize(p) {
+export function normalize(p: Point) {
   return scale(p, 1 / magnitude(p));
 }
 
-function magnitude(p) {
+export function magnitude(p: Point) {
   return Math.hypot(p.x, p.y);
 }
 
-function translate(loc, angle, offset) {
+export function translate(loc: Point, angle: number, offset: number) {
   return new Point(
     loc.x + Math.cos(angle) * offset,
     loc.y + Math.sin(angle) * offset
   );
 }
 
-function angle(p) {
+export function angle(p: Point) {
   return Math.atan2(p.y, p.x);
 }
 
-function getIntersection(A, B, C, D) {
+export function getIntersection(A: Point, B: Point, C: Point, D: Point) {
   const tTop = (D.x - C.x) * (A.y - C.y) - (D.y - C.y) * (A.x - C.x);
   const uTop = (C.y - A.y) * (A.x - B.x) - (C.x - A.x) * (A.y - B.y);
   const bottom = (D.y - C.y) * (B.x - A.x) - (D.x - C.x) * (B.y - A.y);
@@ -75,20 +81,20 @@ function getIntersection(A, B, C, D) {
   return null;
 }
 
-function lerp(a, b, t) {
+export function lerp(a: number, b: number, t: number) {
   return a + (b - a) * t;
 }
 
-function lerp2D(A, B, t) {
+export function lerp2D(A: Point, B: Point, t: number) {
   return new Point(lerp(A.x, B.x, t), lerp(A.y, B.y, t));
 }
 
-function getRandomColor() {
+export function getRandomColor() {
   const hue = 290 + Math.random() * 260;
   return "hsl(" + hue + ", 100%, 60%)";
 }
 
-function getFake3dPoint(point, viewPoint, height) {
+export function getFake3dPoint(point: Point, viewPoint: Point, height: number) {
   const dir = normalize(subtract(point, viewPoint));
   const dist = distance(point, viewPoint);
   const scaler = Math.atan(dist / 300) / (Math.PI / 2);

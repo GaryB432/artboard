@@ -1,16 +1,19 @@
-class Graph {
-  constructor(points = [], segments = []) {
-    this.points = points;
-    this.segments = segments;
-  }
+import { Point } from "../primitives/point";
+import { Segment } from "../primitives/segment";
 
-  static load(info) {
+export class Graph {
+  constructor(public points: Point[] = [], public segments: Segment[] = []) {}
+
+  static load(info: {
+    points: { x: number; y: number }[];
+    segments: { p1: Point; p2: Point }[];
+  }) {
     const points = info.points.map((i) => new Point(i.x, i.y));
     const segments = info.segments.map(
       (i) =>
         new Segment(
-          points.find((p) => p.equals(i.p1)),
-          points.find((p) => p.equals(i.p2))
+          points.find((p) => p.equals(i.p1))!,
+          points.find((p) => p.equals(i.p2))!
         )
     );
     return new Graph(points, segments);
@@ -20,15 +23,15 @@ class Graph {
     return JSON.stringify(this);
   }
 
-  addPoint(point) {
+  addPoint(point: Point) {
     this.points.push(point);
   }
 
-  containsPoint(point) {
+  containsPoint(point: Point) {
     return this.points.find((p) => p.equals(point));
   }
 
-  tryAddPoint(point) {
+  tryAddPoint(point: Point): boolean {
     if (!this.containsPoint(point)) {
       this.addPoint(point);
       return true;
@@ -36,7 +39,7 @@ class Graph {
     return false;
   }
 
-  removePoint(point) {
+  removePoint(point: Point): void {
     const segs = this.getSegmentsWithPoint(point);
     for (const seg of segs) {
       this.removeSegment(seg);
@@ -44,15 +47,15 @@ class Graph {
     this.points.splice(this.points.indexOf(point), 1);
   }
 
-  addSegment(seg) {
+  addSegment(seg: Segment): void {
     this.segments.push(seg);
   }
 
-  containsSegment(seg) {
+  containsSegment(seg: Segment): Segment | undefined {
     return this.segments.find((s) => s.equals(seg));
   }
 
-  tryAddSegment(seg) {
+  tryAddSegment(seg: Segment): boolean {
     if (!this.containsSegment(seg) && !seg.p1.equals(seg.p2)) {
       this.addSegment(seg);
       return true;
@@ -60,12 +63,12 @@ class Graph {
     return false;
   }
 
-  removeSegment(seg) {
+  removeSegment(seg: Segment): void {
     this.segments.splice(this.segments.indexOf(seg), 1);
   }
 
-  getSegmentsWithPoint(point) {
-    const segs = [];
+  getSegmentsWithPoint(point: Point): Segment[] {
+    const segs: Segment[] = [];
     for (const seg of this.segments) {
       if (seg.includes(point)) {
         segs.push(seg);
@@ -74,12 +77,12 @@ class Graph {
     return segs;
   }
 
-  dispose() {
+  dispose(): void {
     this.points.length = 0;
     this.segments.length = 0;
   }
 
-  draw(ctx) {
+  draw(ctx: CanvasRenderingContext2D): void {
     for (const seg of this.segments) {
       seg.draw(ctx);
     }

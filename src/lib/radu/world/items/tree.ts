@@ -1,12 +1,14 @@
-class Tree {
-  constructor(center, size, height = 200) {
-    this.center = center;
-    this.size = size; // size of the base
-    this.height = height;
+import { getFake3dPoint, lerp, lerp2D, translate } from "../math/utils";
+import type { Point } from "../primitives/point";
+import { Polygon } from "../primitives/polygon";
+
+export class Tree {
+  base: Polygon;
+  constructor(public center: Point, public size: number, public height = 200) {
     this.base = this.#generateLevel(center, size);
   }
 
-  #generateLevel(point, size) {
+  #generateLevel(point: Point, size: number): Polygon {
     const points = [];
     const rad = size / 2;
     for (let a = 0; a < Math.PI * 2; a += Math.PI / 16) {
@@ -17,7 +19,7 @@ class Tree {
     return new Polygon(points);
   }
 
-  draw(ctx, viewPoint) {
+  draw(ctx: CanvasRenderingContext2D, viewPoint: Point) {
     const top = getFake3dPoint(this.center, viewPoint, this.height);
 
     const levelCount = 7;
