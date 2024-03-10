@@ -16,9 +16,9 @@ export abstract class MarkingEditor {
   mouse: Point | null;
   intent: Marking | null;
   markings: Marking[];
-  boundMouseDown?: (evt: any) => void;
-  boundMouseMove?: (evt: any) => void;
-  boundContextMenu?: (evt: any) => any;
+  boundMouseDown?: (evt: MouseEvent) => void;
+  boundMouseMove?: (evt: MouseEvent) => void;
+  boundContextMenu?: (evt: MouseEvent) => void;
   constructor(
     public readonly viewport: Viewport,
     public readonly world: World,
@@ -41,15 +41,15 @@ export abstract class MarkingEditor {
   // to be overwritten
   abstract createMarking(center: Point, directionVector: Point): Marking;
 
-  enable() {
+  enable(): void {
     this.#addEventListeners();
   }
 
-  disable() {
+  disable(): void {
     this.#removeEventListeners();
   }
 
-  #addEventListeners() {
+  #addEventListeners(): void {
     this.boundMouseDown = this.#handleMouseDown.bind(this);
     this.boundMouseMove = this.#handleMouseMove.bind(this);
     this.boundContextMenu = (evt) => evt.preventDefault();
@@ -59,12 +59,18 @@ export abstract class MarkingEditor {
   }
 
   #removeEventListeners() {
-    this.canvas.removeEventListener("mousedown", this.boundMouseDown!);
-    this.canvas.removeEventListener("mousemove", this.boundMouseMove!);
-    this.canvas.removeEventListener("contextmenu", this.boundContextMenu!);
+    if (this.boundMouseDown) {
+      this.canvas.removeEventListener("mousedown", this.boundMouseDown);
+    }
+    if (this.boundMouseMove) {
+      this.canvas.removeEventListener("mousemove", this.boundMouseMove);
+    }
+    if (this.boundContextMenu) {
+      this.canvas.removeEventListener("contextmenu", this.boundContextMenu);
+    }
   }
 
-  #handleMouseMove(evt: MouseEvent) {
+  #handleMouseMove(evt: MouseEvent): void {
     this.mouse = this.viewport.getMouse(evt, true);
     const seg = getNearestSegment(
       this.mouse,
@@ -83,7 +89,7 @@ export abstract class MarkingEditor {
     }
   }
 
-  #handleMouseDown(evt: MouseEvent) {
+  #handleMouseDown(evt: MouseEvent): void {
     if (evt.button == 0) {
       // left click
       if (this.intent) {
@@ -91,11 +97,11 @@ export abstract class MarkingEditor {
         this.intent = null;
       }
     }
-    if (evt.button == 2) {
+    if (this.mouse && evt.button == 2) {
       // right click
       for (let i = 0; i < this.markings.length; i++) {
         const poly = this.markings[i].poly;
-        if (poly.containsPoint(this.mouse!)) {
+        if (poly.containsPoint(this.mouse)) {
           this.markings.splice(i, 1);
           return;
         }
@@ -103,7 +109,7 @@ export abstract class MarkingEditor {
     }
   }
 
-  display() {
+  display(): void {
     if (this.intent) {
       this.intent.draw(this.ctx);
     }

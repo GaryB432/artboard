@@ -81,13 +81,13 @@ export class GraphEditor {
     }
   }
 
-  dispose() {
+  dispose(): void {
     this.graph.dispose();
     this.selected = null;
     this.hovered = null;
   }
 
-  display() {
+  display(): void {
     if (!this.ctx) return;
     this.graph.draw(this.ctx);
     if (this.hovered) {
