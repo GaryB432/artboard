@@ -5,9 +5,7 @@ export function clamp(num: number, min: number, max: number): number {
 }
 
 export function lerp(start: number, end: number, amount: number): number {
-  const tot = end - start;
-  const dx = tot * amount;
-  return start + dx;
+  return start + (end - start) * amount;
 }
 
 export function shuffle<T>(array: T[]): T[] {
