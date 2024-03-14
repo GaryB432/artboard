@@ -10,62 +10,62 @@
     <li>
       <a href="{base}/boids">boids</a>
       <div>not yet boids</div>
-      <div class="tech"></div>
+      <div class="tech" />
     </li>
     <li>
       <a href="{base}/carnivals">carnivals</a>
       <div>random shapes</div>
-      <div class="tech"></div>
+      <div class="tech" />
     </li>
     <li>
       <a href="{base}/cloth">cloth</a>
       <div>tearable cloth</div>
-      <div class="tech"></div>
+      <div class="tech" />
     </li>
     <li>
       <a href="{base}/radu/vectors">radu/vectors</a>
       <div>vector math and visualization from radu</div>
-      <div class="tech"></div>
+      <div class="tech" />
     </li>
     <li>
       <a href="{base}/radu/virtual-world">radu/virtual-world</a>
       <div>virtual world demo from radu's machine learning course</div>
-      <div class="tech"></div>
+      <div class="tech" />
     </li>
     <li>
       <a href="{base}/siner">siner</a>
       <div>basic sine wave</div>
-      <div class="tech"></div>
+      <div class="tech" />
     </li>
     <li>
       <a href="{base}/skyline">skyline</a>
       <div>skyline</div>
-      <div class="tech"></div>
+      <div class="tech" />
     </li>
     <li>
       <a href="{base}/stilo">stilo</a>
       <div>basic points</div>
-      <div class="tech"></div>
+      <div class="tech" />
     </li>
     <li>
       <a href="{base}/three/cinematic">three/cinematic</a>
       <div>threejs cinematic camera</div>
-      <div class="tech"></div>
+      <div class="tech" />
     </li>
     <li>
       <a href="{base}/three/cuber">three/cuber</a>
       <div>threejs spinning cube basics</div>
-      <div class="tech"></div>
+      <div class="tech" />
     </li>
     <li>
       <a href="{base}/timeline">timeline</a>
       <div>scrollable infinite timeline</div>
-      <div class="tech"></div>
+      <div class="tech" />
     </li>
     <li>
       <a href="{base}/virtual-world">virtual-world</a>
       <div>basic</div>
-      <div class="tech"></div>
+      <div class="tech" />
     </li>
   </ul>
   <section>

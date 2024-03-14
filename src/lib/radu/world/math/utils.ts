@@ -129,7 +129,11 @@ export function getRandomColor(): string {
   return "hsl(" + hue + ", 100%, 60%)";
 }
 
-export function getFake3dPoint(point: Point, viewPoint: Point, height: number): Point {
+export function getFake3dPoint(
+  point: Point,
+  viewPoint: Point,
+  height: number
+): Point {
   const dir = normalize(subtract(point, viewPoint));
   const dist = distance(point, viewPoint);
   const scaler = Math.atan(dist / 300) / (Math.PI / 2);
