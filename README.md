@@ -25,19 +25,9 @@ nx lint
 nx dev
 ```
 
-## Features
-
-- [@gb-nx/svelte - svelte-kit NX plugin](https://www.npmjs.com/package/@gb-nx/svelte)
-- [SvelteKit • Web development, streamlined](https://kit.svelte.dev/)
-- [Nx: Smart, Fast and Extensible Build System](https://nx.dev/)
-- Request animation frame
-- [ai/easings.net: Easing Functions Cheat Sheet](https://github.com/ai/easings.net)
-
 ## Roadmap
 
-- ~~move to nx~~
-
-- fix buzzing sound
+- all things CG
 
 ## Related
 
@@ -55,11 +45,9 @@ nx dev
 
 ### tplant
 
-[tplant/test/Playground/RayTracer at 67ceef69e2f9027270a022b985b24cee636dab25 · bafolts/tplant](https://github.com/bafolts/tplant/tree/67ceef69e2f9027270a022b985b24cee636dab25/test/Playground/RayTracer)
+[tplant/test/Playground/RayTracer](https://github.com/bafolts/tplant/tree/67ceef69e2f9027270a022b985b24cee636dab25/test/Playground/RayTracer)
 
-[tplant/test/Playground/RayTracer at 67ceef69e2f9027270a022b985b24cee636dab25 · bafolts/tplant](https://github.com/bafolts/tplant/tree/67ceef69e2f9027270a022b985b24cee636dab25/test/Playground/RayTracer)
-
-[tplant/test/mermaid/results/playground_raytracer at 67ceef69e2f9027270a022b985b24cee636dab25 · bafolts/tplant](https://github.com/bafolts/tplant/blob/67ceef69e2f9027270a022b985b24cee636dab25/test/mermaid/results/playground_raytracer)
+[tplant/test/mermaid/results/playground_raytracer](https://github.com/bafolts/tplant/blob/67ceef69e2f9027270a022b985b24cee636dab25/test/mermaid/results/playground_raytracer)
 
 ```mermaid
 classDiagram
