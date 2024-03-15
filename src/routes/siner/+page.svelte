@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount } from "svelte";
+  import fmVsAm from "./radio-fm-vs-am-anim.gif";
 
   let frequency = 80;
   let myCanvas: HTMLCanvasElement;
@@ -73,6 +74,7 @@
   <div class="freq">
     {frequency}
   </div>
+  <img src={fmVsAm} alt="anim" />
 </main>
 
 <style>
@@ -85,6 +87,9 @@
     gap: 1rem;
   }
   canvas {
+    align-self: center;
+  }
+  img {
     align-self: center;
   }
 </style>
