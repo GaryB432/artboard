@@ -2,16 +2,18 @@
   import easings from "$lib/easings";
   import { onMount } from "svelte";
 
-  let accuracy = 5;
-  let gravity = 400;
-  let clothY = 28;
-  let clothX = 54;
-  let spacing = 8;
-  let tearDist = 60;
-  let friction = 0.99;
-  let bounce = 0.5;
+  const accuracy = 5;
+  const gravity = 400;
+  const clothY = 28;
+  const clothX = 54;
+  const spacing = 8;
+  const tearDist = 60;
+  const friction = 0.99;
+  const bounce = 0.5;
   let canvas: HTMLCanvasElement | null = null;
   let ctx: CanvasRenderingContext2D | null = null;
+
+  const canvasSize = { x: 600, y: 400 };
 
   let cloth: Cloth;
 
@@ -33,7 +35,7 @@
     public vy: number;
     public pinX: number | null;
     public pinY: number | null;
-    public constraints: Constraint[];
+    #constraints: Constraint[];
     public constructor(public x: number, public y: number) {
       this.px = x;
       this.py = y;
@@ -42,7 +44,7 @@
       this.pinX = null;
       this.pinY = null;
 
-      this.constraints = [];
+      this.#constraints = [];
     }
 
     public update(delta: number) {
@@ -58,7 +60,7 @@
           this.px = this.x - (mouse.x - mouse.px);
           this.py = this.y - (mouse.y - mouse.py);
         } else if (dist < mouse.cut) {
-          this.constraints = [];
+          this.#constraints = [];
         }
       }
 
@@ -95,8 +97,8 @@
     }
 
     public draw() {
-      let i = this.constraints.length;
-      while (i--) this.constraints[i].draw();
+      let i = this.#constraints.length;
+      while (i--) this.#constraints[i].draw();
     }
 
     public resolve() {
@@ -106,18 +108,18 @@
         return;
       }
 
-      this.constraints.forEach((constraint) => constraint.resolve());
+      this.#constraints.forEach((constraint) => constraint.resolve());
     }
 
     public attach(point: Point): void {
-      this.constraints.push(new Constraint(this, point));
+      this.#constraints.push(new Constraint(this, point));
     }
 
     public free(constraint: Constraint) {
-      this.constraints.splice(this.constraints.indexOf(constraint), 1);
+      this.#constraints.splice(this.#constraints.indexOf(constraint), 1);
     }
 
-    public addForce(x: number, y: number) {
+    private addForce(x: number, y: number) {
       this.vx += x;
       this.vy += y;
     }
@@ -168,8 +170,6 @@
   class Cloth {
     public points: Point[] = [];
     public constructor() {
-      // if (!canvas) return;
-
       this.reset();
     }
 
@@ -208,8 +208,6 @@
     }
   }
 
-  let canvasSize = new Point(600, 400);
-
   function setMouse(e: MouseEvent) {
     if (!canvas) return;
     let rect = canvas.getBoundingClientRect();
@@ -221,12 +219,11 @@
 
   function wipe() {
     if (!ctx || !canvas) return;
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.clearRect(0, 0, canvasSize.x, canvasSize.y);
 
     // ctx.beginPath;
     const left = "#29BF12";
     const right = "#ABFF4F";
-    const canvasSize = { x: canvas.width, y: canvas.height };
     const duration = 4000;
 
     let starttime: number;
@@ -272,8 +269,6 @@
 
     if (!ctx) return;
 
-    // canvas.width = window.innerWidth;
-    // canvasSize.y = window.innerHeight;
     canvas.width = canvasSize.x;
     canvas.height = canvasSize.y;
     ctx.strokeStyle = "#555";
