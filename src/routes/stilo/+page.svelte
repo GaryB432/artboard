@@ -13,6 +13,8 @@
   let canvas: HTMLCanvasElement | null = null;
   let ctx: CanvasRenderingContext2D | null = null;
 
+  let cloth: Cloth;
+
   let mouse = {
     cut: 8,
     influence: 26,
@@ -25,14 +27,14 @@
   };
 
   class Point {
-    px: number;
-    py: number;
-    vx: number;
-    vy: number;
-    pinX: number | null;
-    pinY: number | null;
-    constraints: Constraint[];
-    constructor(public x: number, public y: number) {
+    public px: number;
+    public py: number;
+    public vx: number;
+    public vy: number;
+    public pinX: number | null;
+    public pinY: number | null;
+    public constraints: Constraint[];
+    public constructor(public x: number, public y: number) {
       this.px = x;
       this.py = y;
       this.vx = 0;
@@ -43,7 +45,7 @@
       this.constraints = [];
     }
 
-    update(delta: number) {
+    public update(delta: number) {
       if (this.pinX && this.pinY) return this;
       if (!canvas) return this;
 
@@ -92,12 +94,12 @@
       return this;
     }
 
-    draw() {
+    public draw() {
       let i = this.constraints.length;
       while (i--) this.constraints[i].draw();
     }
 
-    resolve() {
+    public resolve() {
       if (this.pinX && this.pinY) {
         this.x = this.pinX;
         this.y = this.pinY;
@@ -107,32 +109,32 @@
       this.constraints.forEach((constraint) => constraint.resolve());
     }
 
-    attach(point: Point): void {
+    public attach(point: Point): void {
       this.constraints.push(new Constraint(this, point));
     }
 
-    free(constraint: Constraint) {
+    public free(constraint: Constraint) {
       this.constraints.splice(this.constraints.indexOf(constraint), 1);
     }
 
-    addForce(x: number, y: number) {
+    public addForce(x: number, y: number) {
       this.vx += x;
       this.vy += y;
     }
 
-    pin(pinx: number | null, piny: number | null) {
+    public pin(pinx: number | null, piny: number | null) {
       this.pinX = pinx;
       this.pinY = piny;
     }
   }
 
   class Constraint {
-    length: number;
-    constructor(public p1: Point, public p2: Point) {
+    public length: number;
+    public constructor(public p1: Point, public p2: Point) {
       this.length = spacing;
     }
 
-    resolve() {
+    public resolve() {
       let dx = this.p1.x - this.p2.x;
       let dy = this.p1.y - this.p2.y;
       let dist = Math.sqrt(dx * dx + dy * dy);
@@ -156,7 +158,7 @@
       return this;
     }
 
-    draw(): void {
+    public draw(): void {
       if (!ctx) return;
       ctx.moveTo(this.p1.x, this.p1.y);
       ctx.lineTo(this.p2.x, this.p2.y);
@@ -164,10 +166,15 @@
   }
 
   class Cloth {
-    points: Point[] = [];
-    constructor() {
-      if (!canvas) return;
+    public points: Point[] = [];
+    public constructor() {
+      // if (!canvas) return;
 
+      this.reset();
+    }
+
+    public reset() {
+      this.points = [];
       let startX = canvasSize.x / 2 - (clothX * spacing) / 2;
 
       for (let y = 0; y <= clothY; y++) {
@@ -182,7 +189,7 @@
       }
     }
 
-    update(delta: number) {
+    public update(delta: number) {
       if (!ctx) return;
       let i = accuracy;
       // console.log(this.points.length);
@@ -271,7 +278,7 @@
     canvas.height = canvasSize.y;
     ctx.strokeStyle = "#555";
 
-    let cloth = new Cloth();
+    cloth = new Cloth();
 
     (function update(_time) {
       ctx.clearRect(0, 0, canvasSize.x, canvasSize.y);
@@ -301,9 +308,8 @@
   />
   <nav class="button-bar">
     <button on:click={wipe}>Wipe</button>
-    <button disabled>Moar</button>
+    <button on:click={() => cloth.reset()}>Reset</button>
   </nav>
-  <span>Drag with your mouse, right-click to slice.</span>
 </div>
 
 <style>
