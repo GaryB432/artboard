@@ -41,6 +41,7 @@ module.exports = {
       rules: {
         "no-inner-declarations": "off",
         "@typescript-eslint/member-ordering": "off",
+        "@typescript-eslint/explicit-member-accessibility": "off",
       },
     },
   ],

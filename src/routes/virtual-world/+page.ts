@@ -1,20 +1,19 @@
-import type { PageLoad, RouteParams } from "./$types";
-import type { BBox, MultiPolygon, Position } from "geojson";
+import type { PageLoad } from "./$types";
+import { Point, Segment } from "./world/primitives";
 
 export const load = (async ({ params, fetch }) => {
-  const resp = await fetch("/districts/states/MO/shape.geojson");
-  let coordinates: Position[][][] = [];
-  let bbox: BBox | undefined;
-  if (resp.statusText === "OK") {
-    const d = (await resp.json()) as MultiPolygon;
-    if (d.type === "MultiPolygon") {
-      coordinates = d.coordinates;
-      bbox = d.bbox;
-    }
-  }
+  const points: Point[] = [
+    new Point(10, 10),
+    new Point(20, 20),
+    new Point(30, 20),
+  ];
+  const segments: Segment[] = [
+    new Segment(points[0], points[1]),
+    new Segment(points[1], points[2]),
+  ];
 
   return {
-    coordinates,
-    bbox,
+    points,
+    segments,
   };
 }) satisfies PageLoad;
