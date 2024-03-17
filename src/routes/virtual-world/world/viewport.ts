@@ -1,5 +1,5 @@
-import { add, scale, subtract } from "./math/utils";
-import { Point } from "./primitives/point";
+import { add, scale, subtract } from "./math";
+import { Point } from "./primitives";
 
 export class Viewport {
   ctx: CanvasRenderingContext2D | null;

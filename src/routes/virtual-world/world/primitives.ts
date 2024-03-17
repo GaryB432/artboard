@@ -8,10 +8,15 @@ import {
   subtract,
 } from "./math";
 
-export class Point {
+export interface PointInfo {
+  x: number;
+  y: number;
+}
+
+export class Point implements PointInfo {
   public constructor(public x: number, public y: number) {}
 
-  public equals(point: Point): boolean {
+  public equals(point: Point | { x: number; y: number }): boolean {
     return this.x == point.x && this.y == point.y;
   }
 

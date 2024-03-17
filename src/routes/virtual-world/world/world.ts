@@ -35,7 +35,6 @@ export class World {
     //     new Envelope(seg, this.roadWidth, this.roadRoundness)
     //   );
     // }
-
     // this.roadBorders = Polygon.union({
     //   polys: this.envelopes.map((e) => e.poly),
     // });

@@ -1,20 +1,22 @@
-import { Point, Segment } from "./primitives";
+import { Point, Segment, type PointInfo } from "./primitives";
 
 export class Graph {
   constructor(public points: Point[] = [], public segments: Segment[] = []) {}
 
   static load(info: {
-    points: { x: number; y: number }[];
-    segments: { p1: Point; p2: Point }[];
+    points: PointInfo[];
+    segments: { p1: PointInfo; p2: PointInfo }[];
   }): Graph {
     const points = info.points.map((i) => new Point(i.x, i.y));
-    const segments = info.segments.map(
-      (i) =>
-        new Segment(
-          points.find((p) => p.equals(i.p1))!,
-          points.find((p) => p.equals(i.p2))!
-        )
-    );
+    const segments = info.segments.map((i) => {
+      const s1 = points.find((p) => p.equals(i.p1));
+      const s2 = points.find((p) => p.equals(i.p2));
+      if (s1 && s2) {
+        return new Segment(s1, s2);
+      } else {
+        throw new Error("can't load missing segment point(s)");
+      }
+    });
     return new Graph(points, segments);
   }
 
@@ -230,4 +232,3 @@ export function getFake3dPoint(
   const scaler = Math.atan(dist / 300) / (Math.PI / 2);
   return add(point, scale(dir, height * scaler));
 }
-
