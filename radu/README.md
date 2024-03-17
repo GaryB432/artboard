@@ -130,4 +130,3 @@ D:\USERS\BORT1\DOCUMENTS\GITHUB\ARTBOARD\SRC\LIB\RADU
             polygon.ts
             segment.ts
 ```
-

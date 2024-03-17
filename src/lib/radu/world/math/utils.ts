@@ -67,7 +67,7 @@ export function magnitude(p: Point): number {
   return Math.hypot(p.x, p.y);
 }
 
-export function perpendicular(p: Point) {
+export function perpendicular(p: Point): Point {
   return new Point(-p.y, p.x);
 }
 
@@ -108,11 +108,11 @@ export function getIntersection(
   return null;
 }
 
-export function lerp(a: number, b: number, t: number) {
+export function lerp(a: number, b: number, t: number): number {
   return a + (b - a) * t;
 }
 
-export function lerp2D(A: Point, B: Point, t: number) {
+export function lerp2D(A: Point, B: Point, t: number): Point {
   return new Point(lerp(A.x, B.x, t), lerp(A.y, B.y, t));
 }
 
@@ -124,12 +124,16 @@ export function lerp2D(A: Point, B: Point, t: number) {
 //   return (degree * Math.PI) / 180;
 // }
 
-export function getRandomColor() {
+export function getRandomColor(): string {
   const hue = 290 + Math.random() * 260;
   return "hsl(" + hue + ", 100%, 60%)";
 }
 
-export function getFake3dPoint(point: Point, viewPoint: Point, height: number) {
+export function getFake3dPoint(
+  point: Point,
+  viewPoint: Point,
+  height: number
+): Point {
   const dir = normalize(subtract(point, viewPoint));
   const dist = distance(point, viewPoint);
   const scaler = Math.atan(dist / 300) / (Math.PI / 2);

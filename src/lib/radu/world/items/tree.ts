@@ -19,7 +19,7 @@ export class Tree {
     return new Polygon(points);
   }
 
-  draw(ctx: CanvasRenderingContext2D, viewPoint: Point) {
+  draw(ctx: CanvasRenderingContext2D, viewPoint: Point): void {
     const top = getFake3dPoint(this.center, viewPoint, this.height);
 
     const levelCount = 7;

@@ -9,13 +9,14 @@ export class Graph {
     segments: { p1: Point; p2: Point }[];
   }): Graph {
     const points = info.points.map((i) => new Point(i.x, i.y));
-    const segments = info.segments.map(
-      (i) =>
-        new Segment(
-          points.find((p) => p.equals(i.p1))!,
-          points.find((p) => p.equals(i.p2))!
-        )
-    );
+    const segments = info.segments.map((i) => {
+      const s1 = points.find((p) => p.equals(i.p1));
+      const s2 = points.find((p) => p.equals(i.p2));
+      if (!s1 || !s2) {
+        throw new Error("missing segments");
+      }
+      return new Segment(s1, s2);
+    });
     return new Graph(points, segments);
   }
 
