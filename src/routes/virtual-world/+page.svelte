@@ -7,7 +7,7 @@
   let el: HTMLCanvasElement;
 
   onMount(() => {
-    console.log(data.bbox);
+    console.log(data);
   });
 </script>
 
