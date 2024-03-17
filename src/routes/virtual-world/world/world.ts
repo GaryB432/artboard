@@ -3,6 +3,9 @@
 // import type { Graph } from "./world/math/graph";
 // import { add, distance, lerp, scale } from "./world/math/utils";
 // import { Envelope } from "./world/primitives/envelope";
+
+class Graph {}
+
 import type { Point } from "./primitives";
 // import { Polygon } from "./world/primitives/polygon";
 // import { Segment } from "./world/primitives/segment";
@@ -26,18 +29,18 @@ export class World {
   }
 
   public generate(): void {
-    this.envelopes.length = 0;
-    for (const seg of this.graph.segments) {
-      this.envelopes.push(
-        new Envelope(seg, this.roadWidth, this.roadRoundness)
-      );
-    }
+    // this.envelopes.length = 0;
+    // for (const seg of this.graph.segments) {
+    //   this.envelopes.push(
+    //     new Envelope(seg, this.roadWidth, this.roadRoundness)
+    //   );
+    // }
 
-    this.roadBorders = Polygon.union({
-      polys: this.envelopes.map((e) => e.poly),
-    });
-    this.buildings = this.#generateBuildings();
-    this.trees = this.#generateTrees();
+    // this.roadBorders = Polygon.union({
+    //   polys: this.envelopes.map((e) => e.poly),
+    // });
+    // this.buildings = this.#generateBuildings();
+    // this.trees = this.#generateTrees();
   }
 
   // #generateTrees(): Tree[] {
@@ -171,23 +174,22 @@ export class World {
   // }
 
   draw(ctx: CanvasRenderingContext2D, viewPoint: Point): void {
-  //   for (const env of this.envelopes) {
-  //     env.draw(ctx, { fill: "#BBB", stroke: "#BBB", lineWidth: 15 });
-  //   }
-  //   for (const seg of this.graph.segments) {
-  //     seg.draw(ctx, { color: "white", width: 4, dash: [10, 10] });
-  //   }
-  //   for (const seg of this.roadBorders) {
-  //     seg.draw(ctx, { color: "white", width: 4 });
-  //   }
-
-  //   const items = [...this.buildings, ...this.trees];
-  //   items.sort(
-  //     (a, b) =>
-  //       b.base.distanceToPoint(viewPoint) - a.base.distanceToPoint(viewPoint)
-  //   );
-  //   for (const item of items) {
-  //     item.draw(ctx, viewPoint);
-  //   }
+    //   for (const env of this.envelopes) {
+    //     env.draw(ctx, { fill: "#BBB", stroke: "#BBB", lineWidth: 15 });
+    //   }
+    //   for (const seg of this.graph.segments) {
+    //     seg.draw(ctx, { color: "white", width: 4, dash: [10, 10] });
+    //   }
+    //   for (const seg of this.roadBorders) {
+    //     seg.draw(ctx, { color: "white", width: 4 });
+    //   }
+    //   const items = [...this.buildings, ...this.trees];
+    //   items.sort(
+    //     (a, b) =>
+    //       b.base.distanceToPoint(viewPoint) - a.base.distanceToPoint(viewPoint)
+    //   );
+    //   for (const item of items) {
+    //     item.draw(ctx, viewPoint);
+    //   }
   }
 }
