@@ -1,7 +1,11 @@
-import { Vector } from "$lib/vector/vector";
+export class Point {
+  public constructor(public x: number, public y: number) {}
 
-export class Point extends Vector {
-  draw(
+  public equals(point: Point): boolean {
+    return this.x == point.x && this.y == point.y;
+  }
+
+  public draw(
     ctx: CanvasRenderingContext2D,
     { size = 18, color = "black", outline = false, fill = false } = {}
   ): void {
