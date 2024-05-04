@@ -3,11 +3,11 @@
   import fmVsAm from "./radio-fm-vs-am-anim.gif";
 
   let frequency = 80;
-  let myCanvas: HTMLCanvasElement;
+  let canvas: HTMLCanvasElement;
   let ctx: CanvasRenderingContext2D | null = null;
 
   onMount(() => {
-    ctx = myCanvas.getContext("2d");
+    ctx = canvas.getContext("2d");
     if (!ctx) {
       return;
     }
@@ -18,7 +18,7 @@
     if (!ctx) {
       return;
     }
-    ctx.clearRect(0, 0, myCanvas.width, myCanvas.height);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     drawXAxis();
 
@@ -31,12 +31,12 @@
     }
     function f(x: number) {
       let y =
-        Math.sin(x / frequency) * (myCanvas.height / 3) + myCanvas.height / 2;
+        Math.sin(x / frequency) * (canvas.height / 3) + canvas.height / 2;
       return y;
     }
     ctx.moveTo(0, f(0));
     ctx.beginPath();
-    for (let x = 0; x < myCanvas.width; x++) {
+    for (let x = 0; x < canvas.width; x++) {
       ctx.lineTo(x, f(x));
     }
     ctx.strokeStyle = "red";
@@ -48,8 +48,8 @@
       return;
     }
     ctx.beginPath();
-    ctx.moveTo(0, myCanvas.height / 2);
-    ctx.lineTo(myCanvas.width, myCanvas.height / 2);
+    ctx.moveTo(0, canvas.height / 2);
+    ctx.lineTo(canvas.width, canvas.height / 2);
     ctx.setLineDash([5, 4]);
     ctx.lineWidth = 2;
     ctx.strokeStyle = "red";
@@ -60,7 +60,7 @@
 
 <main>
   <canvas
-    bind:this={myCanvas}
+    bind:this={canvas}
     width="500px"
     height="500px"
     style="background-color: darkred"
