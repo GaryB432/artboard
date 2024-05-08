@@ -88,7 +88,7 @@
 </script>
 
 <section class="two-up">
-  <canvas bind:this={canvas} />
+  <canvas bind:this={canvas}></canvas>
   <div class="right">
     <div>I guess we'll be putting some controls or something over here.</div>
   </div>

@@ -69,7 +69,7 @@
       frequency += dir * step;
       update();
     }}
-  />
+  ></canvas>
   <div class="freq">
     {frequency}
   </div>

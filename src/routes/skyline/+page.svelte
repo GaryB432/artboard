@@ -81,7 +81,7 @@
 </script>
 
 <section class="container">
-  <canvas bind:this={canvas} />
+  <canvas bind:this={canvas}></canvas>
   <input bind:value={overallSpeed} type="range" max="30" min="0" />
   <div>fps: {fps.toPrecision(2)}</div>
 </section>

@@ -187,7 +187,7 @@
 </svelte:head>
 
 <article class="container">
-  <canvas bind:this={canvas} />
+  <canvas bind:this={canvas}></canvas>
 </article>
 
 <style>

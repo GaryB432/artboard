@@ -114,7 +114,7 @@
 
 <div class="content">
   <div class="canvas-box">
-    <canvas bind:this={canvas} />
+    <canvas bind:this={canvas}></canvas>
   </div>
   <div class="button-box">
     <PlayButton

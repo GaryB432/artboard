@@ -306,7 +306,7 @@
     on:mousemove={setMouse}
     on:mouseup={() => (mouse.down = false)}
     on:contextmenu={(e) => e.preventDefault()}
-  />
+  ></canvas>
   <nav class="button-bar">
     <button on:click={wipe}>Wipe</button>
     <button on:click={() => cloth.reset()}>Reset</button>

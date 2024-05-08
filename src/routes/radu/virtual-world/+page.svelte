@@ -79,7 +79,7 @@
     width="500px"
     height="500px"
     style="background-color: darkred"
-  />
+  ></canvas>
 </main>
 
 <style>

@@ -268,7 +268,7 @@
     on:mousemove={setMouse}
     on:mouseup={() => (mouse.down = false)}
     on:contextmenu={(e) => e.preventDefault()}
-  />
+  ></canvas>
   <span>Drag with your mouse, right-click to slice.</span>
 </div>
 
