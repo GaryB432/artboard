@@ -79,7 +79,7 @@ export class Clock {
         -this.center.x,
         -this.center.y,
         this.radius * 2,
-        this.radius * 2
+        this.radius * 2,
       );
     }
   }
@@ -99,7 +99,7 @@ export class Clock {
         pos.x - markerSize / 2,
         pos.y - markerSize / 2,
         markerSize,
-        markerSize
+        markerSize,
       );
     }
   }

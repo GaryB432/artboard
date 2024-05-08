@@ -13,7 +13,7 @@ export class GraphEditor {
   mouse: Point | null = null;
   constructor(
     public viewport: Viewport,
-    public graph: Graph
+    public graph: Graph,
   ) {
     this.canvas = viewport.canvas;
 
@@ -34,7 +34,7 @@ export class GraphEditor {
     this.hovered = getNearestPoint(
       this.mouse,
       this.graph.points,
-      10 * this.viewport.zoom
+      10 * this.viewport.zoom,
     );
     if (this.dragging == true) {
       if (!this.selected) {

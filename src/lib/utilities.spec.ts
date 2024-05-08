@@ -40,13 +40,13 @@ describe("Utilities", () => {
 
   test("fitToAspectRatio", (): void => {
     expect(
-      fitToAspectRatio(new Vector2(1000, 600), new Vector2(16, 9))
+      fitToAspectRatio(new Vector2(1000, 600), new Vector2(16, 9)),
     ).toEqual(new Vector2(900, 506.25));
     expect(
-      fitToAspectRatio(new Vector2(1000, 600), new Vector2(16, 9)).toArray()
+      fitToAspectRatio(new Vector2(1000, 600), new Vector2(16, 9)).toArray(),
     ).toEqual([900, (900 / 16) * 9]);
     expect(
-      fitToAspectRatio(new Vector2(400, 800), new Vector2(8.5, 11))
+      fitToAspectRatio(new Vector2(400, 800), new Vector2(8.5, 11)),
     ).toEqual(new Vector2(360, (360 / 8.5) * 11));
   });
 

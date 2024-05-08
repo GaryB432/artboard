@@ -1,7 +1,7 @@
 export class Point {
   public constructor(
     public x: number,
-    public y: number
+    public y: number,
   ) {}
 
   public equals(point: Point): boolean {
@@ -10,7 +10,7 @@ export class Point {
 
   public draw(
     ctx: CanvasRenderingContext2D,
-    { size = 18, color = "black", outline = false, fill = false } = {}
+    { size = 18, color = "black", outline = false, fill = false } = {},
   ): void {
     const rad = size / 2;
     ctx.beginPath();

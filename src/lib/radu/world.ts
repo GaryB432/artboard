@@ -20,7 +20,7 @@ export class World {
     public buildingWidth = 150,
     public buildingMinLength = 150,
     public spacing = 50,
-    public treeSize = 160
+    public treeSize = 160,
   ) {
     this.generate();
   }
@@ -29,7 +29,7 @@ export class World {
     this.envelopes.length = 0;
     for (const seg of this.graph.segments) {
       this.envelopes.push(
-        new Envelope(seg, this.roadWidth, this.roadRoundness)
+        new Envelope(seg, this.roadWidth, this.roadRoundness),
       );
     }
 
@@ -60,7 +60,7 @@ export class World {
     while (tryCount < 100) {
       const p = new Point(
         lerp(left, right, Math.random()),
-        lerp(bottom, top, Math.random())
+        lerp(bottom, top, Math.random()),
       );
 
       // check if tree inside or nearby building / road
@@ -113,8 +113,8 @@ export class World {
         new Envelope(
           seg,
           this.roadWidth + this.buildingWidth + this.spacing * 2,
-          this.roadRoundness
-        )
+          this.roadRoundness,
+        ),
       );
     }
 
@@ -132,7 +132,7 @@ export class World {
     for (const seg of guides) {
       const len = seg.length() + this.spacing;
       const buildingCount = Math.floor(
-        len / (this.buildingMinLength + this.spacing)
+        len / (this.buildingMinLength + this.spacing),
       );
       const buildingLength = len / buildingCount - this.spacing;
 
@@ -184,7 +184,7 @@ export class World {
     const items = [...this.buildings, ...this.trees];
     items.sort(
       (a, b) =>
-        b.base.distanceToPoint(viewPoint) - a.base.distanceToPoint(viewPoint)
+        b.base.distanceToPoint(viewPoint) - a.base.distanceToPoint(viewPoint),
     );
     for (const item of items) {
       item.draw(ctx, viewPoint);

@@ -7,7 +7,7 @@ export class Tree {
   constructor(
     public center: Point,
     public size: number,
-    public height = 200
+    public height = 200,
   ) {
     this.base = this.#generateLevel(center, size);
   }

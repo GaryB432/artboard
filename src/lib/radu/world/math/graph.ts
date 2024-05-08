@@ -4,7 +4,7 @@ import { Segment } from "../primitives/segment";
 export class Graph {
   constructor(
     public points: Point[] = [],
-    public segments: Segment[] = []
+    public segments: Segment[] = [],
   ) {}
 
   static load(info: {

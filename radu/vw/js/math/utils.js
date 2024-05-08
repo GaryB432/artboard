@@ -63,7 +63,7 @@ function perpendicular(p) {
 function translate(loc, angle, offset) {
   return new Point(
     loc.x + Math.cos(angle) * offset,
-    loc.y + Math.sin(angle) * offset
+    loc.y + Math.sin(angle) * offset,
   );
 }
 

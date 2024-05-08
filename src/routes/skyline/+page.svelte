@@ -65,9 +65,9 @@
     canvasSize = fitToAspectRatio(
       new Vector2(
         document.body.clientWidth,
-        document.body.clientHeight - roughHeaderAndFooterHeight
+        document.body.clientHeight - roughHeaderAndFooterHeight,
       ),
-      aspect
+      aspect,
     );
     canvas.height = canvasSize.y;
     canvas.width = canvasSize.x;

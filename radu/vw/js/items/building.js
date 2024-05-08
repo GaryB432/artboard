@@ -6,7 +6,7 @@ class Building {
 
   draw(ctx, viewPoint) {
     const topPoints = this.base.points.map((p) =>
-      getFake3dPoint(p, viewPoint, this.height * 0.6)
+      getFake3dPoint(p, viewPoint, this.height * 0.6),
     );
     const ceiling = new Polygon(topPoints);
 
@@ -22,7 +22,7 @@ class Building {
       sides.push(poly);
     }
     sides.sort(
-      (a, b) => b.distanceToPoint(viewPoint) - a.distanceToPoint(viewPoint)
+      (a, b) => b.distanceToPoint(viewPoint) - a.distanceToPoint(viewPoint),
     );
 
     const baseMidpoints = [
@@ -31,7 +31,7 @@ class Building {
     ];
 
     const topMidpoints = baseMidpoints.map((p) =>
-      getFake3dPoint(p, viewPoint, this.height)
+      getFake3dPoint(p, viewPoint, this.height),
     );
 
     const roofPolys = [
@@ -49,7 +49,7 @@ class Building {
       ]),
     ];
     roofPolys.sort(
-      (a, b) => b.distanceToPoint(viewPoint) - a.distanceToPoint(viewPoint)
+      (a, b) => b.distanceToPoint(viewPoint) - a.distanceToPoint(viewPoint),
     );
 
     this.base.draw(ctx, {

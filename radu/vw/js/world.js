@@ -6,7 +6,7 @@ class World {
     buildingWidth = 150,
     buildingMinLength = 150,
     spacing = 50,
-    treeSize = 160
+    treeSize = 160,
   ) {
     this.graph = graph;
     this.roadWidth = roadWidth;
@@ -28,7 +28,7 @@ class World {
     this.envelopes.length = 0;
     for (const seg of this.graph.segments) {
       this.envelopes.push(
-        new Envelope(seg, this.roadWidth, this.roadRoundness)
+        new Envelope(seg, this.roadWidth, this.roadRoundness),
       );
     }
 
@@ -57,7 +57,7 @@ class World {
     while (tryCount < 100) {
       const p = new Point(
         lerp(left, right, Math.random()),
-        lerp(bottom, top, Math.random())
+        lerp(bottom, top, Math.random()),
       );
 
       // check if tree inside or nearby building / road
@@ -110,8 +110,8 @@ class World {
         new Envelope(
           seg,
           this.roadWidth + this.buildingWidth + this.spacing * 2,
-          this.roadRoundness
-        )
+          this.roadRoundness,
+        ),
       );
     }
 
@@ -129,7 +129,7 @@ class World {
     for (let seg of guides) {
       const len = seg.length() + this.spacing;
       const buildingCount = Math.floor(
-        len / (this.buildingMinLength + this.spacing)
+        len / (this.buildingMinLength + this.spacing),
       );
       const buildingLength = len / buildingCount - this.spacing;
 
@@ -181,7 +181,7 @@ class World {
     const items = [...this.buildings, ...this.trees];
     items.sort(
       (a, b) =>
-        b.base.distanceToPoint(viewPoint) - a.base.distanceToPoint(viewPoint)
+        b.base.distanceToPoint(viewPoint) - a.base.distanceToPoint(viewPoint),
     );
     for (const item of items) {
       item.draw(ctx, viewPoint);

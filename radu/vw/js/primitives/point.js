@@ -10,7 +10,7 @@ class Point {
 
   draw(
     ctx,
-    { size = 18, color = "black", outline = false, fill = false } = {}
+    { size = 18, color = "black", outline = false, fill = false } = {},
   ) {
     const rad = size / 2;
     ctx.beginPath();

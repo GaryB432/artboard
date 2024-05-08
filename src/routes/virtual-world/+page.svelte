@@ -19,7 +19,7 @@
     mouse: Point | null = null;
     constructor(
       public viewport: Viewport,
-      public graph: Graph
+      public graph: Graph,
     ) {
       this.canvas = viewport.canvas;
 
@@ -31,14 +31,14 @@
     #addEventListeners() {
       this.canvas.addEventListener(
         "mousedown",
-        this.#handleMouseDown.bind(this)
+        this.#handleMouseDown.bind(this),
       );
       this.canvas.addEventListener(
         "mousemove",
-        this.#handleMouseMove.bind(this)
+        this.#handleMouseMove.bind(this),
       );
       this.canvas.addEventListener("contextmenu", (evt) =>
-        evt.preventDefault()
+        evt.preventDefault(),
       );
       this.canvas.addEventListener("mouseup", () => (this.dragging = false));
     }
@@ -51,7 +51,7 @@
       this.hovered = getNearestPoint(
         this.mouse,
         this.graph.points,
-        10 * this.viewport.zoom
+        10 * this.viewport.zoom,
       );
       if (this.dragging == true) {
         if (!this.selected) {

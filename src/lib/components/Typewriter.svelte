@@ -217,7 +217,7 @@
         () => {
           phrase = phrase.concat(ch);
         },
-        100 * (c + spaces * 3)
+        100 * (c + spaces * 3),
       );
     }
   }

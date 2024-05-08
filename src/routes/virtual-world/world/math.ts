@@ -3,7 +3,7 @@ import { Point, Segment, type PointInfo } from "./primitives";
 export class Graph {
   constructor(
     public points: Point[] = [],
-    public segments: Segment[] = []
+    public segments: Segment[] = [],
   ) {}
 
   static load(info: {
@@ -100,7 +100,7 @@ export class Graph {
 export function getNearestPoint(
   loc: Point,
   points: Point[],
-  threshold = Number.MAX_SAFE_INTEGER
+  threshold = Number.MAX_SAFE_INTEGER,
 ): Point | null {
   let minDist = Number.MAX_SAFE_INTEGER;
   let nearest = null;
@@ -117,7 +117,7 @@ export function getNearestPoint(
 export function getNearestSegment(
   loc: Point,
   segments: Segment[],
-  threshold = Number.MAX_SAFE_INTEGER
+  threshold = Number.MAX_SAFE_INTEGER,
 ): Segment | null {
   let minDist = Number.MAX_SAFE_INTEGER;
   let nearest = null;
@@ -170,7 +170,7 @@ export function perpendicular(p: Point): Point {
 export function translate(loc: Point, angle: number, offset: number): Point {
   return new Point(
     loc.x + Math.cos(angle) * offset,
-    loc.y + Math.sin(angle) * offset
+    loc.y + Math.sin(angle) * offset,
   );
 }
 
@@ -182,7 +182,7 @@ export function getIntersection(
   A: Point,
   B: Point,
   C: Point,
-  D: Point
+  D: Point,
 ): { x: number; y: number; offset: number } | null {
   const tTop = (D.x - C.x) * (A.y - C.y) - (D.y - C.y) * (A.x - C.x);
   const uTop = (C.y - A.y) * (A.x - B.x) - (C.x - A.x) * (A.y - B.y);
@@ -228,7 +228,7 @@ export function getRandomColor(): string {
 export function getFake3dPoint(
   point: Point,
   viewPoint: Point,
-  height: number
+  height: number,
 ): Point {
   const dir = normalize(subtract(point, viewPoint));
   const dist = distance(point, viewPoint);

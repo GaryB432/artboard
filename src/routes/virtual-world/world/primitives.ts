@@ -16,7 +16,7 @@ export interface PointInfo {
 export class Point implements PointInfo {
   public constructor(
     public x: number,
-    public y: number
+    public y: number,
   ) {}
 
   public equals(point: Point | { x: number; y: number }): boolean {
@@ -25,7 +25,7 @@ export class Point implements PointInfo {
 
   public draw(
     ctx: CanvasRenderingContext2D,
-    { size = 18, color = "black", outline = false, fill = false } = {}
+    { size = 18, color = "black", outline = false, fill = false } = {},
   ): void {
     const rad = size / 2;
     ctx.beginPath();
@@ -51,7 +51,7 @@ export class Point implements PointInfo {
 export class Segment {
   public constructor(
     public p1: Point,
-    public p2: Point
+    public p2: Point,
   ) {}
 
   public length(): number {
@@ -98,7 +98,7 @@ export class Segment {
       width = 2,
       color = "black",
       dash = [],
-    }: { width?: number; color?: string; dash?: number[] } = {}
+    }: { width?: number; color?: string; dash?: number[] } = {},
   ): void {
     ctx.beginPath();
     ctx.lineWidth = width;

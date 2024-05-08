@@ -95,7 +95,7 @@ export class ProgressElement extends HTMLElement {
   public attributeChangedCallback(
     name: "min" | "max" | "value",
     _oldValue: string,
-    newValue: string
+    newValue: string,
   ): void {
     switch (name) {
       case "value": {

@@ -46,7 +46,7 @@ class Polygon {
           segs1[i].p1,
           segs1[i].p2,
           segs2[j].p1,
-          segs2[j].p2
+          segs2[j].p2,
         );
 
         if (int && int.offset != 1 && int.offset != 0) {
@@ -111,7 +111,7 @@ class Polygon {
       lineWidth = 2,
       fill = "rgba(0,0,255,0.3)",
       join = "miter",
-    } = {}
+    } = {},
   ) {
     ctx.beginPath();
     ctx.fillStyle = fill;

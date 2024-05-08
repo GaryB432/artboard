@@ -38,7 +38,7 @@
     #constraints: Constraint[];
     public constructor(
       public x: number,
-      public y: number
+      public y: number,
     ) {
       this.px = x;
       this.py = y;
@@ -137,7 +137,7 @@
     public length: number;
     public constructor(
       public p1: Point,
-      public p2: Point
+      public p2: Point,
     ) {
       this.length = spacing;
     }

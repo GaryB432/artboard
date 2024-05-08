@@ -22,7 +22,7 @@ export abstract class MarkingEditor {
   constructor(
     public readonly viewport: Viewport,
     public readonly world: World,
-    public readonly targetSegments: Segment[]
+    public readonly targetSegments: Segment[],
   ) {
     // this.viewport = viewport;
     this.world = world;
@@ -75,7 +75,7 @@ export abstract class MarkingEditor {
     const seg = getNearestSegment(
       this.mouse,
       this.targetSegments,
-      10 * this.viewport.zoom
+      10 * this.viewport.zoom,
     );
     if (seg) {
       const proj = seg.projectPoint(this.mouse);
