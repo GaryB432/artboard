@@ -42,7 +42,10 @@
     pinX: number | null;
     pinY: number | null;
     constraints: Constraint[];
-    constructor(public x: number, public y: number) {
+    constructor(
+      public x: number,
+      public y: number
+    ) {
       this.px = x;
       this.py = y;
       this.vx = 0;
@@ -138,7 +141,10 @@
 
   class Constraint {
     length: number;
-    constructor(public p1: Point, public p2: Point) {
+    constructor(
+      public p1: Point,
+      public p2: Point
+    ) {
       this.length = spacing;
     }
 

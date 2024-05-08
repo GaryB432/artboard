@@ -6,7 +6,9 @@
 }
 html,
 body {
-  font: 16px "Lato", sans-serif;
+  font:
+    16px "Lato",
+    sans-serif;
   height: 100%;
   width: 100%;
 }
@@ -16,7 +18,9 @@ body {
 }
 button:focus,
 select:focus {
-  box-shadow: 0 0 0 2px rgba(255, 255, 255, 1), 0 0 0 6px rgba(37, 99, 235, 0.4);
+  box-shadow:
+    0 0 0 2px rgba(255, 255, 255, 1),
+    0 0 0 6px rgba(37, 99, 235, 0.4);
 }
 .text-xl {
   font-size: 1.25rem;

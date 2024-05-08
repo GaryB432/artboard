@@ -49,6 +49,8 @@
   select:focus {
     --gb-inner: rgba(255, 255, 255, 1);
     --gb-outer: rgba(37, 99, 235, 0.4);
-    box-shadow: 0 0 0 2px var(--gb-inner), 0 0 0 6px var(--gb-outer);
+    box-shadow:
+      0 0 0 2px var(--gb-inner),
+      0 0 0 6px var(--gb-outer);
   }
 </style>

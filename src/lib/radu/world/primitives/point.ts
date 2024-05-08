@@ -1,5 +1,8 @@
 export class Point {
-  public constructor(public x: number, public y: number) {}
+  public constructor(
+    public x: number,
+    public y: number
+  ) {}
 
   public equals(point: Point): boolean {
     return this.x == point.x && this.y == point.y;

@@ -14,7 +14,10 @@ export interface PointInfo {
 }
 
 export class Point implements PointInfo {
-  public constructor(public x: number, public y: number) {}
+  public constructor(
+    public x: number,
+    public y: number
+  ) {}
 
   public equals(point: Point | { x: number; y: number }): boolean {
     return this.x == point.x && this.y == point.y;
@@ -46,7 +49,10 @@ export class Point implements PointInfo {
 }
 
 export class Segment {
-  public constructor(public p1: Point, public p2: Point) {}
+  public constructor(
+    public p1: Point,
+    public p2: Point
+  ) {}
 
   public length(): number {
     return distance(this.p1, this.p2);

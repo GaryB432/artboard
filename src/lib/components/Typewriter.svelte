@@ -213,9 +213,12 @@
       if (ch === " ") {
         spaces += 1;
       }
-      setTimeout(() => {
-        phrase = phrase.concat(ch);
-      }, 100 * (c + spaces * 3));
+      setTimeout(
+        () => {
+          phrase = phrase.concat(ch);
+        },
+        100 * (c + spaces * 3)
+      );
     }
   }
   typewritePhrase();
@@ -259,14 +262,18 @@
     min-width: 64px;
     border: none;
     text-align: center;
-    box-shadow: 0px 3px 1px -2px rgb(0 0 0 / 20%),
-      0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%);
+    box-shadow:
+      0px 3px 1px -2px rgb(0 0 0 / 20%),
+      0px 2px 2px 0px rgb(0 0 0 / 14%),
+      0px 1px 5px 0px rgb(0 0 0 / 12%);
     transition: box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   button:hover {
     background: rgb(98, 0, 238);
-    box-shadow: 0px 2px 4px -1px rgb(0 0 0 / 20%),
-      0px 4px 5px 0px rgb(0 0 0 / 14%), 0px 1px 10px 0px rgb(0 0 0 / 12%);
+    box-shadow:
+      0px 2px 4px -1px rgb(0 0 0 / 20%),
+      0px 4px 5px 0px rgb(0 0 0 / 14%),
+      0px 1px 10px 0px rgb(0 0 0 / 12%);
   }
 </style>

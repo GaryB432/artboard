@@ -4,7 +4,11 @@ import { Polygon } from "../primitives/polygon";
 
 export class Tree {
   base: Polygon;
-  constructor(public center: Point, public size: number, public height = 200) {
+  constructor(
+    public center: Point,
+    public size: number,
+    public height = 200
+  ) {
     this.base = this.#generateLevel(center, size);
   }
 

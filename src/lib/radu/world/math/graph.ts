@@ -2,7 +2,10 @@ import { Point } from "../primitives/point";
 import { Segment } from "../primitives/segment";
 
 export class Graph {
-  constructor(public points: Point[] = [], public segments: Segment[] = []) {}
+  constructor(
+    public points: Point[] = [],
+    public segments: Segment[] = []
+  ) {}
 
   static load(info: {
     points: { x: number; y: number }[];
