@@ -30,8 +30,7 @@
       return;
     }
     function f(x: number) {
-      let y =
-        Math.sin(x / frequency) * (canvas.height / 3) + canvas.height / 2;
+      let y = Math.sin(x / frequency) * (canvas.height / 3) + canvas.height / 2;
       return y;
     }
     ctx.moveTo(0, f(0));
