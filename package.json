@@ -59,5 +59,6 @@
       }
     }
   },
-  "repository": "github:GaryB432/artboard"
+  "repository": "github:GaryB432/artboard",
+  "bugs": "https://github.com/GaryB432/artboard/issues"
 }
