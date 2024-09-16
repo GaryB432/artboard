@@ -50,7 +50,7 @@
         yr.toString(),
         2,
         topy + yearSize - padz,
-        canvasSize.y * 0.7
+        canvasSize.y * 0.7,
       );
       // ctx.restore();
     }
@@ -71,9 +71,9 @@
     canvasSize = fitToAspectRatio(
       new Vector2(
         document.body.clientWidth,
-        document.body.clientHeight - roughHeaderAndFooterHeight
+        document.body.clientHeight - roughHeaderAndFooterHeight,
       ),
-      aspect
+      aspect,
     );
     canvas.height = canvasSize.y;
     canvas.width = canvasSize.x;
@@ -88,7 +88,7 @@
 </script>
 
 <section class="two-up">
-  <canvas bind:this={canvas} />
+  <canvas bind:this={canvas}></canvas>
   <div class="right">
     <div>I guess we'll be putting some controls or something over here.</div>
   </div>

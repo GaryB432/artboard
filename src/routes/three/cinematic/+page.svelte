@@ -25,4 +25,4 @@
   <meta name="description" content="Three.js example app built with Svelte" />
 </svelte:head>
 
-<canvas bind:this={el} />
+<canvas bind:this={el}></canvas>

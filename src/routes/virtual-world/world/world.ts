@@ -23,7 +23,7 @@ export class World {
     public buildingWidth = 150,
     public buildingMinLength = 150,
     public spacing = 50,
-    public treeSize = 160
+    public treeSize = 160,
   ) {
     this.generate();
   }

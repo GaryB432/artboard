@@ -4,7 +4,7 @@ export const strokeLine = (
   ctx: CanvasRenderingContext2D,
   a: Point,
   b: Point,
-  drawingStyles: Partial<CanvasPathDrawingStyles>
+  drawingStyles: Partial<CanvasPathDrawingStyles>,
 ): void => {
   ctx.beginPath();
   ctx.lineWidth = drawingStyles.lineWidth || 1;
@@ -19,7 +19,7 @@ abstract class Hand {
   public abstract readonly width: number;
   public constructor(
     protected readonly radius: number,
-    public value: number = 0
+    public value: number = 0,
   ) {}
   public draw(ctx: CanvasRenderingContext2D): void {
     strokeLine(ctx, this.tail(), this.head(), {
@@ -31,7 +31,7 @@ abstract class Hand {
     const theta = (this.degrees() * Math.PI) / 180;
     return new Point(
       this.magnitude * Math.cos(theta),
-      this.magnitude * Math.sin(theta)
+      this.magnitude * Math.sin(theta),
     );
   }
   private tail(): Point {

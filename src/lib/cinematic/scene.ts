@@ -22,7 +22,7 @@ function init() {
     60,
     window.innerWidth / window.innerHeight,
     1,
-    1000
+    1000,
   );
   camera.setLens(5);
   camera.position.set(2, 1, 500);
@@ -41,7 +41,7 @@ function init() {
   for (let i = 0; i < 1500; i++) {
     const object = new THREE.Mesh(
       geometry,
-      new THREE.MeshLambertMaterial({ color: Math.random() * 0xffffff })
+      new THREE.MeshLambertMaterial({ color: Math.random() * 0xffffff }),
     );
 
     object.position.x = Math.random() * 800 - 400;
@@ -104,7 +104,7 @@ function init() {
       effectController.focalLength,
       undefined, // camera.frameHeight,
       effectController.fstop,
-      camera.coc
+      camera.coc,
     );
     effectController["focalDepth"] =
       camera.postprocessing.bokeh_uniforms["focalDepth"].value;

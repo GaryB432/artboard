@@ -25,7 +25,7 @@
   let context: CanvasRenderingContext2D | null;
   let easing: EasingFunction = (n) => n;
   let loopDuration = 3000;
-  let loopTimer: NodeJS.Timer;
+  let loopTimer: NodeJS.Timeout;
   let playing = false;
 
   onMount(() => {
@@ -114,7 +114,7 @@
 
 <div class="content">
   <div class="canvas-box">
-    <canvas bind:this={canvas} />
+    <canvas bind:this={canvas}></canvas>
   </div>
   <div class="button-box">
     <PlayButton

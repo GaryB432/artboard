@@ -43,7 +43,11 @@
         }
       }}>{label}</button
     >
-    <div class="clocker" bind:this={clockContainer} class:open={clockOpen} />
+    <div
+      class="clocker"
+      bind:this={clockContainer}
+      class:open={clockOpen}
+    ></div>
     <GithubAnchor />
     <button
       on:click={() => {

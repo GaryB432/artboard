@@ -61,7 +61,7 @@
 </script>
 
 <section>
-  <div class="container right-bar" bind:this={container} class:wiping />
+  <div class="container right-bar" bind:this={container} class:wiping></div>
   <nav class="button-bar">
     <button on:click={drawRandoFrame}>Go</button>
     <button on:click={wipe}>Wipe</button>

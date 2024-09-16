@@ -89,10 +89,10 @@ const easingsFunctions: EasingDictionary = {
     return x === 0
       ? 0
       : x === 1
-      ? 1
-      : x < 0.5
-      ? pow(2, 20 * x - 10) / 2
-      : (2 - pow(2, -20 * x + 10)) / 2;
+        ? 1
+        : x < 0.5
+          ? pow(2, 20 * x - 10) / 2
+          : (2 - pow(2, -20 * x + 10)) / 2;
   },
   easeInCirc: function (x) {
     return 1 - sqrt(1 - pow(x, 2));
@@ -120,24 +120,24 @@ const easingsFunctions: EasingDictionary = {
     return x === 0
       ? 0
       : x === 1
-      ? 1
-      : -pow(2, 10 * x - 10) * sin((x * 10 - 10.75) * c4);
+        ? 1
+        : -pow(2, 10 * x - 10) * sin((x * 10 - 10.75) * c4);
   },
   easeOutElastic: function (x) {
     return x === 0
       ? 0
       : x === 1
-      ? 1
-      : pow(2, -10 * x) * sin((x * 10 - 0.75) * c4) + 1;
+        ? 1
+        : pow(2, -10 * x) * sin((x * 10 - 0.75) * c4) + 1;
   },
   easeInOutElastic: function (x) {
     return x === 0
       ? 0
       : x === 1
-      ? 1
-      : x < 0.5
-      ? -(pow(2, 20 * x - 10) * sin((20 * x - 11.125) * c5)) / 2
-      : (pow(2, -20 * x + 10) * sin((20 * x - 11.125) * c5)) / 2 + 1;
+        ? 1
+        : x < 0.5
+          ? -(pow(2, 20 * x - 10) * sin((20 * x - 11.125) * c5)) / 2
+          : (pow(2, -20 * x + 10) * sin((20 * x - 11.125) * c5)) / 2 + 1;
   },
   easeInBounce: function (x) {
     return 1 - bounceOut(1 - x);

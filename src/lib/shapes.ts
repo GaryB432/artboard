@@ -12,7 +12,7 @@ export type Shape = {
 export function clampVector(vector: Vector2, boundary: Vector2): Vector2 {
   const size = new Vector2(
     clamp(vector.x, 0, boundary.x),
-    clamp(vector.y, 0, boundary.y)
+    clamp(vector.y, 0, boundary.y),
   );
   return size;
 }
@@ -28,7 +28,7 @@ export function randomShape(type: ShapeType, boundary: Vector2): Shape {
 
     const origin = new Vector2(
       ranger(radius, boundary.x - radius),
-      ranger(radius, boundary.y - radius)
+      ranger(radius, boundary.y - radius),
     );
 
     const size = new Vector2(radius, radius);
@@ -38,7 +38,7 @@ export function randomShape(type: ShapeType, boundary: Vector2): Shape {
 
   const size = new Vector2(
     Math.random() * boundary.x,
-    Math.random() * boundary.y
+    Math.random() * boundary.y,
   );
 
   const two = new Vector2(2, 2);
@@ -47,7 +47,7 @@ export function randomShape(type: ShapeType, boundary: Vector2): Shape {
 
   const origin = new Vector2(
     ranger(halfsize.x, boundary.x - halfsize.x),
-    ranger(halfsize.y, boundary.y - halfsize.y)
+    ranger(halfsize.y, boundary.y - halfsize.y),
   );
 
   return { type, origin, size };

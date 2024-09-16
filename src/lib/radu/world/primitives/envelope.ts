@@ -4,7 +4,11 @@ import type { Segment } from "./segment";
 
 export class Envelope {
   poly: Polygon;
-  constructor(public skeleton: Segment, width: number, roundness = 1) {
+  constructor(
+    public skeleton: Segment,
+    width: number,
+    roundness = 1,
+  ) {
     this.skeleton = skeleton;
     this.poly = this.#generatePolygon(width, roundness);
   }
@@ -37,7 +41,7 @@ export class Envelope {
       lineWidth?: number | undefined;
       fill?: string | undefined;
       join?: CanvasLineJoin | undefined;
-    }
+    },
   ): void {
     this.poly.draw(ctx, options);
   }

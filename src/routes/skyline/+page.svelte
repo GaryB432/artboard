@@ -65,9 +65,9 @@
     canvasSize = fitToAspectRatio(
       new Vector2(
         document.body.clientWidth,
-        document.body.clientHeight - roughHeaderAndFooterHeight
+        document.body.clientHeight - roughHeaderAndFooterHeight,
       ),
-      aspect
+      aspect,
     );
     canvas.height = canvasSize.y;
     canvas.width = canvasSize.x;
@@ -81,7 +81,7 @@
 </script>
 
 <section class="container">
-  <canvas bind:this={canvas} />
+  <canvas bind:this={canvas}></canvas>
   <input bind:value={overallSpeed} type="range" max="30" min="0" />
   <div>fps: {fps.toPrecision(2)}</div>
 </section>

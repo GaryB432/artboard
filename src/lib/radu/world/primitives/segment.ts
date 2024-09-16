@@ -10,7 +10,10 @@ import {
 import type { Point } from "./point";
 
 export class Segment {
-  public constructor(public p1: Point, public p2: Point) {}
+  public constructor(
+    public p1: Point,
+    public p2: Point,
+  ) {}
 
   public length(): number {
     return distance(this.p1, this.p2);
@@ -56,7 +59,7 @@ export class Segment {
       width = 2,
       color = "black",
       dash = [],
-    }: { width?: number; color?: string; dash?: number[] } = {}
+    }: { width?: number; color?: string; dash?: number[] } = {},
   ): void {
     ctx.beginPath();
     ctx.lineWidth = width;
