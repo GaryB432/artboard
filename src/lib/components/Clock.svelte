@@ -131,10 +131,6 @@
     transform: scale(2) translateY(1px);
   }
 
-  .button-bar button.mutey {
-    /* padding: 2px; */
-  }
-
   .button-bar button svg path.mutey {
     opacity: 0;
   }
