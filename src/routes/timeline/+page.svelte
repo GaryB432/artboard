@@ -11,8 +11,8 @@
   let canvasSize: Vector2;
   let ctx: CanvasRenderingContext2D;
   let fps = 0;
-  let overallSpeed = 5;
-  let viewPortTop = 0;
+  let overallSpeed = $state(5);
+  let viewPortTop = $state(0);
 
   function wheel(e: WheelEvent) {
     e.preventDefault();

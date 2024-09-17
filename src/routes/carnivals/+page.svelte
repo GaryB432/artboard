@@ -23,10 +23,10 @@
   let canvas: HTMLCanvasElement;
   let canvasSize: Vector2;
   let context: CanvasRenderingContext2D | null;
-  let easing: EasingFunction = (n) => n;
-  let loopDuration = 3000;
+  let easing: EasingFunction = $state((n: number) => n);
+  let loopDuration = $state(3000);
   let loopTimer: NodeJS.Timeout;
-  let playing = false;
+  let playing = $state(false);
 
   onMount(() => {
     context = canvas.getContext("2d");
@@ -118,9 +118,10 @@
   </div>
   <div class="button-box">
     <PlayButton
-      on:toggle={(p) => {
-        playing = p.detail.playing;
-        if (p.detail.playing) {
+      {playing}
+      ontoggle={() => {
+        playing = !playing;
+        if (playing) {
           moveSomeShapes();
           loopTimer = setInterval(() => {
             moveSomeShapes();
@@ -131,9 +132,9 @@
       }}
     />
     <EasingSelect
-      selected="easeOutElastic"
-      on:selected={(evt) => {
-        easing = evt.detail.easing;
+      easingName="easeOutElastic"
+      easingSelected={(f) => {
+        easing = f;
       }}
     />
   </div>

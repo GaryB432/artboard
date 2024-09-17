@@ -5,11 +5,11 @@
     pos: Vec2;
   }
 
-  let boids: Boid[] = [
+  let boids: Boid[] = $state([
     { pos: { x: 0, y: 4 } },
     { pos: { x: 10, y: 24 } },
     { pos: { x: 20, y: 44 } },
-  ];
+  ]);
 
   function randomOne() {
     for (const b of boids) {
@@ -44,7 +44,7 @@
     </svg>
   </div>
   <nav class="button-bar">
-    <button on:click={randomOne}>Random</button>
+    <button onclick={randomOne}>Random</button>
   </nav>
 </div>
 

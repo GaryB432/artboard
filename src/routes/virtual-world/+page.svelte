@@ -1,26 +1,26 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import type { PageData } from "./$types";
   import { Graph, getNearestPoint } from "./world/math";
   import { Point, Segment } from "./world/primitives";
   import { Viewport } from "./world/viewport";
 
-  export let data: PageData;
+  let { data } = $props();
 
   let canvas: HTMLCanvasElement;
   let ctx: CanvasRenderingContext2D | null;
 
   export class GraphEditor {
+    viewport: Viewport;
+    graph: Graph;
     canvas: HTMLCanvasElement;
     ctx: CanvasRenderingContext2D | null;
     selected: Point | null = null;
     hovered: Point | null = null;
     dragging = false;
     mouse: Point | null = null;
-    constructor(
-      public viewport: Viewport,
-      public graph: Graph,
-    ) {
+    constructor(viewport: Viewport, graph: Graph) {
+      this.viewport = viewport;
+      this.graph = graph;
       this.canvas = viewport.canvas;
 
       this.ctx = this.canvas.getContext("2d");

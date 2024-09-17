@@ -10,9 +10,9 @@
   let canvas: HTMLCanvasElement;
   let canvasSize: Vector2;
   let ctx: CanvasRenderingContext2D;
-  let fps = 0;
+  let fps = $state(0);
   let lastCalledTime = 0;
-  let overallSpeed = 5;
+  let overallSpeed = $state(5);
   let start = 0;
 
   function drawCloud() {

@@ -2,7 +2,7 @@
   import { onMount } from "svelte";
   import fmVsAm from "./radio-fm-vs-am-anim.gif";
 
-  let frequency = 80;
+  let frequency = $state(80);
   let canvas: HTMLCanvasElement;
   let ctx: CanvasRenderingContext2D | null = null;
 
@@ -63,7 +63,7 @@
     width="500px"
     height="500px"
     style="background-color: darkred"
-    on:wheel={(evt) => {
+    onwheel={(evt) => {
       const dir = Math.sign(evt.deltaY);
       const step = 1;
       frequency += dir * step;
