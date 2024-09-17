@@ -35,6 +35,8 @@
   };
 
   class Point {
+    x = 0;
+    y = 0;
     px: number;
     py: number;
     vx: number;
@@ -42,10 +44,9 @@
     pinX: number | null;
     pinY: number | null;
     constraints: Constraint[];
-    constructor(
-      public x: number,
-      public y: number,
-    ) {
+    constructor(x: number, y: number) {
+      this.x = x;
+      this.y = y;
       this.px = x;
       this.py = y;
       this.vx = 0;
@@ -140,12 +141,13 @@
   }
 
   class Constraint {
+    p1: Point;
+    p2: Point;
     length: number;
-    constructor(
-      public p1: Point,
-      public p2: Point,
-    ) {
+    constructor(p1: Point, p2: Point) {
       this.length = spacing;
+      this.p1 = p1;
+      this.p2 = p2;
     }
 
     resolve() {
@@ -260,14 +262,14 @@
 <div class="container">
   <canvas
     bind:this={canvas}
-    on:mousedown={(e) => {
+    onmousedown={(e) => {
       mouse.button = e.button + 1;
       mouse.down = true;
       setMouse(e);
     }}
-    on:mousemove={setMouse}
-    on:mouseup={() => (mouse.down = false)}
-    on:contextmenu={(e) => e.preventDefault()}
+    onmousemove={setMouse}
+    onmouseup={() => (mouse.down = false)}
+    oncontextmenu={(e) => e.preventDefault()}
   ></canvas>
   <span>Drag with your mouse, right-click to slice.</span>
 </div>

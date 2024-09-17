@@ -1,26 +1,23 @@
 <script lang="ts">
-  import { createEventDispatcher, onMount } from "svelte";
   import easings, { type EasingFunction } from "../easings";
 
-  const dispatch = createEventDispatcher<{
-    selected: { easing: EasingFunction };
-  }>();
-
   const keys = Object.keys(easings);
-  export let selected = keys.at(0);
-  function dispatchEasing() {
-    if (selected) {
-      dispatch("selected", { easing: easings[selected] });
-    }
-  }
-  onMount(() => {
-    dispatchEasing();
-  });
+  let {
+    easingSelected,
+    easingName,
+  }: {
+    easingSelected: (e: EasingFunction) => void;
+    easingName: string;
+  } = $props();
+  easingSelected(easings[easingName]);
 </script>
 
-<select bind:value={selected} on:change={dispatchEasing}>
+<select
+  bind:value={easingName}
+  onchange={() => easingSelected(easings[easingName])}
+>
   {#each keys as key}
-    <option value={key} selected={key === selected}>{key}</option>
+    <option value={key} selected={key === easingName}>{key}</option>
   {/each}
 </select>
 

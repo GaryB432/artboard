@@ -9,8 +9,8 @@
   }
 
   let container: HTMLElement | null = null;
-  let wiping = false;
-  let muted = true;
+  let wiping = $state(false);
+  let muted = $state(true);
   const clock = new Clock();
   const v = 2;
   const t = 46;
@@ -63,9 +63,9 @@
 <section>
   <div class="container right-bar" bind:this={container} class:wiping></div>
   <nav class="button-bar">
-    <button on:click={drawRandoFrame}>Go</button>
-    <button on:click={wipe}>Wipe</button>
-    <button on:click={toggleMute} class="mutey" class:muted>
+    <button onclick={drawRandoFrame}>Go</button>
+    <button onclick={wipe}>Wipe</button>
+    <button onclick={toggleMute} class="mutey" class:muted>
       <svg
         version="1.1"
         xmlns="http://www.w3.org/2000/svg"
@@ -129,10 +129,6 @@
     fill: currentColor;
     height: 1em;
     transform: scale(2) translateY(1px);
-  }
-
-  .button-bar button.mutey {
-    /* padding: 2px; */
   }
 
   .button-bar button svg path.mutey {

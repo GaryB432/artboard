@@ -33,10 +33,6 @@
       description: "skyline",
     },
     {
-      path: "stilo",
-      description: "basic points",
-    },
-    {
       path: "three/cinematic",
       description: "threejs cinematic camera",
     },
@@ -55,7 +51,7 @@
   ];
 </script>
 
-{#snippet itemf(item)}
+{#snippet itemf(item: { path: string; description: string })}
   <li>
     <a href="{base}/{item.path}">{item.path}</a>
     <div>{item.description}</div>

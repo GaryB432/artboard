@@ -1,15 +1,10 @@
 <script lang="ts">
-  export let playing = false;
-
-  import { createEventDispatcher } from "svelte";
-
-  const dispatch = createEventDispatcher<{ toggle: { playing: boolean } }>();
+  let { playing, ontoggle }: { playing: boolean; ontoggle: () => void } =
+    $props();
 
   function togglePlaying() {
     playing = !playing;
-    dispatch("toggle", {
-      playing,
-    });
+    ontoggle();
   }
 
   const svgPaths = {
@@ -18,7 +13,7 @@
   };
 </script>
 
-<button on:click={togglePlaying}>
+<button onclick={togglePlaying}>
   <svg viewBox="0 0 36 36">
     <path d={playing ? svgPaths.pause : svgPaths.play} />
   </svg>

@@ -4,10 +4,11 @@
   import { onMount } from "svelte";
   import GithubAnchor from "./GithubAnchor.svelte";
 
-  let activeTab = 1;
+  let activeTab = $state(1);
+
   let clockContainer: HTMLDivElement | null;
-  let clockOpen = true;
-  $: label = clockOpen ? "Stop Clock" : "Start Clock";
+  let clockOpen = $state(true);
+  let label = $derived(clockOpen ? "Stop Clock" : "Start Clock");
   let dialog: HTMLDialogElement;
   const clock = new Clock();
   onMount(() => {
@@ -34,7 +35,7 @@
   <span class="button-list">
     <button
       class:active={clockOpen}
-      on:click={() => {
+      onclick={() => {
         clockOpen = !clockOpen;
         if (clockOpen) {
           clock.start();
@@ -50,14 +51,14 @@
     ></div>
     <GithubAnchor />
     <button
-      on:click={() => {
+      onclick={() => {
         activeTab = 0;
         dialog.showModal();
       }}
       class:active={activeTab === 0}>Reset to Defaults</button
     >
     <button
-      on:click={() => {
+      onclick={() => {
         activeTab = 1;
         dialog.showModal();
       }}
