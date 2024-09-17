@@ -1,7 +1,4 @@
 {
-  "affected": {
-    "defaultBase": "master"
-  },
   "generators": {
     "@gb-nx/svelte:component": {
       "directory": "components",
@@ -23,5 +20,7 @@
     "test": {
       "cache": true
     }
-  }
+  },
+  "useInferencePlugins": false,
+  "defaultBase": "master"
 }

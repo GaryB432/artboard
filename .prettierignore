@@ -1,4 +1,6 @@
-/.nx/cache
 .svelte-kit
 .vercel
 build
+
+/.nx/cache
+/.nx/workspace-data
