@@ -1,19 +1,10 @@
 <script lang="ts">
-  // export let playing = false;
-
   let { playing, ontoggle }: { playing: boolean; ontoggle: () => void } =
     $props();
-
-  import { createEventDispatcher } from "svelte";
-
-  // const dispatch = createEventDispatcher<{ toggle: { playing: boolean } }>();
 
   function togglePlaying() {
     playing = !playing;
     ontoggle();
-    // dispatch("toggle", {
-    //   playing,
-    // });
   }
 
   const svgPaths = {
