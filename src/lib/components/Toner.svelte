@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Toner } from "$lib/toner/toner";
-  let playing = false;
+  let playing = $state(false);
 
   const toner = new Toner();
 </script>
@@ -43,7 +43,7 @@
   </div>
   <nav class="button-bar">
     <button
-      on:click={async () => {
+      onclick={async () => {
         playing = true;
         await toner.play([
           { delay: 0, duration: 0.2, frequency: 523.25 },

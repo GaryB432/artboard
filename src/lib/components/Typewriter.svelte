@@ -203,7 +203,7 @@
   function randomMember<T>(set: T[]): T {
     return set[rangeRandomFromZero(set.length - 1)];
   }
-  let phrase = "";
+  let phrase = $state("");
   function typewritePhrase() {
     phrase = "";
     const n = `${randomMember(adjectives)} ${randomMember(nouns)}`;
@@ -228,7 +228,7 @@
   <div>
     {phrase}
   </div>
-  <button on:click={typewritePhrase}>Type</button>
+  <button onclick={typewritePhrase}>Type</button>
 </div>
 
 <style>
