@@ -44,11 +44,12 @@
 <style>
   .cbvp {
     display: grid;
-    grid-template-columns: 1fr 4fr 1fr 1fr;
+    grid-template-columns: 2fr 6fr 1fr 1fr;
     align-items: center;
     border: thin solid #333;
     font-size: 11px;
     gap: 0.5rem;
+    padding: 0.2rem;
   }
 
   button {
@@ -69,5 +70,14 @@
   button.active {
     background-color: #333;
     color: #fafafb;
+  }
+
+  input[type="range" i] {
+    appearance: auto;
+    cursor: default;
+    color: rgb(16, 16, 16);
+    padding: initial;
+    border: initial;
+    margin: 2px;
   }
 </style>
