@@ -6,20 +6,10 @@
   };
   let { label, onpausedchange, onratechange }: Props = $props();
 
-  // let playing = $derived(player.playState === "running");
   let playing = $state(true);
   let rate = $state(1);
+
   let doubled = $derived(rate === 2);
-
-  // let state = $derived(player.playState);
-
-  const duration = 1400;
-
-  function rangeHandler(e: { currentTarget: HTMLInputElement }) {
-    console.log("Enter rangeHandler");
-    // const percent = parseInt(e.currentTarget.value, 10) / 100;
-    // player.currentTime = percent * duration;
-  }
 </script>
 
 <div class="cbvp">
@@ -54,10 +44,8 @@
 
   button {
     background: transparent;
-    /* border: none; */
     color: #333;
     line-height: 1;
-    /* margin: 0.5rem; */
     text-align: center;
     max-width: 2rem;
     padding: 0.2rem 0.5rem 0.2rem 0.3rem;

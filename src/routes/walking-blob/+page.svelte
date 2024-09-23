@@ -48,33 +48,6 @@
     animations.head = part_head.animate(headKeyframes(), headOptions());
   });
 
-  // var ranges = document.querySelectorAll<HTMLInputElement>(
-  //   'input[type="range"]',
-  // );
-  // for (let i = 0, len = ranges.length; i < len; i++) {
-  //   var range = ranges[i];
-  //   range.disabled = true;
-  //   range.value = "0";
-  //   range.addEventListener("change", rangeHandler);
-  // }
-  // var pauses = document.querySelectorAll(".pause");
-  // for (let i = 0, len = pauses.length; i < len; i++) {
-  //   pauses[i].addEventListener("click", pauseHandler);
-  // }
-
-  // var rates = document.querySelectorAll(".rate-2x");
-  // for (let i = 0, len = rates.length; i < len; i++) {
-  //   rates[i].addEventListener("click", rateHandler);
-  // }
-
-  // var duration = 1400;
-
-  /* currentTime DOES take playbackRate into account... nice.
-setInterval(function() {
-console.log(animations.head.currentTime,animations.body.currentTime);
-}, 1000);
-//*/
-
   let playing = $state(false);
   let rate = $state(1);
 
@@ -179,9 +152,7 @@ console.log(animations.head.currentTime,animations.body.currentTime);
   }
 
   .controls {
-    /* font-size: 11px; */
     display: inline-block;
-    /* width: 23rem; */
     padding-top: 1rem;
   }
 </style>
