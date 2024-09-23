@@ -17,6 +17,11 @@
       description: "tearable cloth",
     },
     {
+      path: "walking-blob",
+      description:
+        "borrowed and sveltized from https://codepen.io/danwilson/pen/WvXRYg",
+    },
+    {
       path: "radu/vectors",
       description: "vector math and visualization from radu",
     },
