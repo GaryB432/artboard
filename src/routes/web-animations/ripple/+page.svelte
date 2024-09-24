@@ -1,4 +1,4 @@
-script lang="ts">
+<script lang="ts">
   import WebAnimationsHome from "../WebAnimationsHome.svelte";
   let data = $state({ subject: "ripple" });
 </script>
