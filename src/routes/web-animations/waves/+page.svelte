@@ -13,7 +13,6 @@
       this.delay = (this.width * this.width + this.height * this.height) * 20;
     }
     animate(): Animation | null {
-      const { delay } = this;
       if (this.div) {
         return this.div.animate(
           {
@@ -21,7 +20,7 @@
             opacity: [1, 0],
           },
           {
-            delay,
+            delay: this.delay,
             duration: 2000,
             iterations: Infinity,
             direction: "alternate",
@@ -37,10 +36,15 @@
 
   var sideCount = 20;
 
+  // let container: HTMLDivElement;
+  // var adjustment = $derived((sideCount % 2) * 0.5);
+  // var min = $derived(-sideCount / 2 + adjustment);
+  // var max = $derived(sideCount / 2 + adjustment);
+
   let container: HTMLDivElement;
-  var adjustment = $derived((sideCount % 2) * 0.5);
-  var min = $derived(-sideCount / 2 + adjustment);
-  var max = $derived(sideCount / 2 + adjustment);
+  var adjustment = (sideCount % 2) * 0.5;
+  var min = -sideCount / 2 + adjustment;
+  var max = sideCount / 2 + adjustment;
 
   function loadBoxes() {
     for (var y = min; y < max; y++) {
@@ -51,6 +55,10 @@
   }
 
   loadBoxes();
+  for (const b of boxes) {
+    const { width, height } = b;
+    console.log(width, height);
+  }
 
   onMount(() => {
     container.animate(
@@ -99,12 +107,11 @@
 
 <WebAnimationsHome></WebAnimationsHome>
 
-
 <style>
   .host {
     margin: 0;
     background: blue;
-    overflow: hidden;
+    /* overflow: hidden; */
   }
 
   #perspective {
