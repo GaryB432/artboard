@@ -1,4 +1,5 @@
 <script lang="ts">
+  import WebAnimationsHome from "../WebAnimationsHome.svelte";
   let data = $state({ subject: "ripple" });
 </script>
 
@@ -9,6 +10,8 @@
 <article class="container">
   {data.subject} is coming some day soon
 </article>
+
+<WebAnimationsHome></WebAnimationsHome>
 
 <style>
   .container {

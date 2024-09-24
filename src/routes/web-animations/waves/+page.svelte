@@ -1,22 +1,34 @@
 <script lang="ts">
+  import WebAnimationsHome from "../WebAnimationsHome.svelte";
   import { onMount } from "svelte";
 
   class Box {
-    width = $state(0);
-    height = $state(0);
+    width = 0;
+    height = 0;
+    delay = 0;
     div: Animatable | null = $state(null);
     constructor(x: number, y: number) {
       this.width = x;
       this.height = y;
+      this.delay = (this.width * this.width + this.height * this.height) * 20;
     }
-    animate(
-      keyframes: Keyframe[] | PropertyIndexedKeyframes | null,
-      options?: number | KeyframeAnimationOptions,
-    ): Animation | null {
+    animate(): Animation | null {
+      const { delay } = this;
       if (this.div) {
-        return this.div.animate(keyframes, options);
+        return this.div.animate(
+          {
+            transform: ["translateZ(0px)", "translateZ(40px)"],
+            opacity: [1, 0],
+          },
+          {
+            delay,
+            duration: 2000,
+            iterations: Infinity,
+            direction: "alternate",
+            easing: "ease-in",
+          },
+        );
       }
-      console.log("fall thru!");
       return null;
     }
   }
@@ -55,19 +67,7 @@
     );
 
     for (const box of boxes) {
-      box.animate(
-        {
-          transform: ["translateZ(0px)", "translateZ(40px)"],
-          opacity: [1, 0],
-        },
-        {
-          delay: (box.width * box.width + box.height * box.height) * 20,
-          duration: 2000,
-          iterations: Infinity,
-          direction: "alternate",
-          easing: "ease-in",
-        },
-      );
+      box.animate();
     }
   });
 
@@ -96,6 +96,8 @@
     </div>
   </div>
 </div>
+
+<WebAnimationsHome></WebAnimationsHome>
 
 <style>
   /* body {
