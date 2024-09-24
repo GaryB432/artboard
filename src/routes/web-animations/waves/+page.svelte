@@ -99,10 +99,8 @@
 
 <WebAnimationsHome></WebAnimationsHome>
 
-<style>
-  /* body {
-    } */
 
+<style>
   .host {
     margin: 0;
     background: blue;
