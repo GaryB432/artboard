@@ -5,9 +5,7 @@
       "language": "ts"
     },
     "@gb-nx/svelte:route": {
-      "directory": "web-animations",
       "language": "ts",
-      "style": "css",
       "skipTests": true
     },
     "@gb-nx/workspace:module": {

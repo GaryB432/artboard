@@ -7,7 +7,7 @@
 </svelte:head>
 
 <article class="container">
-  {data.subject} works
+  {data.subject} is coming some day soon
 </article>
 
 <style>
