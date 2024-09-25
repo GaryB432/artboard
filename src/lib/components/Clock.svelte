@@ -65,7 +65,12 @@
   <nav class="button-bar">
     <button onclick={drawRandoFrame}>Go</button>
     <button onclick={wipe}>Wipe</button>
-    <button onclick={toggleMute} class="mutey" class:muted>
+    <button
+      onclick={toggleMute}
+      class="mutey"
+      class:muted
+      aria-label="play or mute"
+    >
       <svg
         version="1.1"
         xmlns="http://www.w3.org/2000/svg"

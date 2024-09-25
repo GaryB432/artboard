@@ -6,7 +6,7 @@
     <div class="logo">
       <div class="logo-flp">
         <div class="wrap">
-          <a href="/">
+          <a href="/" aria-label="STL Today">
             <div class="front">
               <img
                 alt="STLtoday.com"
