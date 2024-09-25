@@ -8,6 +8,7 @@
 </div>
 
 <ul>
+  <li><a href="web-animations/parallax-starfield">parallax-starfield</a></li>
   <li><a href="web-animations/spinning-dots">spinning-dots</a></li>
   <li><a href="web-animations/waves">waves</a></li>
 </ul>
@@ -15,7 +16,6 @@
 <h1>On the roadmap</h1>
 
 <ul>
-  <li><a href="web-animations/parallax-starfield">parallax-starfield</a></li>
   <li><a href="web-animations/expandoboard">expandoboard</a></li>
   <li><a href="web-animations/galaxy">galaxy</a></li>
   <li><a href="web-animations/ripple">ripple</a></li>

@@ -2,7 +2,8 @@
   "generators": {
     "@gb-nx/svelte:component": {
       "directory": "components",
-      "language": "ts"
+      "language": "ts",
+      "style": "css"
     },
     "@gb-nx/svelte:route": {
       "language": "ts",
