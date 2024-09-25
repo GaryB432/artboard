@@ -3,6 +3,7 @@
   target="_blank"
   rel="noreferrer noopener"
   title="View on GitHub"
+  aria-label="View on GitHub"
 >
   <svg
     viewBox="0 0 24 24"
