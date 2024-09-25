@@ -47,5 +47,6 @@ module.exports = {
   ],
   globals: {
     NodeJS: true,
+    Animatable: true,
   },
 };
