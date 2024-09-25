@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { Circle } from "./circle.svelte";
   import WebAnimationsHome from "../WebAnimationsHome.svelte";
+  import { Circle } from "./circle.svelte";
 
   var layers = 9;
   var start = 4;

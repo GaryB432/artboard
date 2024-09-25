@@ -1,7 +1,3 @@
-<script lang="ts">
-  let data = $state({ subject: "web-animations" });
-</script>
-
 <svelte:head>
   <title>artboard - web-animations</title>
 </svelte:head>
@@ -12,6 +8,7 @@
 </div>
 
 <ul>
+  <li><a href="web-animations/spinning-dots">spinning-dots</a></li>
   <li><a href="web-animations/waves">waves</a></li>
 </ul>
 
@@ -19,7 +16,6 @@
 
 <ul>
   <li><a href="web-animations/parallax-starfield">parallax-starfield</a></li>
-  <li><a href="web-animations/spinning-dots">spinning-dots</a></li>
   <li><a href="web-animations/expandoboard">expandoboard</a></li>
   <li><a href="web-animations/galaxy">galaxy</a></li>
   <li><a href="web-animations/ripple">ripple</a></li>

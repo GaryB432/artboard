@@ -1,20 +1,20 @@
 <script lang="ts">
-  import WebAnimationsHome from "../WebAnimationsHome.svelte";
   import { onMount } from "svelte";
+  import WebAnimationsHome from "../WebAnimationsHome.svelte";
 
   class Box {
     width = 0;
     height = 0;
     delay = 0;
-    div: Animatable | null = $state(null);
+    element: Animatable | null = $state(null);
     constructor(x: number, y: number) {
       this.width = x;
       this.height = y;
       this.delay = (this.width * this.width + this.height * this.height) * 20;
     }
     animate(): Animation | null {
-      if (this.div) {
-        return this.div.animate(
+      if (this.element) {
+        return this.element.animate(
           {
             transform: ["translateZ(0px)", "translateZ(40px)"],
             opacity: [1, 0],
@@ -35,11 +35,6 @@
   let boxes: Box[] = $state([]);
 
   var sideCount = 20;
-
-  // let container: HTMLDivElement;
-  // var adjustment = $derived((sideCount % 2) * 0.5);
-  // var min = $derived(-sideCount / 2 + adjustment);
-  // var max = $derived(sideCount / 2 + adjustment);
 
   let container: HTMLDivElement;
   var adjustment = (sideCount % 2) * 0.5;
@@ -79,16 +74,6 @@
     }
   });
 
-  // function createBox() {
-  //   // var box = document.createElement("div");
-  //   const box = new Box();
-  //   // box.className = "box";
-  //   box.width = 100 / sideCount;
-  //   box.height = 100 / sideCount;
-  //   // container.appendChild(box);
-  //   boxes.push(box);
-  //   // return box;
-  // }
 </script>
 
 <div class="host">
@@ -97,7 +82,7 @@
       {#each boxes as box}
         <div
           class="box"
-          bind:this={box.div}
+          bind:this={box.element}
           style="width: {box.width}%; height: {box.width}%"
         ></div>
       {/each}
