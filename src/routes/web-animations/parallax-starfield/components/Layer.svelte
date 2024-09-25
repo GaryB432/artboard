@@ -1,20 +1,17 @@
 <script lang="ts">
-  import type { Star } from "../shared";
+  import StarComponent from "./Star.svelte";
+  import type { Layer, Star } from "../shared";
 
   let subject = $state("Layer component");
 
-  type Props = {
-    stars: Star[];
-  };
-
-  let { stars }: Props = $props();
+  let { stars }: Layer = $props();
 </script>
 
 <div class="container">
   {#each stars as star}
-    {JSON.stringify(star)}
+    <StarComponent {...star}></StarComponent>
   {/each}
-  {subject} works
+  {subject} works with {stars.length} stars!
 </div>
 
 <style>

@@ -2,12 +2,10 @@
   let subject = $state("Star component");
 </script>
 
-<div class="container">
-  {subject} works
-</div>
+<span class="container">*</span>
 
 <style>
   .container {
-    border: thin solid silver;
+    border: none;
   }
 </style>

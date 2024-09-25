@@ -8,7 +8,7 @@
   // var universe = document.getElementById("universe");
 
   let universe: HTMLElement | null = $state(null);
-  let layerComponents: LayerPanel[] = $state([]);
+  // let layerComponents: LayerPanel[] = $state([]);
   let layers: Layer[] = $state([]);
 
   // var w = window;
@@ -20,7 +20,7 @@
   for (var l = 0; l < layerCount; ++l) {
     //   var layer = document.createElement("div");
     const layer = new Layer();
-    layers.push(new Layer());
+    // layers.push(new Layer());
     //   layer.setAttribute("id", "layer" + l);
     //   layer.setAttribute("class", "starfield");
     //   universe.appendChild(layer);
@@ -37,8 +37,10 @@
         //         "translate(" + (xpos + s * width) + "px, " + ypos + "px)";
         //       star.style.backgroundColor = "white"; //rgb(' + Math.round(Math.random() * 255) + ', ' + Math.round(Math.random() * 255) + ', ' + Math.round(Math.random() * 255) + ')';
         //       layer.appendChild(star);
+        console.log(star);
         layer.stars.push(star);
       }
+      layers.push(layer)
     }
     //   layer.animate(
     //     [
@@ -52,6 +54,7 @@
 
 <div bind:this={universe} id="xxxxx-universe">
   {#each layers as layer}
+  {layer.stars.length}
     <LayerPanel {...layer}></LayerPanel>
   {/each}
 </div>
