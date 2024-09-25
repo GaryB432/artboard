@@ -1,42 +1,45 @@
 <script lang="ts">
+  import { onMount } from "svelte";
+  import { Circle } from "./circle.svelte";
   import WebAnimationsHome from "../WebAnimationsHome.svelte";
-  let data = $state({ subject: "spinning-dots" });
+
+  var layers = 9;
+  var start = 4;
+  const circles: Circle[] = [];
+  for (var i = 1; i <= layers; i++) {
+    var n = i * start;
+    for (var j = 0; j < n; j++) {
+      circles.push(new Circle(i, j / n));
+    }
+  }
+
+  onMount(() => {
+    circles.forEach((c) => c.animate());
+  });
 </script>
 
-<svelte:head>
-  <title>artboard - spinning-dots</title>
-</svelte:head>
-
-<article class="container">
-  {data.subject} is coming some day soon
-</article>
-
+<div class="host">
+  {#each circles as circle}
+    <div class="circle" bind:this={circle.element}></div>
+  {/each}
+</div>
 <WebAnimationsHome></WebAnimationsHome>
 
-
 <style>
-  .container {
-    padding: 1em;
-    border: thin solid silver;
-	margin-left: calc((100vw - 50vmin) / 2);
-    margin-top: calc((100vh - 50vmin) / 4);
-    width: 50vmin;
-    height: 50vmin;
-    perspective: 60vmin;
+  .host {
+    background: #0e7cf0;
+    margin: 16px;
+    color: white;
+    top: 40vh;
+    height: 60vh;
   }
-  @media screen and (min-width: 576px) {
-    /* landscape phones */
-  }
-  @media screen and (min-width: 768px) {
-    /* tablets */
-  }
-  @media screen and (min-width: 992px) {
-    /* desktops */
-  }
-  @media screen and (min-width: 1200px) {
-    /* large desktops */
-  }
-  @media screen and (min-width: 1400px) {
-    /* larger desktops */
+  .circle {
+    background: #2a2a2a;
+    border-radius: 50%;
+    width: 10px;
+    height: 10px;
+    position: absolute;
+    top: 40vh;
+    left: 50vw;
   }
 </style>
