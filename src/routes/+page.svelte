@@ -17,6 +17,10 @@
       description: "tearable cloth",
     },
     {
+      path: "web-animations",
+      description: "animations ported from the old polyfill site",
+    },
+    {
       path: "walking-blob",
       description:
         "borrowed and sveltized from https://codepen.io/danwilson/pen/WvXRYg",

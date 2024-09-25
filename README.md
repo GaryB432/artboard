@@ -39,6 +39,8 @@ nx dev
 
 [SVG Attribute reference](https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute)
 
+[Web Animations Demos](https://web-animations.github.io/web-animations-demos/)
+
 ### elements
 
 [shadow parts](https://css-tricks.com/styling-in-the-shadow-dom-with-css-shadow-parts/)
