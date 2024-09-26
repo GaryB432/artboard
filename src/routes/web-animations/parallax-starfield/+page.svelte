@@ -13,8 +13,8 @@
 
   onMount(() => {
     if (container) {
-      const a = container.getBoundingClientRect();
-      size = [a.width, a.height];
+      const rect = container.getBoundingClientRect();
+      size = [rect.width, rect.height];
     }
     // $inspect(universe);
   });
