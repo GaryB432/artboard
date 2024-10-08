@@ -25,13 +25,13 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="460"
-   height="460"
-   viewBox="46 46 121.70834 121.70834"
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 210 297"
    version="1.1"
    id="svg8"
    inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)"
-   sodipodi:docname="drawing.svg">
+   sodipodi:docname="ryg.svg">
   <defs
      id="defs2" />
   <sodipodi:namedview
@@ -41,24 +41,19 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.7"
-     inkscape:cx="371.13735"
-     inkscape:cy="278.39899"
+     inkscape:zoom="0.35"
+     inkscape:cx="396.85039"
+     inkscape:cy="561.25984"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      inkscape:document-rotation="0"
      showgrid="false"
-     units="px"
-     scale-x="1"
-     viewbox-x="46"
-     fit-margin-top="0"
-     fit-margin-left="0"
-     fit-margin-right="0"
-     fit-margin-bottom="0"
-     inkscape:window-width="1267"
+     inkscape:snap-grids="true"
+     inkscape:snap-to-guides="true"
+     inkscape:window-width="1584"
      inkscape:window-height="1009"
-     inkscape:window-x="564"
-     inkscape:window-y="21"
+     inkscape:window-x="1998"
+     inkscape:window-y="0"
      inkscape:window-maximized="0" />
   <metadata
      id="metadata5">
@@ -75,14 +70,44 @@
   <g
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
-     id="layer1">
-    <path
-       id="path835"
-       style="fill:none;stroke:#000000;stroke-width:4.36399;stroke-linejoin:bevel"
-       d="M 111.01562 221.87109 L 111.01562 223.15039 A 52.142854 54.28571 0 0 0 64.285156 277.14258 A 52.142854 54.28571 0 0 0 111.01562 331.13477 L 111.01562 332.69922 L 357.55664 332.69922 L 357.55664 331.41406 A 52.142854 54.28571 0 0 0 408.57227 277.14258 A 52.142854 54.28571 0 0 0 357.55664 222.86914 L 357.55664 221.87109 L 111.01562 221.87109 z "
-       transform="matrix(0.26458333,0,0,0.26458333,46,46)" />
+     id="layer1"
+     style="display:inline">
+    <rect
+       style="fill:#ffffff;stroke:#000000;stroke-width:1.15464;stroke-linejoin:bevel"
+       id="rect841"
+       width="167.82143"
+       height="278.19049"
+       x="17.38689"
+       y="4.5357146" />
+    <ellipse
+       style="fill:#b9314f;stroke:#000000;stroke-width:1.4052;stroke-linejoin:bevel"
+       id="path833"
+       cx="102.05357"
+       cy="54.050594"
+       rx="40.696144"
+       ry="40.243835" />
+    <ellipse
+       style="fill:#ffff00;stroke:#000000;stroke-width:1.4052;stroke-linejoin:bevel"
+       id="ellipse835"
+       cx="102.80952"
+       cy="144.00891"
+       rx="40.696144"
+       ry="40.243835" />
+    <ellipse
+       style="fill:#008000;stroke:#000000;stroke-width:1.4052;stroke-linejoin:bevel"
+       id="ellipse837"
+       cx="102.80952"
+       cy="233.96724"
+       rx="40.696144"
+       ry="40.243835" />
   </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer2"
+     inkscape:label="bulbs"
+     style="display:inline" />
 </svg>
+
 
 
 <style>
