@@ -29,7 +29,7 @@ describe("Element", () => {
 
   test("creates Circle", () => {
     const el = createCircle(x99y99, 9);
-    expect(el.outerHTML).toEqual('<circle x="99" y="99" r="9"></circle>');
+    expect(el.outerHTML).toEqual('<circle cx="99" cy="99" r="9"></circle>');
   });
   test("creates Ellipse", () => {
     const el = createEllipse(x01y01, x10y10);

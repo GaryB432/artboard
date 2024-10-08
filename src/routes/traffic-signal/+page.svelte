@@ -1,5 +1,9 @@
 <script lang="ts">
-  let innerCircle: HTMLDivElement | null = null;
+  import { createCircle, createRect } from "$lib/svg/element";
+  import { Vector } from "$lib/vector/vector";
+  import { onMount } from "svelte";
+
+  let svg: SVGSVGElement | null = null;
   let grow = $state(false);
 
   function scaleInnerCircle() {
@@ -9,62 +13,42 @@
       grow = false;
     }, 1000);
   }
+
+  onMount(() => {
+    const r = 12;
+    const gap = 3;
+
+    for (let i = 0; i < 3; i++) {
+      const nv = new Vector(50, (i + 1) * 50);
+      console.log(nv);
+      const c = createCircle(nv, r);
+      svg?.appendChild(c);
+    }
+  });
 </script>
 
-<div class="circle-container">
-  <div class="outer-circle"></div>
-  <div class="inner-circle" class:grow bind:this={innerCircle}></div>
+<div class="container">
+  <svg viewBox="0 0 108 182" bind:this={svg}></svg>
 </div>
-<button onclick={scaleInnerCircle}>Scale Inner Circle</button>
 
-<svg
-  xmlns="http://www.w3.org/2000/svg"
-  width="210mm"
-  height="297mm"
-  viewBox="0 0 210 297"
-  version="1.1"
-  id="svg8"
->
-  <g id="layer1" style="display:inline">
-    <rect
-      style="fill:#ffffff;stroke:#000000;stroke-width:1.15464;stroke-linejoin:bevel"
-      id="rect841"
-      width="167.82143"
-      height="278.19049"
-      x="17.38689"
-      y="4.5357146"
-    />
-    <ellipse
-      style="fill:#b9314f;stroke:#000000;stroke-width:1.4052;stroke-linejoin:bevel"
-      id="path833"
-      cx="102.05357"
-      cy="54.050594"
-      rx="40.696144"
-      ry="40.243835"
-    />
-    <ellipse
-      style="fill:#ffff00;stroke:#000000;stroke-width:1.4052;stroke-linejoin:bevel"
-      id="ellipse835"
-      cx="102.80952"
-      cy="144.00891"
-      rx="40.696144"
-      ry="40.243835"
-    />
-    <ellipse
-      style="fill:#008000;stroke:#000000;stroke-width:1.4052;stroke-linejoin:bevel"
-      id="ellipse837"
-      cx="102.80952"
-      cy="233.96724"
-      rx="40.696144"
-      ry="40.243835"
-    />
-  </g>
-</svg>
+<button onclick={scaleInnerCircle}>Scale Inner Circle</button>
 
 <style>
   :root {
     --outer-circle-radius: 200px;
     --inner-circle-radius: 140px;
+  }
+
+  .container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+
+  svg {
+    border: thin solid silver;
+    height: 600px;
+    width: 1000px;
   }
 
   .circle-container {

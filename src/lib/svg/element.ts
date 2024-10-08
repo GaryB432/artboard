@@ -27,8 +27,8 @@ export function ΘcreateEllipse(radii: Vector, centers: Vector) {
 
 export function createCircle(pos: Vector, radius: number): SVGCircleElement {
   return createElement("circle", {
-    x: pos.x,
-    y: pos.y,
+    cx: pos.x,
+    cy: pos.y,
     r: radius,
   });
 }
