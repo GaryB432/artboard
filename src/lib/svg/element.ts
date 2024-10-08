@@ -22,6 +22,20 @@ export function addAttributes<K extends keyof SVGElementTagNameMap>(
 }
 
 export function ΘcreateEllipse(radii: Vector, centers: Vector) {
+  return createElement("ellipse", {});
+}
+
+export function createCircle(pos: Vector, radius: number): SVGCircleElement {
+  return createElement("circle", {
+    x: pos.x,
+    y: pos.y,
+    r: radius,
+  });
+}
+export function createEllipse(
+  radii: Vector,
+  centers: Vector,
+): SVGEllipseElement {
   return createElement("ellipse", {
     rx: radii.x,
     ry: radii.y,
@@ -29,32 +43,37 @@ export function ΘcreateEllipse(radii: Vector, centers: Vector) {
     cy: centers.y,
   });
 }
-
-export function createCircle(pos: Vector, radius: number): SVGCircleElement {
-  return createElement("circle", {});
-}
-export function createEllipse(
-  radii: Vector,
-  centers: Vector,
-): SVGEllipseElement {
-  return createElement("ellipse", {});
-}
 export function createLine(start: Vector, end: Vector): SVGLineElement {
-  return createElement("line", {});
-}
-export function createPath(points: Vector[]): SVGPathElement {
-  return createElement("path", {});
+  return createElement("line", {
+    x1: start.x,
+    y1: start.y,
+    x2: end.x,
+    y2: end.y,
+  });
 }
 export function createPolygon(points: Vector[]): SVGPolygonElement {
-  return createElement("polygon", {});
+  return createElement("polygon", { points: toPointString(points) });
 }
 export function createPolyline(points: Vector[]): SVGPolylineElement {
-  return createElement("polyline", {});
+  return createElement("polyline", { points: toPointString(points) });
 }
+function toPointString(points: Vector[]) {
+  return points.map((p) => `${p.x},${p.y}`).join(" ");
+}
+
 export function createRect(
   pos: Vector,
   size: Vector,
   radius?: Vector,
 ): SVGRectElement {
-  return createElement("rect", {});
+  const basics = {
+    x: pos.x,
+    y: pos.y,
+    width: size.x,
+    height: size.y,
+  };
+  if (radius) {
+    Object.assign(basics, { rx: radius.x, ry: radius.y });
+  }
+  return createElement("rect", basics);
 }

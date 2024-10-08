@@ -1,15 +1,14 @@
+import { Vector } from "$lib/vector/vector";
 import { describe, expect, test } from "vitest";
 import {
   createCircle,
   createElement,
+  createEllipse,
   createLine,
-  createPath,
   createPolygon,
   createPolyline,
   createRect,
-  createEllipse,
 } from "./element";
-import { Vector } from "$lib/vector/vector";
 
 const x10y10 = new Vector(10, 10);
 const x01y01 = new Vector(1, 1);
@@ -30,30 +29,30 @@ describe("Element", () => {
 
   test("creates Circle", () => {
     const el = createCircle(x99y99, 9);
-    expect(el.outerHTML).toEqual('<Circle rx="0"></Circle>');
+    expect(el.outerHTML).toEqual('<circle x="99" y="99" r="9"></circle>');
   });
   test("creates Ellipse", () => {
     const el = createEllipse(x01y01, x10y10);
-    expect(el.outerHTML).toEqual('<Ellipse rx="0"></Ellipse>');
+    expect(el.outerHTML).toEqual(
+      '<ellipse rx="1" ry="1" cx="10" cy="10"></ellipse>',
+    );
   });
   test("creates Line", () => {
     const el = createLine(x01y01, x10y10);
-    expect(el.outerHTML).toEqual('<Line rx="0"></Line>');
-  });
-  test("creates Path", () => {
-    const el = createPath([x01y01, x10y10]);
-    expect(el.outerHTML).toEqual('<path rx="0"></path>');
+    expect(el.outerHTML).toEqual('<line x1="1" y1="1" x2="10" y2="10"></line>');
   });
   test("creates Polygon", () => {
     const el = createPolygon([x01y01, x10y10]);
-    expect(el.outerHTML).toEqual('<polygon rx="0"></polygon>');
+    expect(el.outerHTML).toEqual('<polygon points="1,1 10,10"></polygon>');
   });
   test("creates Polyline", () => {
     const el = createPolyline([x01y01, x10y10]);
-    expect(el.outerHTML).toEqual('<polyline rx="0"></polyline>');
+    expect(el.outerHTML).toEqual('<polyline points="1,1 10,10"></polyline>');
   });
   test("creates Rect", () => {
     const el = createRect(x01y01, x10y10);
-    expect(el.outerHTML).toEqual('<rect rx="0"></rect>');
+    expect(el.outerHTML).toEqual(
+      '<rect x="1" y="1" width="10" height="10"></rect>',
+    );
   });
 });
