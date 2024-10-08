@@ -18,97 +18,48 @@
 <button onclick={scaleInnerCircle}>Scale Inner Circle</button>
 
 <svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="210mm"
-   height="297mm"
-   viewBox="0 0 210 297"
-   version="1.1"
-   id="svg8"
-   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)"
-   sodipodi:docname="ryg.svg">
-  <defs
-     id="defs2" />
-  <sodipodi:namedview
-     id="base"
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1.0"
-     inkscape:pageopacity="0.0"
-     inkscape:pageshadow="2"
-     inkscape:zoom="0.35"
-     inkscape:cx="396.85039"
-     inkscape:cy="561.25984"
-     inkscape:document-units="mm"
-     inkscape:current-layer="layer1"
-     inkscape:document-rotation="0"
-     showgrid="false"
-     inkscape:snap-grids="true"
-     inkscape:snap-to-guides="true"
-     inkscape:window-width="1584"
-     inkscape:window-height="1009"
-     inkscape:window-x="1998"
-     inkscape:window-y="0"
-     inkscape:window-maximized="0" />
-  <metadata
-     id="metadata5">
-    <rdf:RDF>
-      <cc:Work
-         rdf:about="">
-        <dc:format>image/svg+xml</dc:format>
-        <dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
-      </cc:Work>
-    </rdf:RDF>
-  </metadata>
-  <g
-     inkscape:label="Layer 1"
-     inkscape:groupmode="layer"
-     id="layer1"
-     style="display:inline">
+  xmlns="http://www.w3.org/2000/svg"
+  width="210mm"
+  height="297mm"
+  viewBox="0 0 210 297"
+  version="1.1"
+  id="svg8"
+>
+  <g id="layer1" style="display:inline">
     <rect
-       style="fill:#ffffff;stroke:#000000;stroke-width:1.15464;stroke-linejoin:bevel"
-       id="rect841"
-       width="167.82143"
-       height="278.19049"
-       x="17.38689"
-       y="4.5357146" />
+      style="fill:#ffffff;stroke:#000000;stroke-width:1.15464;stroke-linejoin:bevel"
+      id="rect841"
+      width="167.82143"
+      height="278.19049"
+      x="17.38689"
+      y="4.5357146"
+    />
     <ellipse
-       style="fill:#b9314f;stroke:#000000;stroke-width:1.4052;stroke-linejoin:bevel"
-       id="path833"
-       cx="102.05357"
-       cy="54.050594"
-       rx="40.696144"
-       ry="40.243835" />
+      style="fill:#b9314f;stroke:#000000;stroke-width:1.4052;stroke-linejoin:bevel"
+      id="path833"
+      cx="102.05357"
+      cy="54.050594"
+      rx="40.696144"
+      ry="40.243835"
+    />
     <ellipse
-       style="fill:#ffff00;stroke:#000000;stroke-width:1.4052;stroke-linejoin:bevel"
-       id="ellipse835"
-       cx="102.80952"
-       cy="144.00891"
-       rx="40.696144"
-       ry="40.243835" />
+      style="fill:#ffff00;stroke:#000000;stroke-width:1.4052;stroke-linejoin:bevel"
+      id="ellipse835"
+      cx="102.80952"
+      cy="144.00891"
+      rx="40.696144"
+      ry="40.243835"
+    />
     <ellipse
-       style="fill:#008000;stroke:#000000;stroke-width:1.4052;stroke-linejoin:bevel"
-       id="ellipse837"
-       cx="102.80952"
-       cy="233.96724"
-       rx="40.696144"
-       ry="40.243835" />
+      style="fill:#008000;stroke:#000000;stroke-width:1.4052;stroke-linejoin:bevel"
+      id="ellipse837"
+      cx="102.80952"
+      cy="233.96724"
+      rx="40.696144"
+      ry="40.243835"
+    />
   </g>
-  <g
-     inkscape:groupmode="layer"
-     id="layer2"
-     inkscape:label="bulbs"
-     style="display:inline" />
 </svg>
-
-
 
 <style>
   :root {
@@ -147,7 +98,7 @@
     transition: transform 200ms ease-in-out;
     transform-origin: center;
   }
-  
+
   .inner-circle.grow {
     transform: scale(1.25);
   }
