@@ -1,6 +1,7 @@
+import { names } from "$lib/utils/names";
 import type { Vector } from "$lib/vector/vector";
 
-export function createElement<K extends keyof SVGElementTagNameMap>(
+function createElement<K extends keyof SVGElementTagNameMap>(
   qualifiedName: K,
   attributes: Record<string, string | number> = {},
   style: Partial<CSSStyleDeclaration>,
@@ -9,15 +10,25 @@ export function createElement<K extends keyof SVGElementTagNameMap>(
     "http://www.w3.org/2000/svg",
     qualifiedName,
   );
-  return addAttributes(ele, attributes);
+  return addPresentationAttributes(addAttributes(ele, attributes), style);
 }
 
-export function addAttributes<K extends keyof SVGElementTagNameMap>(
+function addAttributes<K extends keyof SVGElementTagNameMap>(
   ele: SVGElementTagNameMap[K],
   attributes: Record<string, string | number>,
 ): SVGElementTagNameMap[K] {
   Object.entries(attributes).forEach(([k, v]) =>
     ele.setAttribute(k, v.toString()),
+  );
+  return ele;
+}
+
+function addPresentationAttributes<K extends keyof SVGElementTagNameMap>(
+  ele: SVGElementTagNameMap[K],
+  style: Partial<CSSStyleDeclaration>,
+): SVGElementTagNameMap[K] {
+  Object.entries(style).forEach(([k, v]) =>
+    ele.setAttribute(names(k).fileName, v ? v.toString() : ""),
   );
   return ele;
 }

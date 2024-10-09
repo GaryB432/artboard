@@ -15,13 +15,14 @@
   }
 
   onMount(() => {
-    const lenses = ["red", "yellow", "green"];
+    const ccs = ["red", "yellow", "green"];
+    const lenses = ccs.map((fill) => ({ stroke: "none", fill }));
     const r = 12;
     const gap = 3;
 
     for (let i = 0; i < lenses.length; i++) {
       const nv = new Vector(50, (i + 1) * 50);
-      const c = createCircle(nv, r, { stroke: "none", fill: lenses[i] });
+      const c = createCircle(nv, r, lenses[i]);
       svg?.appendChild(c);
     }
   });
@@ -49,41 +50,5 @@
     border: thin solid silver;
     height: 600px;
     width: 1000px;
-  }
-
-  .circle-container {
-    width: calc(2 * var(--outer-circle-radius));
-    height: calc(2 * var(--outer-circle-radius));
-    border-radius: 50%;
-    background-color: #f0f0f0;
-    position: relative;
-  }
-
-  .outer-circle {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: calc(2 * var(--outer-circle-radius));
-    height: calc(2 * var(--outer-circle-radius));
-    border-radius: 50%;
-    border: 13px solid #000;
-  }
-
-  .inner-circle {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: calc(2 * var(--inner-circle-radius));
-    height: calc(2 * var(--inner-circle-radius));
-    border-radius: 50%;
-    border: 13px solid #000;
-    transition: transform 200ms ease-in-out;
-    transform-origin: center;
-  }
-
-  .inner-circle.grow {
-    transform: scale(1.25);
   }
 </style>

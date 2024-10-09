@@ -2,7 +2,6 @@ import { Vector } from "$lib/vector/vector";
 import { describe, expect, test } from "vitest";
 import {
   createCircle,
-  createElement,
   createEllipse,
   createLine,
   createPolygon,
@@ -15,18 +14,6 @@ const x01y01 = new Vector(1, 1);
 const x99y99 = new Vector(99, 99);
 
 describe("Element", () => {
-  test("creates simple element", () => {
-    const el = createElement("circle", { fun: "true", testing: "10px" }, {});
-    expect(el.outerHTML).toEqual('<circle fun="true" testing="10px"></circle>');
-  });
-
-  // test("creates ellipse", () => {
-  //   const el = ΘcreateEllipse(new Vector(0, 0), new Vector(2, 5));
-  //   expect(el.outerHTML).toEqual(
-  //     '<ellipse rx="0" ry="0" cx="2" cy="5"></ellipse>',
-  //   );
-  // });
-
   test("creates Circle", () => {
     const el = createCircle(x99y99, 9);
     expect(el.outerHTML).toEqual('<circle cx="99" cy="99" r="9"></circle>');
@@ -44,6 +31,16 @@ describe("Element", () => {
   test("creates Polygon", () => {
     const el = createPolygon([x01y01, x10y10]);
     expect(el.outerHTML).toEqual('<polygon points="1,1 10,10"></polygon>');
+  });
+  test("creates blue Polygon", () => {
+    const el = createPolygon([x01y01, x10y10], {
+      stroke: "orange",
+      strokeWidth: "3",
+      fill: "blue",
+    });
+    expect(el.outerHTML).toEqual(
+      '<polygon points="1,1 10,10" stroke="orange" stroke-width="3" fill="blue"></polygon>',
+    );
   });
   test("creates Polyline", () => {
     const el = createPolyline([x01y01, x10y10]);
