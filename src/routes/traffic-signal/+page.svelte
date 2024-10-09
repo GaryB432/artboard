@@ -15,13 +15,13 @@
   }
 
   onMount(() => {
+    const lenses = ["red", "yellow", "green"];
     const r = 12;
     const gap = 3;
 
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < lenses.length; i++) {
       const nv = new Vector(50, (i + 1) * 50);
-      console.log(nv);
-      const c = createCircle(nv, r);
+      const c = createCircle(nv, r, { stroke: "none", fill: lenses[i] });
       svg?.appendChild(c);
     }
   });

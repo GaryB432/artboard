@@ -3,6 +3,7 @@ import type { Vector } from "$lib/vector/vector";
 export function createElement<K extends keyof SVGElementTagNameMap>(
   qualifiedName: K,
   attributes: Record<string, string | number> = {},
+  style: Partial<CSSStyleDeclaration>,
 ): SVGElementTagNameMap[K] {
   const ele = document.createElementNS(
     "http://www.w3.org/2000/svg",
@@ -21,41 +22,64 @@ export function addAttributes<K extends keyof SVGElementTagNameMap>(
   return ele;
 }
 
-export function ΘcreateEllipse(radii: Vector, centers: Vector) {
-  return createElement("ellipse", {});
-}
-
-export function createCircle(pos: Vector, radius: number): SVGCircleElement {
-  return createElement("circle", {
-    cx: pos.x,
-    cy: pos.y,
-    r: radius,
-  });
+export function createCircle(
+  pos: Vector,
+  radius: number,
+  style: Partial<CSSStyleDeclaration> = {},
+): SVGCircleElement {
+  return createElement(
+    "circle",
+    {
+      cx: pos.x,
+      cy: pos.y,
+      r: radius,
+    },
+    style,
+  );
 }
 export function createEllipse(
   radii: Vector,
   centers: Vector,
+  style: Partial<CSSStyleDeclaration> = {},
 ): SVGEllipseElement {
-  return createElement("ellipse", {
-    rx: radii.x,
-    ry: radii.y,
-    cx: centers.x,
-    cy: centers.y,
-  });
+  return createElement(
+    "ellipse",
+    {
+      rx: radii.x,
+      ry: radii.y,
+      cx: centers.x,
+      cy: centers.y,
+    },
+    style,
+  );
 }
-export function createLine(start: Vector, end: Vector): SVGLineElement {
-  return createElement("line", {
-    x1: start.x,
-    y1: start.y,
-    x2: end.x,
-    y2: end.y,
-  });
+export function createLine(
+  start: Vector,
+  end: Vector,
+  style: Partial<CSSStyleDeclaration> = {},
+): SVGLineElement {
+  return createElement(
+    "line",
+    {
+      x1: start.x,
+      y1: start.y,
+      x2: end.x,
+      y2: end.y,
+    },
+    style,
+  );
 }
-export function createPolygon(points: Vector[]): SVGPolygonElement {
-  return createElement("polygon", { points: toPointString(points) });
+export function createPolygon(
+  points: Vector[],
+  style: Partial<CSSStyleDeclaration> = {},
+): SVGPolygonElement {
+  return createElement("polygon", { points: toPointString(points) }, style);
 }
-export function createPolyline(points: Vector[]): SVGPolylineElement {
-  return createElement("polyline", { points: toPointString(points) });
+export function createPolyline(
+  points: Vector[],
+  style: Partial<CSSStyleDeclaration> = {},
+): SVGPolylineElement {
+  return createElement("polyline", { points: toPointString(points) }, style);
 }
 function toPointString(points: Vector[]) {
   return points.map((p) => `${p.x},${p.y}`).join(" ");
@@ -65,6 +89,7 @@ export function createRect(
   pos: Vector,
   size: Vector,
   radius?: Vector,
+  style: Partial<CSSStyleDeclaration> = {},
 ): SVGRectElement {
   const basics = {
     x: pos.x,
@@ -75,5 +100,5 @@ export function createRect(
   if (radius) {
     Object.assign(basics, { rx: radius.x, ry: radius.y });
   }
-  return createElement("rect", basics);
+  return createElement("rect", basics, style);
 }

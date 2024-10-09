@@ -16,7 +16,7 @@ const x99y99 = new Vector(99, 99);
 
 describe("Element", () => {
   test("creates simple element", () => {
-    const el = createElement("circle", { fun: "true", testing: "10px" });
+    const el = createElement("circle", { fun: "true", testing: "10px" }, {});
     expect(el.outerHTML).toEqual('<circle fun="true" testing="10px"></circle>');
   });
 
