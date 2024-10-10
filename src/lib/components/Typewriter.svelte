@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { ranger } from "$lib/utilities";
+  import { ranger } from "$lib/utils/misc";
 
   const adjectives = [
     "abundant",
