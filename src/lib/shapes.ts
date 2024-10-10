@@ -1,5 +1,5 @@
 import { Vector2 } from "three";
-import { clamp, ranger, vectorMin } from "./utilities";
+import { clamp, ranger, vectorMin } from "./utils/misc";
 
 export type ShapeType = "arc" | "rect";
 

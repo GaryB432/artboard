@@ -7,7 +7,7 @@ import {
   ranger,
   shuffle,
   vectorMin,
-} from "./utilities";
+} from "./misc";
 
 describe("Utilities", () => {
   test("shuffles", (): void => {
