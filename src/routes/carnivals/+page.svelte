@@ -9,7 +9,7 @@
     type Shape,
     type ShapeType,
   } from "$lib/shapes";
-  import { shuffle } from "$lib/utilities";
+  import { shuffle } from "$lib/utils/misc";
   import { onMount } from "svelte";
   import { Vector2 } from "three";
 

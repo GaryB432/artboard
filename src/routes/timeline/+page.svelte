@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { fitToAspectRatio } from "$lib/utilities";
+  import { fitToAspectRatio } from "$lib/utils/misc";
   import { onMount } from "svelte";
   import { Vector2 } from "three";
 
