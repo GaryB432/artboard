@@ -1,6 +1,6 @@
 <script lang="ts">
   // http://thenewcode.com/757/Playing-With-The-HTML5-range-Slider-Input
-  import { fitToAspectRatio } from "$lib/utilities";
+  import { fitToAspectRatio } from "$lib/utils/misc";
   import { onMount } from "svelte";
   import { Vector2 } from "three";
   import { layers } from "./street";
