@@ -40,6 +40,11 @@ export class Vector {
     this.y = interp(this.y, other.y);
     return this;
   }
+  public multiplyScaler(scaler: number): this {
+    this.x *= scaler;
+    this.y *= scaler;
+    return this;
+  }
   public norm(): this {
     const length = this.length();
     this.divide(new Vector(length, length));
