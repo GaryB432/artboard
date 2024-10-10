@@ -26,15 +26,13 @@
       svg.height.baseVal.value,
     ).multiplyScaler(0.5);
 
-    console.log(center);
-
     const lenses = ["red", "yellow", "green"].map((fill) => ({
       stroke: "black",
       strokeWidth: "1",
       fill,
     }));
-    const r = 100;
-    const gap = 30;
+    const r = 150;
+    const gap = 20;
 
     // const cir = createCircle(new Vector(0, 0), r, {
     //   stroke: "black",
@@ -43,12 +41,12 @@
     // });
     // svg.appendChild(cir);
 
-    for (let i = 0; i < lenses.length; i++) {
+    for (let i = 0; i < 3; i++) {
       // console.log(i, cy);
       const dd = 2 * r + gap;
       // const nv = new Vector(200, dd * (i - 1));
 
-      const nv = new Vector(0, dd * (i - 1)).add(center);
+      const nv = new Vector(0, (2 * r + gap) * (i - 1)).add(center);
 
       const c = createCircle(nv, r, lenses[i]);
       svg.appendChild(c);
@@ -57,7 +55,7 @@
 </script>
 
 <div class="container">
-  <svg height="1080" width="1920" viewBox="0 0 1920 1080" bind:this={svg}></svg>
+  <svg width="1920" height="1080" viewBox="0 0 1920 1080" bind:this={svg}></svg>
 </div>
 
 <button onclick={scaleInnerCircle}>Scale Inner Circle</button>
@@ -70,13 +68,14 @@
 
   .container {
     display: flex;
-    justify-content: center;
     width: 100%;
-    border: thin solid green;
+    justify-content: center;
+    padding: 2px;
+    overflow: hidden;
   }
 
   svg {
-    border: thin solid silver;
+    outline: 1px solid silver;
     width: auto;
     height: 60vh;
     transform-origin: 0 0;
