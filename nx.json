@@ -6,7 +6,9 @@
       "style": "css"
     },
     "@gb-nx/svelte:route": {
+      "directory": "",
       "language": "ts",
+      "style": "css",
       "skipTests": true
     },
     "@gb-nx/workspace:module": {

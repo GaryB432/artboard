@@ -109,7 +109,7 @@
   }
 
   .blob {
-    border: thin solid red;
+    border: thin solid silver;
     display: inline-block;
     width: 23rem;
     height: 20rem;
@@ -122,7 +122,7 @@
     height: 4rem;
     position: absolute;
     left: 9.5rem;
-    top: 3rem;
+    top: 6rem;
   }
   .anim.head {
     border-color: #299;
@@ -131,12 +131,12 @@
     border-color: #c92;
     width: 6rem;
     height: 6rem;
-    top: 8rem;
+    top: 11rem;
     left: 8.5rem;
   }
   .anim.hand {
     border-color: #922;
-    top: 8rem;
+    top: 11rem;
     left: 15rem;
   }
   .anim.hand.left {
@@ -144,7 +144,7 @@
   }
   .anim.foot {
     border-color: #c65;
-    top: 15rem;
+    top: 18rem;
     left: 7rem;
   }
   .anim.foot.right {

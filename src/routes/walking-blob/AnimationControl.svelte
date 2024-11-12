@@ -9,12 +9,12 @@
   let playing = $state(true);
   let rate = $state(1);
 
-  let doubled = $derived(rate === 2);
+  let isDoubled = $derived(rate === 2);
 </script>
 
 <div class="cbvp">
   <div class="label">{label}</div>
-  <input type="range" min="0" max="100" />
+  <input type="range" min="0" max="100" disabled />
   <button
     class:active={!playing}
     onclick={() => {
@@ -23,7 +23,7 @@
     }}>&#9616;&#9616;</button
   >
   <button
-    class:active={doubled}
+    class:active={isDoubled}
     onclick={() => {
       rate = rate === 1 ? 2 : 1;
       onratechange(rate);
