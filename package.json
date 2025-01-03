@@ -1,0 +1,7 @@
+{
+  "name": "artboard",
+  "version": "1.0.0",
+  "description": "all things cgi",
+  "license": "ISC",
+  "packageManager": "pnpm@9.14.2"
+}

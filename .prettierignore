@@ -1,6 +1,4 @@
-.svelte-kit
-.vercel
-build
-
-/.nx/cache
-/.nx/workspace-data
+# Package Managers
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
