@@ -1,4 +1,8 @@
 # Package Managers
+apps/artboard/radu
 package-lock.json
 pnpm-lock.yaml
 yarn.lock
+
+**/.svelte-kit
+**/.vercel
