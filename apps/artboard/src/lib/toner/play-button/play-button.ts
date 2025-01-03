@@ -1,4 +1,3 @@
-/* eslint-disable */
 // TODO remove rxjs stuff
 import { Subject } from "rxjs";
 import type {
