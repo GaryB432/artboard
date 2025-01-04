@@ -48,7 +48,7 @@ importers:
         specifier: ^15.0.0
         version: 15.14.0
       happy-dom:
-        specifier: ^10.10.4
+        specifier: ^10.11.2
         version: 10.11.2
       prettier:
         specifier: ^3.3.2
