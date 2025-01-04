@@ -3,5 +3,7 @@
   "version": "1.0.0",
   "description": "all things cgi",
   "license": "ISC",
-  "packageManager": "pnpm@9.14.2"
+  "packageManager": "pnpm@9.14.2",
+  "repository": "github:GaryB432/artboard",
+  "bugs": "https://github.com/GaryB432/artboard/issues"
 }
