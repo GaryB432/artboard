@@ -79,7 +79,7 @@ flowchart TB
       yield.js
     end
     subgraph editors
-      ME>markingEditor.js}
+      ME>markingEditor.js]
       GE>graphEditor.js]
       crossingEditor.js
       stopEditor.js
@@ -107,7 +107,7 @@ flowchart TB
 ```
 
 ```
-D:\USERS\BORT1\DOCUMENTS\GITHUB\ARTBOARD\SRC\LIB\RADU
+D:\\RADU
 │   viewport.ts
 │   world.ts
 │
