@@ -1,6 +1,8 @@
-.svelte-kit
-.vercel
-build
+# Package Managers
+apps/artboard/radu
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
 
-/.nx/cache
-/.nx/workspace-data
+**/.svelte-kit
+**/.vercel

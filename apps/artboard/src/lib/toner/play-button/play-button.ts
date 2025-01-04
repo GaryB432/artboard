@@ -1,6 +1,3 @@
-/* eslint-disable */
-// TODO remove rxjs stuff
-import { Subject } from "rxjs";
 import type {
   AnimationOtherAttributes,
   AnimationTimingAttributes,
@@ -16,6 +13,18 @@ interface GSVGAnimateElement extends SVGAnimateElement {
   beginElementAt(offset: number): void;
   endElement(): void;
   endElementAt(offset: number): void;
+}
+
+class Subject<T> {
+  private observers: ((value: T) => void)[] = [];
+
+  public subscribe(observer: (value: T) => void): void {
+    this.observers.push(observer);
+  }
+
+  public next(value: T): void {
+    this.observers.forEach((observer) => observer(value));
+  }
 }
 
 export const svgPaths = {

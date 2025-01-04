@@ -73,7 +73,6 @@
       box.animate();
     }
   });
-
 </script>
 
 <div class="host">

@@ -13,12 +13,11 @@
 </article>
 <WebAnimationsHome></WebAnimationsHome>
 
-
 <style>
   .container {
     padding: 1em;
     border: thin solid silver;
-	margin-left: calc((100vw - 50vmin) / 2);
+    margin-left: calc((100vw - 50vmin) / 2);
     margin-top: calc((100vh - 50vmin) / 4);
     width: 50vmin;
     height: 50vmin;
