@@ -1,6 +1,6 @@
 import { setupCounter } from "./counter.ts";
 import "./style.css";
-import { d, setupHousing } from "./thermostat/housing.ts";
+import { setupHousing } from "./thermostat/housing.ts";
 import typescriptLogo from "./typescript.svg";
 import viteLogo from "/vite.svg";
 
@@ -21,7 +21,5 @@ document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
     </p>
   </div>
 `;
-// const fd = document.querySelector<SVGPathElement>("#housing")!;
-// fd.setAttribute("d", d);
 setupHousing(document.querySelector<SVGSVGElement>("#housing")!);
 setupCounter(document.querySelector<HTMLButtonElement>("#counter")!);

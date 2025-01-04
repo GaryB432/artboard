@@ -1,15 +1,9 @@
-import { describe, expect, test } from 'vitest';
+import { describe, expect, test } from "vitest";
 
-import { add, greet, meaning } from './housing';
+import { curveToPath } from "./housing";
 
-describe('Housing', () => {
-  test('adds', () => {
-    expect(add(2, 3)).toEqual(5);
-  });
-  test('greets', () => {
-    expect(greet('world')).toEqual('housing says: hello to world');
-  });
-  test('meaning', () => {
-    expect(meaning.life).toEqual(42);
+describe("Housing", () => {
+  test("curveToPath", async () => {
+    expect(curveToPath([1, 2, 3, 4, 5, 6])).toEqual("c 1 2 3 4 5 6");
   });
 });
