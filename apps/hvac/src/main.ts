@@ -1,9 +1,10 @@
-import './style.css'
-import typescriptLogo from './typescript.svg'
-import viteLogo from '/vite.svg'
-import { setupCounter } from './counter.ts'
+import { setupCounter } from "./counter.ts";
+import "./style.css";
+import { d, setupHousing } from "./thermostat/housing.ts";
+import typescriptLogo from "./typescript.svg";
+import viteLogo from "/vite.svg";
 
-document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
+document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
   <div>
     <a href="https://vite.dev" target="_blank">
       <img src="${viteLogo}" class="logo" alt="Vite logo" />
@@ -19,6 +20,8 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
       Click on the Vite and TypeScript logos to learn more
     </p>
   </div>
-`
-
-setupCounter(document.querySelector<HTMLButtonElement>('#counter')!)
+`;
+// const fd = document.querySelector<SVGPathElement>("#housing")!;
+// fd.setAttribute("d", d);
+setupHousing(document.querySelector<SVGSVGElement>("#housing")!);
+setupCounter(document.querySelector<HTMLButtonElement>("#counter")!);
