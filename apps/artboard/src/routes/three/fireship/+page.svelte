@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { createScene } from "../lib/scenes/background";
+  import { createScene } from "$lib/scenes/background";
   import { onMount } from "svelte";
 
   let el: HTMLCanvasElement;
