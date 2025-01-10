@@ -22,6 +22,8 @@ jobs:
           cache: "pnpm"
       - name: Lint
         run: pnpm run --recursive lint
+      - name: Check
+        run: pnpm run --recursive check
       - name: Test
         run: pnpm run --recursive test
       - name: Build
