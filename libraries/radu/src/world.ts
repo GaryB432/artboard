@@ -55,7 +55,7 @@ export class World {
       ...this.envelopes.map((e) => e.poly),
     ];
 
-    const trees = [];
+    const trees: Tree[] = [];
     let tryCount = 0;
     while (tryCount < 100) {
       const p = new Point(
@@ -107,7 +107,7 @@ export class World {
   }
 
   #generateBuildings(): Building[] {
-    const tmpEnvelopes = [];
+    const tmpEnvelopes: Envelope[] = [];
     for (const seg of this.graph.segments) {
       tmpEnvelopes.push(
         new Envelope(
@@ -128,7 +128,7 @@ export class World {
       }
     }
 
-    const supports = [];
+    const supports: Segment[] = [];
     for (const seg of guides) {
       const len = seg.length() + this.spacing;
       const buildingCount = Math.floor(
@@ -149,7 +149,7 @@ export class World {
       }
     }
 
-    const bases = [];
+    const bases:Polygon[] = [];
     for (const seg of supports) {
       bases.push(new Envelope(seg, this.buildingWidth).poly);
     }
