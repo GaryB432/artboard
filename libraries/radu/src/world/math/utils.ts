@@ -7,7 +7,7 @@ export function getNearestPoint(
   threshold = Number.MAX_SAFE_INTEGER,
 ): Point | null {
   let minDist = Number.MAX_SAFE_INTEGER;
-  let nearest = null;
+  let nearest: Point | null = null;
   for (const point of points) {
     const dist = distance(point, loc);
     if (dist < minDist && dist < threshold) {
