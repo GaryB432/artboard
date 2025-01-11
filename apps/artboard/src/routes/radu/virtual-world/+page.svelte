@@ -1,9 +1,9 @@
 <script lang="ts">
-  import { Viewport } from "$lib/radu/viewport";
-  import { World } from "$lib/radu/world";
-  import { GraphEditor } from "$lib/radu/world/editors/graphEditor";
-  import { Graph } from "$lib/radu/world/math/graph";
-  import { scale } from "$lib/radu/world/math/utils";
+  import { Viewport } from "@libraries/radu/viewport";
+  import { World } from "@libraries/radu/world";
+  import { GraphEditor } from "@libraries/radu/world/editors/graphEditor";
+  import { Graph } from "@libraries/radu/world/math/graph";
+  import { scale } from "@libraries/radu/world/math/utils";
   import { onMount } from "svelte";
 
   // import { Point } from "$lib/radu/world/primitives/point";
