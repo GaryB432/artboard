@@ -1,5 +1,5 @@
-import type { Viewport } from "$lib/radu/viewport";
-import type { World } from "$lib/radu/world";
+import type { Viewport } from "../../viewport";
+import type { World } from "../../world";
 import { getNearestSegment } from "../math/utils";
 import type { Point } from "../primitives/point";
 import type { Polygon } from "../primitives/polygon";
