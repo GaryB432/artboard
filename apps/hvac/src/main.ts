@@ -20,6 +20,11 @@ class Point {
     public x: number,
     public y: number,
   ) {}
+  scale(scalar: number): this {
+    this.x = this.x * scalar;
+    this.y = this.y * scalar;
+    return this;
+  }
 }
 
 class Scene {
@@ -55,13 +60,15 @@ class Scene {
     svg.addEventListener("click", (evt) => {
       const bcr = svg.getBoundingClientRect();
       const dot = document.createElementNS(svgns, "circle");
-      const cx = evt.clientX - bcr.left - 2;
-      const cy = evt.clientY - bcr.top - 2;
-      const spot = new Point(cx,cy)
+      const spot = new Point(
+        evt.clientX - bcr.left - 2,
+        evt.clientY - bcr.top - 2,
+      ).scale(this.zoom);
       dot.setAttributeNS(null, "cx", spot.x.toString());
       dot.setAttributeNS(null, "cy", spot.y.toString());
       dot.setAttributeNS(null, "r", "4");
       dot.setAttributeNS(null, "fill", "blue");
+
       svg.append(dot);
       console.log(spot);
       // const dir = Math.sign(evt.deltaY);
@@ -77,24 +84,26 @@ class Scene {
     });
   }
   reset() {
-    for (let i = 0; i < 100; i++) {
-      for (let j = 0; j < 70; j++) {
-        const rg = {
-          x: i * 42,
-          y: j * 32,
+    for (let r = 0; r < 30; r++) {
+      for (let c = 0; c < 40; c++) {
+        const rg: Required<DOMRectInit> = {
+          x: c * 42,
+          y: r * 32,
           width: 40,
           height: 30,
         };
         const rectElement = createRectElement(rg);
 
         this.svg.appendChild(rectElement);
-        const tt = document.createElementNS(svgns, "text");
-        tt.textContent = `(${i},${j})`;
-        tt.setAttributeNS(null, "x", (rg.x + 0).toString());
-        tt.setAttributeNS(null, "y", (rg.y + 10).toString());
-        tt.setAttributeNS(null, "font-size", "10");
-        tt.setAttributeNS(null, "fill", "black");
-        this.svg.appendChild(tt);
+
+        const textElement = document.createElementNS(svgns, "text");
+        textElement.textContent = `(${r},${c})`;
+        textElement.setAttributeNS(null, "x", (rg.x + 0).toString());
+        textElement.setAttributeNS(null, "y", (rg.y + 10).toString());
+        textElement.setAttributeNS(null, "font-size", "10");
+        textElement.setAttributeNS(null, "fill", "black");
+        // console.log (tt)
+        this.svg.appendChild(textElement);
       }
     }
   }
@@ -129,8 +138,7 @@ document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
   </div>
 `;
 // setupHousing(document.querySelector<SVGSVGElement>("#housing")!);
-const svgg = document.querySelector<SVGSVGElement>("#scene");
-const scene = new Scene(svgg!);
+const scene = new Scene(document.querySelector<SVGSVGElement>("#scene")!);
 scene.reset();
 console.log(scene);
 setupCounter(document.querySelector<HTMLButtonElement>("#counter")!);
