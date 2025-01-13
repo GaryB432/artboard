@@ -1,7 +1,7 @@
 <script lang="ts">
   import EasingSelect from "$lib/components/EasingSelect.svelte";
   import PlayButton from "$lib/components/PlayButton.svelte";
-  import type { EasingFunction } from "$lib/easings";
+  import type { EasingFunction } from "@libraries/graphics/easings";
   import {
     clampShape,
     randomShape,

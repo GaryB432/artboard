@@ -1,4 +1,4 @@
-import type { Viewport } from "$lib/radu/viewport";
+import type { Viewport } from "../../viewport";
 import type { Graph } from "../math/graph";
 import { getNearestPoint } from "../math/utils";
 import { Point } from "../primitives/point";
