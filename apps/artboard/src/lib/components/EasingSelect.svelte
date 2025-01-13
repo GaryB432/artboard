@@ -1,5 +1,5 @@
 <script lang="ts">
-  import easings, { type EasingFunction } from "../easings";
+  import easings, { type EasingFunction } from "@libraries/graphics/easings";
 
   const keys = Object.keys(easings);
   let {
