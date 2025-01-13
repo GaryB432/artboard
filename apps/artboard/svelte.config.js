@@ -9,6 +9,7 @@ const config = {
     adapter: adapter(),
     alias: {
       "@libraries/radu": "../../libraries/radu/src",
+      "@libraries/graphics": "../../libraries/graphics/src",
     },
   },
 };

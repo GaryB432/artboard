@@ -23,7 +23,7 @@ a:hover {
 }
 
 body {
-  margin: 0;
+  margin: 0 0.5rem;
   display: flex;
   place-items: center;
   min-width: 320px;
@@ -80,6 +80,10 @@ button:hover {
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
+}
+
+svg#scene {
+  border: 3px solid #1a1a1a;
 }
 
 @media (prefers-color-scheme: light) {
