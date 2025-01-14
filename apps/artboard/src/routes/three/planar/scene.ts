@@ -7,15 +7,15 @@ const canvasSize: Readonly<THREE.Vec2> = { x: 800, y: 600 };
 const scene = new THREE.Scene();
 
 const camera = new THREE.PerspectiveCamera(
-  45,
-  canvasSize.y / canvasSize.y,
+  75,
+  canvasSize.x / canvasSize.y,
   0.1,
   1000,
 );
 
 //   const orbit = new OrbitControls(camera, renderer.domElement);
 
-camera.position.set(10, 15, -22);
+// camera.position.set(10, 15, -22);
 
 //   orbit.update();
 const geometry = new THREE.BoxGeometry();
@@ -27,6 +27,8 @@ const material = new THREE.MeshStandardMaterial({
 
 const cube = new THREE.Mesh(geometry, material);
 scene.add(cube);
+
+camera.position.z = 5;
 
 const directionalLight = new THREE.DirectionalLight(0x9090aa);
 // directionalLight.position.set(-10, 10, -10).normalize();
@@ -71,6 +73,7 @@ function animate(time: number): void {
 
 export function createScene(el: HTMLCanvasElement): void {
   renderer = new THREE.WebGLRenderer({ antialias: true, canvas: el });
+  renderer.setSize(canvasSize.x, canvasSize.y)
   el.width = canvasSize.x;
   el.height = canvasSize.y;
   resize();
