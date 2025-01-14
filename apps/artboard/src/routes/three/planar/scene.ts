@@ -29,12 +29,15 @@ const cube = new THREE.Mesh(geometry, material);
 scene.add(cube);
 
 const directionalLight = new THREE.DirectionalLight(0x9090aa);
-directionalLight.position.set(-10, 10, -10).normalize();
+// directionalLight.position.set(-10, 10, -10).normalize();
 scene.add(directionalLight);
 
 const hemisphereLight = new THREE.HemisphereLight(0xffffff, 0x444444);
-hemisphereLight.position.set(1, 1, 1);
+// hemisphereLight.position.set(1, 1, 1);
 scene.add(hemisphereLight);
+
+const ambientLight = new THREE.AmbientLight(0x404040);
+scene.add(ambientLight);
 
 // const animate = () => {
 //   requestAnimationFrame(animate);
