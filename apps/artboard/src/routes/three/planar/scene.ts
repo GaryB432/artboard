@@ -2,11 +2,13 @@ import * as THREE from "three";
 
 let renderer: THREE.WebGLRenderer;
 
+const canvasSize: Readonly<THREE.Vec2> = { x: 800, y: 600 };
+
 const scene = new THREE.Scene();
 
 const camera = new THREE.PerspectiveCamera(
   45,
-  window.innerWidth / window.innerHeight,
+  canvasSize.y / canvasSize.y,
   0.1,
   1000,
 );
@@ -40,13 +42,16 @@ scene.add(hemisphereLight);
 //   renderer.render(scene, camera);
 // };
 
-// const resize = () => {
-//   const w = window.innerWidth;
-//   const h = window.innerHeight - 100;
-//   renderer.setSize(w, h);
-//   camera.aspect = w / h;
-//   camera.updateProjectionMatrix();
-// };
+const resize = () => {
+  //   bcr = renderer.domElement.getBoundingClientRect();
+  //   console.log(bcr);
+
+  //   const w = bcr.width;
+  //   const h = bcr.height;
+  //   renderer.setSize(w, h);
+  //   camera.aspect = w / h;
+  camera.updateProjectionMatrix();
+};
 
 function animate(time: number): void {
   // highlightMesh.material.opacity = 1 + Math.sin(time / 120);
@@ -59,14 +64,14 @@ function animate(time: number): void {
   renderer.render(scene, camera);
 }
 
-let bcr: DOMRect;
+// let bcr: DOMRect;
 
 export function createScene(el: HTMLCanvasElement): void {
-  bcr = el.getBoundingClientRect();
-  console.log(bcr);
   renderer = new THREE.WebGLRenderer({ antialias: true, canvas: el });
+  el.width = canvasSize.x;
+  el.height = canvasSize.y;
+  resize();
   renderer.setAnimationLoop(animate);
-  //   resize();
   //   animate();
 }
 
