@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
 let renderer: THREE.WebGLRenderer;
 
@@ -13,11 +14,6 @@ const camera = new THREE.PerspectiveCamera(
   1000,
 );
 
-//   const orbit = new OrbitControls(camera, renderer.domElement);
-
-// camera.position.set(10, 15, -22);
-
-//   orbit.update();
 const geometry = new THREE.BoxGeometry();
 
 const material = new THREE.MeshStandardMaterial({
@@ -26,9 +22,20 @@ const material = new THREE.MeshStandardMaterial({
 });
 
 const cube = new THREE.Mesh(geometry, material);
-scene.add(cube);
+// scene.add(cube);
 
-camera.position.z = 5;
+const planeMesh = new THREE.Mesh(
+  new THREE.PlaneGeometry(20, 20),
+  new THREE.MeshBasicMaterial({
+    side: THREE.DoubleSide,
+    visible: true,
+  }),
+);
+planeMesh.position.set(1, 1, 0);
+planeMesh.rotateX(-Math.PI / 2);
+scene.add(planeMesh);
+
+camera.position.z = 22;
 
 const directionalLight = new THREE.DirectionalLight(0x9090aa);
 // directionalLight.position.set(-10, 10, -10).normalize();
@@ -50,12 +57,10 @@ scene.add(ambientLight);
 const resize = () => {
   //   bcr = renderer.domElement.getBoundingClientRect();
   //   console.log(bcr);
-
   //   const w = bcr.width;
   //   const h = bcr.height;
   //   renderer.setSize(w, h);
   //   camera.aspect = w / h;
-  camera.updateProjectionMatrix();
 };
 
 function animate(time: number): void {
@@ -66,6 +71,7 @@ function animate(time: number): void {
   //   object.position.y = 0.5 + 0.5 * Math.abs(Math.sin(time / 1000));
   cube.rotation.x += 0.01;
   cube.rotation.y += 0.01;
+  camera.updateProjectionMatrix();
   renderer.render(scene, camera);
 }
 
@@ -73,10 +79,17 @@ function animate(time: number): void {
 
 export function createScene(el: HTMLCanvasElement): void {
   renderer = new THREE.WebGLRenderer({ antialias: true, canvas: el });
-  renderer.setSize(canvasSize.x, canvasSize.y)
+  renderer.setSize(canvasSize.x, canvasSize.y);
   el.width = canvasSize.x;
   el.height = canvasSize.y;
-  resize();
+
+  const orbit = new OrbitControls(camera, renderer.domElement);
+
+  // camera.position.set(10, 15, -22);
+
+  orbit.update();
+
+  //   resize();
   renderer.setAnimationLoop(animate);
   //   animate();
 }
