@@ -80,7 +80,7 @@
   </section>
 </section>
 
-<Typewriter />
+<Typewriter />!
 
 <style>
   .twofer {
