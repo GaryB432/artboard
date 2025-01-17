@@ -9,7 +9,7 @@
 
   let container: HTMLDivElement | null = $state(null);
 
-  let universe = $derived(createUniverse(size, 5, 200));
+  let universe = $derived(createUniverse(size, 5, 20));
 
   onMount(() => {
     if (container) {
