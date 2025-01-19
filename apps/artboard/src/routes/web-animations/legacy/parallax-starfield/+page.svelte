@@ -1,7 +1,7 @@
 <script lang="ts">
   import { createUniverse } from "./shared.svelte";
   import StarfieldPanel from "./components/Starfield.svelte";
-  import WebAnimationsHome from "../WebAnimationsHome.svelte";
+  import WebAnimationsHome from "../../WebAnimationsHome.svelte";
   import { onMount } from "svelte";
   import type { Vector2Tuple } from "three";
 
