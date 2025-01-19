@@ -1,25 +1,41 @@
 <script lang="ts">
-	import type { PageData } from './$types';
-	let { data }: { data: PageData } = $props();
-	let title = $derived(`${data.subject} - Generated`);
+  import WebAnimationsHome from "../WebAnimationsHome.svelte";
+  let data = $state({ subject: "expandoboard" });
 </script>
 
 <svelte:head>
-	<title>{title}</title>
+  <title>artboard - expandoboard</title>
 </svelte:head>
 
-<h1>{data.subject} works</h1>
+<article class="container">
+  {data.subject} is coming some day soon
+</article>
+
+<WebAnimationsHome></WebAnimationsHome>
 
 <style>
-  h1 {
-    all: unset;
-    display: block;
-    font-size: 2em;
-    margin-block-start: 0.67em;
-    margin-block-end: 0.67em;
-    margin-inline-start: 0px;
-    margin-inline-end: 0px;
-    font-weight: bold;
-    unicode-bidi: isolate;
+  .container {
+    padding: 1em;
+    border: thin solid silver;
+    margin-left: calc((100vw - 50vmin) / 2);
+    margin-top: calc((100vh - 50vmin) / 4);
+    width: 50vmin;
+    height: 50vmin;
+    perspective: 60vmin;
+  }
+  @media screen and (min-width: 576px) {
+    /* landscape phones */
+  }
+  @media screen and (min-width: 768px) {
+    /* tablets */
+  }
+  @media screen and (min-width: 992px) {
+    /* desktops */
+  }
+  @media screen and (min-width: 1200px) {
+    /* large desktops */
+  }
+  @media screen and (min-width: 1400px) {
+    /* larger desktops */
   }
 </style>
