@@ -3,7 +3,7 @@
   import WebAnimationsHome from "../WebAnimationsHome.svelte";
   import { onMount } from "svelte";
 
-  let universe: HTMLDivElement | undefined;
+  let universe: HTMLElement | undefined;
 
   class Star {
     pos: Vector3Tuple = $state([0, 0, 0]);
@@ -15,9 +15,12 @@
   class Starfield {
     left: number = $state(0);
     stars: Star[] = [];
-    constructor(starCount: number, distance: number) {
-      const width = universe.clientWidth;
-      const height = universe.clientHeight;
+    constructor(
+      rect: Required<Pick<DOMRectInit, "width" | "height">>,
+      starCount: number,
+      distance: number,
+    ) {
+      const { width, height } = rect;
       this.stars.push(
         ...Array(starCount)
           .fill(undefined)
@@ -35,11 +38,12 @@
   // };
   const starfields: Starfield[] = $state([]);
   onMount(() => {
+    const fk = universe?.getBoundingClientRect();
     starfields.push(
       ...Array(3)
         .fill(undefined)
         .map((_, i) => {
-          return new Starfield(5, i);
+          return new Starfield(fk!, 5, i);
         }),
     );
     console.log(starfields);
@@ -81,7 +85,7 @@
     width: 90vw;
     aspect-ratio: 16 / 9;
     fill: rgb(112, 109, 109);
-    overflow: hidden;
+    /* overflow: hidden; */
   }
   .field {
     position: absolute;
