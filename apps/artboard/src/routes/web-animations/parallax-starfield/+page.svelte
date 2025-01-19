@@ -3,8 +3,6 @@
   import WebAnimationsHome from "../WebAnimationsHome.svelte";
   import { onMount } from "svelte";
 
-
-
   // const kf = $derived([
   //   { transform: "translate3d(0, 0, 0)" },
   //   { transform: "translate3d(-" + width + "px, 0, 0)" },
@@ -12,8 +10,7 @@
 
   // let durationExponent = $derived(universeDepth - starfield.depth);
   // let options = $derived({
-  //   duration: Math.pow(2, durationExponent) * 1000,
-  //   iterations: Infinity,
+
   // });
 
   // onMount(() => {
@@ -25,6 +22,8 @@
   // });
 
   let universe: HTMLElement | undefined;
+
+  let fieldDivs: HTMLElement[] = $state([]);
 
   class Star {
     pos: Vector3Tuple = $state([0, 0, 0]);
@@ -52,9 +51,11 @@
             return new Star([x, y, z]);
           }),
       );
-      console.log(this.stars);
     }
   }
+  // $effect(() => {
+  //   fieldDivs.forEach((a, b) => a.animate([]));
+  // });
   // type Starfield = {
   //   rect: DOMRectInit;
   //   speed: number;
@@ -69,7 +70,20 @@
           return new Starfield(rect!, 200, i);
         }),
     );
-    console.log(starfields);
+    setTimeout(() => {
+      fieldDivs.forEach((a, b) => {
+        const kfs: Keyframe[] = [
+          { transform: `translate3d(-${rect!.width}px, 0, 0)` },
+        ];
+        const durationExponent = fieldDivs.length - b;
+        const opts = {
+          duration: Math.pow(2, durationExponent) * 1000,
+          iterations: Infinity,
+        };
+
+        a.animate(kfs, opts);
+      });
+    }, 0);
   });
 </script>
 
@@ -80,7 +94,11 @@
 <section class="wrapper">
   <section id="universe" bind:this={universe}>
     {#each starfields as field, sfn}
-      <div class="field" style="--left: {sfn * 20}px">
+      <div
+        class="field"
+        bind:this={fieldDivs[sfn]}
+        style="--left: {sfn * 20}px"
+      >
         {#each field.stars as starf}
           {@const [x, y, z] = starf.pos}
           <div
