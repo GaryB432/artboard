@@ -3,6 +3,27 @@
   import WebAnimationsHome from "../WebAnimationsHome.svelte";
   import { onMount } from "svelte";
 
+
+
+  // const kf = $derived([
+  //   { transform: "translate3d(0, 0, 0)" },
+  //   { transform: "translate3d(-" + width + "px, 0, 0)" },
+  // ]);
+
+  // let durationExponent = $derived(universeDepth - starfield.depth);
+  // let options = $derived({
+  //   duration: Math.pow(2, durationExponent) * 1000,
+  //   iterations: Infinity,
+  // });
+
+  // onMount(() => {
+  //   // console.log(element, kf, options);
+  //   console.log(options.duration);
+  //   setTimeout(() => {
+  //     element?.animate(kf, options);
+  //   }, 10000);
+  // });
+
   let universe: HTMLElement | undefined;
 
   class Star {
@@ -24,12 +45,14 @@
       this.stars.push(
         ...Array(starCount)
           .fill(undefined)
-          .map<Star>((_, z) => {
+          .map<Star>(() => {
             const x = Math.round(Math.random() * width);
             const y = Math.round(Math.random() * height);
+            const z = distance;
             return new Star([x, y, z]);
           }),
       );
+      console.log(this.stars);
     }
   }
   // type Starfield = {
@@ -38,12 +61,12 @@
   // };
   const starfields: Starfield[] = $state([]);
   onMount(() => {
-    const fk = universe?.getBoundingClientRect();
+    const rect = universe?.getBoundingClientRect();
     starfields.push(
       ...Array(3)
         .fill(undefined)
         .map((_, i) => {
-          return new Starfield(fk!, 5, i);
+          return new Starfield(rect!, 200, i);
         }),
     );
     console.log(starfields);
