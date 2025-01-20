@@ -93,7 +93,6 @@
     display: flex;
     flex-direction: column;
     place-items: center;
-    border: thin solid silver;
   }
   #universe {
     position: relative;
