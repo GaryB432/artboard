@@ -18,14 +18,18 @@
     { transform: "translate3d(-" + width + "px, 0, 0)" },
   ]);
 
-  const durationExponent = universeDepth - starfield.depth;
-  const options = {
+  let durationExponent = $derived(universeDepth - starfield.depth);
+  let options = $derived({
     duration: Math.pow(2, durationExponent) * 1000,
     iterations: Infinity,
-  };
+  });
 
   onMount(() => {
-    element?.animate(kf, options);
+    // console.log(element, kf, options);
+    console.log(options.duration);
+    setTimeout(() => {
+      element?.animate(kf, options);
+    }, 10000);
   });
 </script>
 
