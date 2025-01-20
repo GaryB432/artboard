@@ -1,40 +1,22 @@
 <script lang="ts">
+  import { onMount } from "svelte";
   import type { Vector3Tuple } from "three";
   import WebAnimationsHome from "../WebAnimationsHome.svelte";
-  import { onMount } from "svelte";
 
-  // const kf = $derived([
-  //   { transform: "translate3d(0, 0, 0)" },
-  //   { transform: "translate3d(-" + width + "px, 0, 0)" },
-  // ]);
+  const STARCOUNT = 200;
+  const UNIVERSEDEPTH = 5;
 
-  // let durationExponent = $derived(universeDepth - starfield.depth);
-  // let options = $derived({
+  let universe: HTMLElement | undefined = $state();
 
-  // });
-
-  // onMount(() => {
-  //   // console.log(element, kf, options);
-  //   console.log(options.duration);
-  //   setTimeout(() => {
-  //     element?.animate(kf, options);
-  //   }, 10000);
-  // });
-
-  let universe: HTMLElement | undefined;
+  let universeSize = $derived(universe?.getBoundingClientRect());
 
   let fieldDivs: HTMLElement[] = $state([]);
 
-  class Star {
-    pos: Vector3Tuple = $state([0, 0, 0]);
-    constructor(pos: Vector3Tuple) {
-      this.pos = pos;
-    }
-  }
+  const starfields: Starfield[] = [];
 
   class Starfield {
     left: number = $state(0);
-    stars: Star[] = [];
+    stars: Vector3Tuple[] = [];
     constructor(
       rect: Required<Pick<DOMRectInit, "width" | "height">>,
       starCount: number,
@@ -44,46 +26,38 @@
       this.stars.push(
         ...Array(starCount)
           .fill(undefined)
-          .map<Star>(() => {
+          .map<Vector3Tuple>(() => {
             const x = Math.round(Math.random() * width);
             const y = Math.round(Math.random() * height);
             const z = distance;
-            return new Star([x, y, z]);
+            return [x, y, z];
           }),
       );
     }
   }
-  // $effect(() => {
-  //   fieldDivs.forEach((a, b) => a.animate([]));
-  // });
-  // type Starfield = {
-  //   rect: DOMRectInit;
-  //   speed: number;
-  // };
-  const starfields: Starfield[] = $state([]);
+  $effect(() => {
+    fieldDivs.forEach((a, b) => {
+      const kfs: Keyframe[] = [
+        { transform: `translate3d(-${universe!.clientWidth}px, 0, 0)` },
+      ];
+      const durationExponent = fieldDivs.length - b;
+      const opts = {
+        duration: Math.pow(2, durationExponent) * 1000,
+        iterations: Infinity,
+      };
+
+      a.animate(kfs, opts);
+    });
+  });
   onMount(() => {
-    const rect = universe?.getBoundingClientRect();
+    // const rect = universe?.getBoundingClientRect();
     starfields.push(
-      ...Array(3)
+      ...Array(UNIVERSEDEPTH)
         .fill(undefined)
         .map((_, i) => {
-          return new Starfield(rect!, 200, i);
+          return new Starfield(universeSize!, STARCOUNT, i);
         }),
     );
-    setTimeout(() => {
-      fieldDivs.forEach((a, b) => {
-        const kfs: Keyframe[] = [
-          { transform: `translate3d(-${rect!.width}px, 0, 0)` },
-        ];
-        const durationExponent = fieldDivs.length - b;
-        const opts = {
-          duration: Math.pow(2, durationExponent) * 1000,
-          iterations: Infinity,
-        };
-
-        a.animate(kfs, opts);
-      });
-    }, 0);
   });
 </script>
 
@@ -93,21 +67,22 @@
 
 <section class="wrapper">
   <section id="universe" bind:this={universe}>
-    {#each starfields as field, sfn}
-      <div
-        class="field"
-        bind:this={fieldDivs[sfn]}
-        style="--left: {sfn * 20}px"
-      >
-        {#each field.stars as starf}
-          {@const [x, y, z] = starf.pos}
-          <div
-            class="star"
-            style="--distance: {z + 1}; top: {y}px; left: {x}px;"
-          ></div>
-        {/each}
-      </div>
-    {/each}
+    {#if universeSize}
+      {#each starfields as field, sfn}
+        <div class="field" bind:this={fieldDivs[sfn]}>
+          {#each field.stars as star}
+            {@const [x, y, z] = star}
+            {@const distance = z + 1}
+            {#each [0, universeSize.width] as xMore}
+              <div
+                class="star"
+                style="--distance: {distance}; top: {y}px; left: {x + xMore}px;"
+              ></div>
+            {/each}
+          {/each}
+        </div>
+      {/each}
+    {/if}
   </section>
 </section>
 
@@ -122,22 +97,20 @@
   }
   #universe {
     position: relative;
-    border: thin solid green;
     width: 90vw;
     aspect-ratio: 16 / 9;
-    fill: rgb(112, 109, 109);
-    /* overflow: hidden; */
+    overflow: hidden;
+    background-color: black;
   }
   .field {
     position: absolute;
     top: 0;
-    left: var(--left);
+    left: 0;
     height: 100%;
     width: 100%;
-    border: thin solid red;
   }
   .star {
-    background-color: green;
+    background-color: white;
     height: calc(var(--distance) * 1px);
     width: calc(var(--distance) * 1px);
     border-radius: 50%;
