@@ -3,17 +3,6 @@
   import type { Vector3Tuple } from "three";
   import WebAnimationsHome from "../WebAnimationsHome.svelte";
 
-  const STARCOUNT = 200;
-  const UNIVERSEDEPTH = 5;
-
-  let universe: HTMLElement | undefined = $state();
-
-  let universeSize = $derived(universe?.getBoundingClientRect());
-
-  let fieldDivs: HTMLElement[] = $state([]);
-
-  const starfields: Starfield[] = [];
-
   class Starfield {
     left: number = $state(0);
     stars: Vector3Tuple[] = [];
@@ -35,7 +24,17 @@
       );
     }
   }
-  $effect(() => {
+
+  const STARCOUNT = 200;
+  const UNIVERSEDEPTH = 5;
+
+  let universe: HTMLElement | undefined = $state();
+
+  let universeSize = $derived(universe?.getBoundingClientRect());
+
+  let fieldDivs: HTMLElement[] = $state([]);
+
+  function animateFieldDivs() {
     fieldDivs.forEach((a, b) => {
       const kfs: Keyframe[] = [
         { transform: `translate3d(-${universe!.clientWidth}px, 0, 0)` },
@@ -48,16 +47,22 @@
 
       a.animate(kfs, opts);
     });
-  });
+  }
+
+  // $inspect(v);
+
+  let starfields: Starfield[] = $state([]);
+
   onMount(() => {
+    starfields = Array(UNIVERSEDEPTH)
+      .fill(undefined)
+      .map((_, i) => {
+        return new Starfield(universeSize!, STARCOUNT, i);
+      });
     // const rect = universe?.getBoundingClientRect();
-    starfields.push(
-      ...Array(UNIVERSEDEPTH)
-        .fill(undefined)
-        .map((_, i) => {
-          return new Starfield(universeSize!, STARCOUNT, i);
-        }),
-    );
+    setTimeout(() => {
+      animateFieldDivs();
+    }, 0);
   });
 </script>
 
