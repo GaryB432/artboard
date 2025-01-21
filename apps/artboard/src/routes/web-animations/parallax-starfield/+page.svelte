@@ -34,7 +34,7 @@
 
   let fieldDivs: HTMLElement[] = $state([]);
 
-  function animateFieldDivs() {
+  $effect(() => {
     fieldDivs.forEach((a, b) => {
       const kfs: Keyframe[] = [
         { transform: `translate3d(-${universe!.clientWidth}px, 0, 0)` },
@@ -47,9 +47,7 @@
 
       a.animate(kfs, opts);
     });
-  }
-
-  // $inspect(v);
+  });
 
   let starfields: Starfield[] = $state([]);
 
@@ -60,9 +58,6 @@
         return new Starfield(universeSize!, STARCOUNT, i);
       });
     // const rect = universe?.getBoundingClientRect();
-    setTimeout(() => {
-      animateFieldDivs();
-    }, 0);
   });
 </script>
 
