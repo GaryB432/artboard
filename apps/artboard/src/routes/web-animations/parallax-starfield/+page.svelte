@@ -96,7 +96,7 @@
   }
   #universe {
     position: relative;
-    width: 90vw;
+    height: 80vh;
     aspect-ratio: 16 / 9;
     overflow: hidden;
     background-color: black;
