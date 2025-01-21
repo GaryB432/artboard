@@ -3,17 +3,6 @@
   import type { Vector3Tuple } from "three";
   import WebAnimationsHome from "../WebAnimationsHome.svelte";
 
-  const STARCOUNT = 200;
-  const UNIVERSEDEPTH = 5;
-
-  let universe: HTMLElement | undefined = $state();
-
-  let universeSize = $derived(universe?.getBoundingClientRect());
-
-  let fieldDivs: HTMLElement[] = $state([]);
-
-  const starfields: Starfield[] = [];
-
   class Starfield {
     left: number = $state(0);
     stars: Vector3Tuple[] = [];
@@ -35,6 +24,16 @@
       );
     }
   }
+
+  const STARCOUNT = 200;
+  const UNIVERSEDEPTH = 5;
+
+  let universe: HTMLElement | undefined = $state();
+
+  let universeSize = $derived(universe?.getBoundingClientRect());
+
+  let fieldDivs: HTMLElement[] = $state([]);
+
   $effect(() => {
     fieldDivs.forEach((a, b) => {
       const kfs: Keyframe[] = [
@@ -49,15 +48,16 @@
       a.animate(kfs, opts);
     });
   });
+
+  let starfields: Starfield[] = $state([]);
+
   onMount(() => {
+    starfields = Array(UNIVERSEDEPTH)
+      .fill(undefined)
+      .map((_, i) => {
+        return new Starfield(universeSize!, STARCOUNT, i);
+      });
     // const rect = universe?.getBoundingClientRect();
-    starfields.push(
-      ...Array(UNIVERSEDEPTH)
-        .fill(undefined)
-        .map((_, i) => {
-          return new Starfield(universeSize!, STARCOUNT, i);
-        }),
-    );
   });
 </script>
 
@@ -96,7 +96,7 @@
   }
   #universe {
     position: relative;
-    width: 90vw;
+    height: 80vh;
     aspect-ratio: 16 / 9;
     overflow: hidden;
     background-color: black;
