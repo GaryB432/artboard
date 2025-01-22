@@ -16,6 +16,7 @@ body {
   display: flex;
   flex-direction: column;
 }
+a.button:focus,
 button:focus,
 select:focus {
   box-shadow:
@@ -35,7 +36,8 @@ nav.button-bar {
   align-self: center;
   justify-content: space-around;
 }
-nav.button-bar button {
+nav.button-bar button,
+a.button {
   font-size: 0.875rem;
   line-height: 1.25rem;
   cursor: pointer;
@@ -48,11 +50,16 @@ nav.button-bar button {
   color: var(--blue);
 }
 
-nav.button-bar button:hover {
+nav.button-bar button:hover,
+a.button:hover {
   background-color: rgb(239, 246, 255);
 }
 
 .right-bar {
   background-color: #8cb7f2;
   padding: 6px;
+}
+
+button {
+  outline: 1px solid red;
 }

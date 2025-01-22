@@ -1,29 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import type { Vector3Tuple } from "three";
   import WebAnimationsHome from "../WebAnimationsHome.svelte";
-
-  class Starfield {
-    left: number = $state(0);
-    stars: Vector3Tuple[] = [];
-    constructor(
-      rect: Required<Pick<DOMRectInit, "width" | "height">>,
-      starCount: number,
-      distance: number,
-    ) {
-      const { width, height } = rect;
-      this.stars.push(
-        ...Array(starCount)
-          .fill(undefined)
-          .map<Vector3Tuple>(() => {
-            const x = Math.round(Math.random() * width);
-            const y = Math.round(Math.random() * height);
-            const z = distance;
-            return [x, y, z];
-          }),
-      );
-    }
-  }
+  import { Starfield } from "./star-field.svelte";
 
   const STARCOUNT = 200;
   const UNIVERSEDEPTH = 5;
