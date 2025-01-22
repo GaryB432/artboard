@@ -1,6 +1,6 @@
 <div class="wa-home">
-  <a class="button-a" href="./">
-    <div class="btl">Animations List</div>
+  <a class="button" href="./">
+    <div>Animations List</div>
     <svg
       viewBox="0 0 24 24"
       fill="none"
@@ -19,20 +19,14 @@
   .wa-home {
     display: flex;
     justify-content: flex-end;
+    padding: 0 1em;
   }
-  a {
-    border: thin solid var(--blue);
-    border-radius: 5px;
-    padding: 5px 8px;
-    width: fit-content;
+  a.button {
     display: flex;
-    /* font-size: 14px; */
-    gap: 1rem;
-    align-items: center;
-    flex-direction: row;
-    justify-content: space-between;
+    gap: 0.5em;
+    place-items: center;
   }
   svg {
-    height: 0.8em;
+    height: 1em;
   }
 </style>
