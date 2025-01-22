@@ -149,7 +149,7 @@ export class World {
       }
     }
 
-    const bases:Polygon[] = [];
+    const bases: Polygon[] = [];
     for (const seg of supports) {
       bases.push(new Envelope(seg, this.buildingWidth).poly);
     }
