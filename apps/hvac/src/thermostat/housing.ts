@@ -6,7 +6,7 @@ function negate(a: number[][]): number[][] {
   return a.map((v) => v.map((n) => -n));
 }
 
-export function setupHousing(svg: SVGSVGElement) {
+export function setupHousing(svg: SVGSVGElement): void {
   const height = width * aspectRatio;
 
   svg.width.baseVal.value = width;
@@ -39,7 +39,7 @@ export function setupHousing(svg: SVGSVGElement) {
   svg.appendChild(pathd);
 }
 
-export function curveToPath(curve: number[]) {
+export function curveToPath(curve: number[]): string {
   if (curve.length !== 6) {
     throw new Error("curve must have 6 elements");
   }

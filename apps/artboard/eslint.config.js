@@ -2,16 +2,24 @@ import prettier from "eslint-config-prettier";
 import js from "@eslint/js";
 import { includeIgnoreFile } from "@eslint/compat";
 import svelte from "eslint-plugin-svelte";
+import gb from "eslint-plugin-gb";
 import globals from "globals";
 import { fileURLToPath } from "node:url";
 import ts from "typescript-eslint";
 const gitignorePath = fileURLToPath(new URL("./.gitignore", import.meta.url));
+
+const workarounds = {
+  Animatable: false,
+  Keyframe: false,
+  NodeJS: false,
+};
 
 export default ts.config(
   includeIgnoreFile(gitignorePath),
   js.configs.recommended,
   ...ts.configs.recommended,
   ...svelte.configs["flat/recommended"],
+  ...gb.configs["flat/recommended"],
   prettier,
   ...svelte.configs["flat/prettier"],
   {
@@ -19,6 +27,7 @@ export default ts.config(
       globals: {
         ...globals.browser,
         ...globals.node,
+        ...workarounds,
       },
     },
   },
@@ -32,9 +41,6 @@ export default ts.config(
   },
   { ignores: ["**/radu/**/*"] },
   {
-    rules: {
-      "@typescript-eslint/no-unused-vars": "off",
-      "no-undef": "off",
-    },
+    rules: {},
   },
 );
