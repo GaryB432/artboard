@@ -5,7 +5,7 @@ import viteLogo from "/vite.svg";
 
 const svgns = "http://www.w3.org/2000/svg";
 
-function createRectElement(rect: Required<DOMRectInit>) {
+function createRectElement(rect: Required<DOMRectInit>): SVGRectElement {
   const rectElement = document.createElementNS(svgns, "rect");
   rectElement.setAttributeNS(null, "x", rect.x.toString());
   rectElement.setAttributeNS(null, "y", rect.y.toString());
@@ -16,11 +16,11 @@ function createRectElement(rect: Required<DOMRectInit>) {
 }
 
 class Point {
-  constructor(
+  public constructor(
     public x: number,
     public y: number,
   ) {}
-  scale(scalar: number): this {
+  public scale(scalar: number): this {
     this.x = this.x * scalar;
     this.y = this.y * scalar;
     return this;
@@ -28,9 +28,6 @@ class Point {
 }
 
 class Scene {
-  private zoom = 1;
-  private svgSize: Point;
-  private worldSize = new Point(4000, 3000);
   private mouse = {
     down: false,
     button: 1,
@@ -39,8 +36,11 @@ class Scene {
     px: 0,
     py: 0,
   };
+  private svgSize: Point;
+  private worldSize = new Point(4000, 3000);
+  private zoom = 1;
 
-  constructor(private svg: SVGSVGElement) {
+  public constructor(private svg: SVGSVGElement) {
     this.svgSize = new Point(
       this.svg.width.baseVal.value,
       this.svg.height.baseVal.value,
@@ -83,7 +83,7 @@ class Scene {
       // evt.preventDefault();
     });
   }
-  reset() {
+  public reset() {
     for (let r = 0; r < 30; r++) {
       for (let c = 0; c < 40; c++) {
         const rg: Required<DOMRectInit> = {
