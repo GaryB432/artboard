@@ -8,6 +8,12 @@ import { fileURLToPath } from "node:url";
 import ts from "typescript-eslint";
 const gitignorePath = fileURLToPath(new URL("./.gitignore", import.meta.url));
 
+const workarounds = {
+  Animatable: false,
+  Keyframe: false,
+  NodeJS: false,
+};
+
 export default ts.config(
   includeIgnoreFile(gitignorePath),
   js.configs.recommended,
@@ -21,6 +27,7 @@ export default ts.config(
       globals: {
         ...globals.browser,
         ...globals.node,
+        ...workarounds,
       },
     },
   },
