@@ -1,4 +1,4 @@
 {
-    "git.branchProtection": ["master"],
-    "git.branchRandomName.enable": true
+  "git.branchProtection": ["master"],
+  "git.branchRandomName.enable": true
 }
