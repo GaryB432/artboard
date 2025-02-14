@@ -13,6 +13,8 @@
     id: number;
     x: Tween<number>;
     y: Tween<number>;
+    velocity: { x: number; y: number };
+
     size: number;
     color: string;
   }
@@ -25,6 +27,10 @@
         id: i,
         x,
         y,
+        velocity: {
+          x: (Math.random() - 0.5) * 15,
+          y: (Math.random() - 0.5) * 15,
+        },
         size: Math.random() * 20 + 5,
         color: `rgba(${Math.random() * 255},${Math.random() * 255},${Math.random() * 255},0.3)`,
       };
@@ -51,8 +57,8 @@
     const elapsed = time - startTime; // Total elapsed time
 
     bubbles.forEach((b) => {
-      b.x.set(b.x.current + Math.random() * 5);
-      b.y.set(b.y.current + Math.random() * 5);
+      b.x.set(b.x.current + b.velocity.x);
+      b.y.set(b.y.current + b.velocity.y);
     });
 
     // // Clear the canvas
