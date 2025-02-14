@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { onMount } from "svelte";
   import { Tween } from "svelte/motion";
   import { fade } from "svelte/transition";
 
@@ -32,11 +33,54 @@
   $inspect(container?.getBoundingClientRect());
   $inspect(bubbles);
 
+  let lastFrameTime = 0;
+  let startTime = 0;
+
+  onMount(() => {
+    startTime = performance.now();
+    lastFrameTime = startTime;
+    requestAnimationFrame(update);
+  });
+
+  function update(time: number) {
+    // if (!ctx) return;
+
+    const deltaTime = time - lastFrameTime; // Time since the last frame
+    lastFrameTime = time;
+
+    const elapsed = time - startTime; // Total elapsed time
+
+    bubbles.forEach((b) => {
+      b.x.set(b.x.current + Math.random() * 5);
+      b.y.set(b.y.current + Math.random() * 5);
+    });
+
+    // // Clear the canvas
+    // ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // // Example: Draw a rectangle that moves based on elapsed time.
+    // const x = Math.sin(elapsed / 1000) * 100 + 150; // Example animation
+    // ctx.fillStyle = 'blue';
+    // ctx.fillRect(x, 50, 50, 50);
+
+    //  // Display the elapsed time
+    // ctx.fillStyle = 'black';
+    // ctx.fillText(`Elapsed Time: ${elapsed.toFixed(0)}ms`, 10, 10);
+
+    requestAnimationFrame(update);
+  }
+
   function moveBubbles() {
     bubbles.forEach((b) => {
       b.x.set(b.x.current + 200, { duration: 100 });
     });
   }
+
+  onMount(() => {
+    startTime = performance.now();
+    lastFrameTime = startTime;
+    requestAnimationFrame(update);
+  });
 </script>
 
 <div class="container">
