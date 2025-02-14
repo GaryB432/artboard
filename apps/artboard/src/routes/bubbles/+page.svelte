@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { Tween } from "svelte/motion";
   import { fade } from "svelte/transition";
 
   let title = $state("Floating Bubbles");
@@ -9,16 +10,16 @@
 
   interface Bubble {
     id: number;
-    x: number;
-    y: number;
+    x: Tween<number>;
+    y: Tween<number>;
     size: number;
     color: string;
   }
 
   let bubbles: Bubble[] = $derived(
     Array.from({ length: 50 }, (_, i) => {
-      const x = Math.random() * containerRect.width;
-      const y = Math.random() * containerRect.height;
+      const x = new Tween(Math.random() * containerRect.width);
+      const y = new Tween(Math.random() * containerRect.height);
       return {
         id: i,
         x,
@@ -31,7 +32,11 @@
   $inspect(container?.getBoundingClientRect());
   $inspect(bubbles);
 
-  function moveBubbles() {}
+  function moveBubbles() {
+    bubbles.forEach((b) => {
+      b.x.set(b.x.current + 200, { duration: 100 });
+    });
+  }
 </script>
 
 <div class="container">
@@ -40,8 +45,8 @@
       {#each bubbles as bubble (bubble.id)}
         <!-- use animatebubble -->
         <circle
-          cx={bubble.x}
-          cy={bubble.y}
+          cx={bubble.x.current}
+          cy={bubble.y.current}
           r={bubble.size}
           fill={bubble.color}
           transition:fade={{ duration: 1000 }}
