@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { Vector } from "$lib/vector/vector";
   import { onMount } from "svelte";
   import { Tween } from "svelte/motion";
   import { fade } from "svelte/transition";
@@ -27,10 +28,10 @@
         id: i,
         x,
         y,
-        velocity: {
-          x: (Math.random() - 0.5) * 15,
-          y: (Math.random() - 0.5) * 15,
-        },
+        velocity: new Vector(
+          (Math.random() - 0.5) * 20,
+          (Math.random() - 0.5) * 20,
+        ),
         size: Math.random() * 20 + 5,
         color: `rgba(${Math.random() * 255},${Math.random() * 255},${Math.random() * 255},0.3)`,
       };
@@ -99,13 +100,12 @@
           cy={bubble.y.current}
           r={bubble.size}
           fill={bubble.color}
-          transition:fade={{ duration: 1000 }}
         />
       {/each}
     </svg>
   </div>
   <div class="content">
-    <div class="title-container" in:fade>
+    <div class="title-container">
       <h1 class="title">
         {#each title.split(" ") as word, wordIndex}
           <span class="word">
