@@ -1,14 +1,11 @@
 <script lang="ts">
-  import { onMount } from "svelte";
-  import { fade, fly } from "svelte/transition";
+  import { fade } from "svelte/transition";
 
   let title = $state("Floating Bubbles");
-  let size: DOMRectInit = $state({ x: 0, y: 0, width: 0, height: 0 });
   let container: SVGSVGElement | undefined = $state();
-  let fdf: DOMRectInit = $derived(
-    container ? container.getBoundingClientRect() : { height: 0, width: 0 },
+  let containerRect: DOMRect = $derived(
+    container ? container.getBoundingClientRect() : new DOMRect(0, 0, 0, 0),
   );
-  let mounted = $state(true);
 
   interface Bubble {
     id: number;
@@ -20,8 +17,8 @@
 
   let bubbles: Bubble[] = $derived(
     Array.from({ length: 50 }, (_, i) => {
-      const x = Math.random() * (fdf.width ?? 100);
-      const y = Math.random() * (fdf.height ?? 100);
+      const x = Math.random() * containerRect.width;
+      const y = Math.random() * containerRect.height;
       return {
         id: i,
         x,
@@ -34,28 +31,22 @@
   $inspect(container?.getBoundingClientRect());
   $inspect(bubbles);
 
-  onMount(() => {
-    mounted = true;
-  });
-
   function moveBubbles() {}
 </script>
 
 <div class="container">
   <div class="bubbles-container">
     <svg class="bubbles-svg" bind:this={container}>
-      {#if mounted}
-        {#each bubbles as bubble (bubble.id)}
-          <!-- use animatebubble -->
-          <circle
-            cx={bubble.x}
-            cy={bubble.y}
-            r={bubble.size}
-            fill={bubble.color}
-            transition:fade={{ duration: 1000 }}
-          />
-        {/each}
-      {/if}
+      {#each bubbles as bubble (bubble.id)}
+        <!-- use animatebubble -->
+        <circle
+          cx={bubble.x}
+          cy={bubble.y}
+          r={bubble.size}
+          fill={bubble.color}
+          transition:fade={{ duration: 1000 }}
+        />
+      {/each}
     </svg>
   </div>
   <div class="content">
