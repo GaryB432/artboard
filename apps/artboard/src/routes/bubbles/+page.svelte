@@ -57,10 +57,10 @@
 
     const elapsed = time - startTime; // Total elapsed time
 
-    // bubbles.forEach((b) => {
-    //   b.x.set(b.x.current + b.velocity.x);
-    //   b.y.set(b.y.current + b.velocity.y);
-    // });
+    bubbles.forEach((b) => {
+      b.x.set(b.x.current + b.velocity.x);
+      b.y.set(b.y.current + b.velocity.y);
+    });
 
     // // Clear the canvas
     // ctx.clearRect(0, 0, canvas.width, canvas.height);
