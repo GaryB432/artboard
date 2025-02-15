@@ -1,9 +1,6 @@
 <script lang="ts">
-    import { onMount } from "svelte";
-  import type { PageData } from "./$types";
+  import { browser } from "$app/environment";
 
-  let { data }: { data: PageData } = $props();
-  // Define types for better type safety
   interface Point {
     x: number;
     y: number;
@@ -12,6 +9,9 @@
   interface Circle {
     center: Point;
     radius: number;
+    mass: number;
+    velocity: Point;
+    restitution: number;
   }
 
   interface Rectangle {
@@ -21,91 +21,157 @@
     height: number;
   }
 
-  function animateCircle(
-    circle: Circle,
-    rectangle: Rectangle,
+  function checkCircleCollision(c1: Circle, c2: Circle): boolean {
+    const dx = c2.center.x - c1.center.x;
+    const dy = c2.center.y - c1.center.y;
+    const distance = Math.sqrt(dx * dx + dy * dy);
+    return distance < c1.radius + c2.radius;
+  }
+
+  function resolveCircleCollision(c1: Circle, c2: Circle) {
+    const dx = c2.center.x - c1.center.x;
+    const dy = c2.center.y - c1.center.y;
+    const distance = Math.sqrt(dx * dx + dy * dy);
+
+    const normalX = dx / distance;
+    const normalY = dy / distance;
+
+    const relativeVelocityX = c2.velocity.x - c1.velocity.x;
+    const relativeVelocityY = c2.velocity.y - c1.velocity.y;
+
+    const dotProduct =
+      relativeVelocityX * normalX + relativeVelocityY * normalY;
+
+    if (dotProduct > 0) return;
+
+    const elasticity = 0.8;
+
+    const impulse =
+      (-(1 + elasticity) * dotProduct) / (1 / c1.mass + 1 / c2.mass);
+
+    c1.velocity.x -= (impulse * normalX) / c1.mass;
+    c1.velocity.y -= (impulse * normalY) / c1.mass;
+    c2.velocity.x += (impulse * normalX) / c2.mass;
+    c2.velocity.y += (impulse * normalY) / c2.mass;
+
+    const overlap = c1.radius + c2.radius - distance;
+    c1.center.x -= (overlap * normalX * c2.mass) / (c1.mass + c2.mass);
+    c1.center.y -= (overlap * normalY * c2.mass) / (c1.mass + c2.mass);
+    c2.center.x += (overlap * normalX * c1.mass) / (c1.mass + c2.mass);
+    c2.center.y += (overlap * normalY * c1.mass) / (c1.mass + c2.mass);
+  }
+
+  function animateCircles(
+    circles: Circle[],
     gravity: number,
-    wind: number,
     deltaTime: number,
+    rectangle: Rectangle,
   ): void {
-    // Physics calculations
-    const mass = 1; // You can adjust mass
-    let accelerationX = wind / mass; // Wind force
-    let accelerationY = gravity / mass; // Gravity force
+    for (let i = 0; i < circles.length; i++) {
+      const c1 = circles[i];
 
-    // Update velocity
-    circle.center.x += velocityX * deltaTime;
-    circle.center.y += velocityY * deltaTime;
-    velocityX += accelerationX * deltaTime;
-    velocityY += accelerationY * deltaTime;
+      const acceleration: Point = { x: 0, y: 0 };
+      acceleration.y += gravity / c1.mass;
 
-    // Boundary check (optional - you might want different behavior)
-    if (circle.center.y + circle.radius > rectangle.y + rectangle.height) {
-      circle.center.y = rectangle.y + rectangle.height - circle.radius;
-      velocityY = 0; // Stop at the bottom (or bounce, etc.)
-    }
+      c1.velocity.x += acceleration.x * deltaTime;
+      c1.velocity.y += acceleration.y * deltaTime;
 
-    if (circle.center.x + circle.radius > rectangle.x + rectangle.width) {
-      circle.center.x = rectangle.x + rectangle.width - circle.radius;
-      velocityX = 0;
-    }
-    if (circle.center.x - circle.radius < rectangle.x) {
-      circle.center.x = rectangle.x + circle.radius;
-      velocityX = 0;
+      c1.center.x += c1.velocity.x * deltaTime;
+      c1.center.y += c1.velocity.y * deltaTime;
+
+      if (c1.center.y + c1.radius > rectangle.y + rectangle.height) {
+        c1.center.y = rectangle.y + rectangle.height - c1.radius;
+        c1.velocity.y = -c1.velocity.y * c1.restitution;
+        c1.velocity.x += (Math.random() - 0.5) * 100;
+      }
+      if (c1.center.y - c1.radius < rectangle.y) {
+        c1.center.y = rectangle.y + c1.radius;
+        c1.velocity.y = -c1.velocity.y * c1.restitution;
+        c1.velocity.x += (Math.random() - 0.5) * 100;
+      }
+      if (c1.center.x + c1.radius > rectangle.x + rectangle.width) {
+        c1.center.x = rectangle.x + rectangle.width - c1.radius;
+        c1.velocity.x = -c1.velocity.x * c1.restitution;
+      }
+      if (c1.center.x - c1.radius < rectangle.x) {
+        c1.center.x = rectangle.x + c1.radius;
+        c1.velocity.x = -c1.velocity.x * c1.restitution;
+      }
+
+      for (let j = i + 1; j < circles.length; j++) {
+        const c2 = circles[j];
+        if (checkCircleCollision(c1, c2)) {
+          resolveCircleCollision(c1, c2);
+        }
+      }
     }
   }
 
-  // Example usage (you'll need to adapt this to your SVG setup)
-  let circle: Circle = $state({
-    center: { x: 150, y: 50 }, // Start at the top center
-    radius: 20,
-  });
+  const circles: Circle[] = [
+    {
+      center: { x: 150, y: 50 },
+      radius: 20,
+      mass: 1,
+      velocity: {
+        x: (Math.random() - 0.5) * 200,
+        y: (Math.random() - 0.5) * 200,
+      },
+      restitution: 0.8,
+    },
+    {
+      center: { x: 250, y: 150 },
+      radius: 30,
+      mass: 1.6,
+      velocity: {
+        x: (Math.random() - 0.5) * 200,
+        y: (Math.random() - 0.5) * 200,
+      },
+      restitution: 0.8,
+    },
+    {
+      center: { x: 100, y: 100 },
+      radius: 15,
+      mass: 0.8,
+      velocity: {
+        x: (Math.random() - 0.5) * 200,
+        y: (Math.random() - 0.5) * 200,
+      },
+      restitution: 0.8,
+    },
+  ];
 
-  const rectangle: Rectangle = {
-    x: 100,
-    y: 0,
-    width: 200,
-    height: 300,
-  };
+  const rectangle: Rectangle = { x: 0, y: 0, width: 400, height: 300 };
 
-  let velocityX = 0;
-  let velocityY = 0;
-  const gravity = 9.8; // Adjust gravity
-  const wind = 5; // Adjust wind force
-
+  const gravity = 9.8;
   let lastFrameTime = performance.now();
-  let circleElement: SVGCircleElement | null = $state(null);
 
   function gameLoop() {
     const currentTime = performance.now();
-    const deltaTime = (currentTime - lastFrameTime) / 1000; // In seconds
+    const deltaTime = (currentTime - lastFrameTime) / 1000;
     lastFrameTime = currentTime;
 
-    animateCircle(circle, rectangle, gravity, wind, deltaTime);
+    animateCircles(circles, gravity, deltaTime, rectangle);
 
-    // Update the SVG element's position using the updated circle.center.x and circle.center.y.
-
-    if (circleElement) {
-      circleElement.setAttribute("cx", circle.center.x.toString());
-      circleElement.setAttribute("cy", circle.center.y.toString());
+    for (let i = 0; i < circles.length; i++) {
+      const circleElement = document.getElementById(
+        `circle${i}`,
+      )! as unknown as SVGCircleElement;
+      if (circleElement) {
+        circleElement.setAttribute("cx", circles[i].center.x.toString());
+        circleElement.setAttribute("cy", circles[i].center.y.toString());
+      }
     }
 
     requestAnimationFrame(gameLoop);
   }
-
-  onMount(gameLoop)
-
-//   gameLoop(); // Start the animation loop
+  if (browser) {
+    gameLoop();
+  }
 </script>
 
 <svg width="400" height="300">
-  <rect x="100" y="0" width="200" height="300" fill="lightgray" />
-  <circle
-    id="myCircle"
-    cx="150"
-    cy="50"
-    r="20"
-    fill="red"
-    bind:this={circleElement}
-  />
+  <rect x="0" y="0" width="400" height="300" fill="lightgray" />
+  <circle id="circle0" cx="150" cy="50" r="20" fill="red" />
+  <circle id="circle1" cx="250" cy="150" r="30" fill="blue" />
+  <circle id="circle2" cx="100" cy="100" r="15" fill="green" />
 </svg>
