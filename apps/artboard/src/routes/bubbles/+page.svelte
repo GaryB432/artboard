@@ -1,8 +1,20 @@
 <script lang="ts">
-  import { Vector } from "$lib/vector/vector";
-  import { onMount } from "svelte";
-  import { Tween } from "svelte/motion";
-  import { fade } from "svelte/transition";
+  import { browser } from "$app/environment";
+
+  interface Point {
+    x: number;
+    y: number;
+  }
+
+  interface Bubble {
+    center: Point;
+    color: string;
+    id: number;
+    mass: number;
+    radius: number;
+    restitution: number;
+    velocity: Point;
+  }
 
   let title = $state("Floating Bubbles");
   let container: SVGSVGElement | undefined = $state();
@@ -10,84 +22,188 @@
     container ? container.getBoundingClientRect() : new DOMRect(0, 0, 0, 0),
   );
 
-  interface Bubble {
-    id: number;
-    x: Tween<number>;
-    y: Tween<number>;
-    velocity: Vector;
+  const gravity = 9.8;
 
-    size: number;
-    color: string;
+  function checkBubbleCollision(c1: Bubble, c2: Bubble): boolean {
+    const dx = c2.center.x - c1.center.x;
+    const dy = c2.center.y - c1.center.y;
+    const distance = Math.sqrt(dx * dx + dy * dy);
+    return distance < c1.radius + c2.radius;
   }
+
+  function resolveBubbleCollision(c1: Bubble, c2: Bubble) {
+    // Calculate the vector between the centers of the two circles
+    const dx = c2.center.x - c1.center.x;
+    const dy = c2.center.y - c1.center.y;
+    const distance = Math.sqrt(dx * dx + dy * dy);
+
+    // Calculate the collision normal (unit vector pointing from c1 to c2)
+    const normalX = dx / distance;
+    const normalY = dy / distance;
+
+    // Calculate the relative velocity of the two circles
+    const relativeVelocityX = c2.velocity.x - c1.velocity.x;
+    const relativeVelocityY = c2.velocity.y - c1.velocity.y;
+
+    // Calculate the dot product of the relative velocity and the collision normal.
+    // This tells us how much the circles are moving *towards* each other.
+    const dotProduct =
+      relativeVelocityX * normalX + relativeVelocityY * normalY;
+
+    // If the dot product is positive, the circles are moving away from each other,
+    // so there's no collision to resolve.
+    if (dotProduct > 0) return;
+
+    // Elasticity: Controls how "bouncy" the collision is.
+    // 0.0: Completely inelastic (circles stick together).
+    // 1.0: Perfectly elastic (no energy loss).
+    const elasticity = 0.8; // Adjust this value for different bounciness
+
+    // Calculate the impulse (change in momentum) needed to separate the circles.
+    // This formula takes into account the masses and elasticity.
+    const impulse =
+      (-(1 + elasticity) * dotProduct) / (1 / c1.mass + 1 / c2.mass);
+
+    // Update the velocities of the circles based on the impulse and their masses.
+    // The impulse is distributed proportionally to the inverse of their masses.
+    c1.velocity.x -= (impulse * normalX) / c1.mass;
+    c1.velocity.y -= (impulse * normalY) / c1.mass;
+    c2.velocity.x += (impulse * normalX) / c2.mass;
+    c2.velocity.y += (impulse * normalY) / c2.mass;
+
+    // Separate the circles to prevent them from sticking together.
+    // The amount of separation is proportional to their masses.
+    const overlap = c1.radius + c2.radius - distance;
+    c1.center.x -= (overlap * normalX * c2.mass) / (c1.mass + c2.mass);
+    c1.center.y -= (overlap * normalY * c2.mass) / (c1.mass + c2.mass);
+    c2.center.x += (overlap * normalX * c1.mass) / (c1.mass + c2.mass);
+    c2.center.y += (overlap * normalY * c1.mass) / (c1.mass + c2.mass);
+  }
+
+  function arrangeBubbles() {
+    const cols = 10;
+    const mr = containerRect.width / (cols - 1);
+    const topLeft: Point = {
+      x: (containerRect.width - cols * mr) * 0.5,
+      y: (containerRect.height - (bubbles.length / cols) * mr) * 0.5,
+    };
+
+    bubbles.forEach((b, i) => {
+      const r = Math.floor(i / cols);
+      const c = i % cols;
+
+      b.center = { x: topLeft.x + c * mr, y: topLeft.y + r * mr };
+      b.velocity = { x: 0, y: 0 };
+    });
+  }
+
+  function animateBubbles(deltaTime: number) {
+    for (let i = 0; i < bubbles.length; i++) {
+      const b1 = bubbles[i];
+
+      const grav = gravity * 0.1;
+
+      const acceleration: Point = { x: 0, y: 0 };
+      acceleration.y += gravity / b1.mass;
+
+      b1.velocity.x += acceleration.x * deltaTime;
+      b1.velocity.y += acceleration.y * deltaTime;
+
+      b1.center.x += b1.velocity.x * deltaTime;
+      b1.center.y += b1.velocity.y * deltaTime;
+
+      const bottomEdge = containerRect.height;
+      if (b1.center.y + b1.radius > bottomEdge) {
+        b1.center.y = bottomEdge - b1.radius;
+        b1.velocity.y = -b1.velocity.y * b1.restitution;
+        b1.velocity.x += (Math.random() - 0.5) * 50;
+        b1.velocity.x *= grav;
+        b1.velocity.y *= grav;
+
+        if (
+          Math.abs(b1.velocity.y) < 1 &&
+          Math.abs(b1.velocity.x) < 1 &&
+          b1.center.y + b1.radius > bottomEdge - 5
+        ) {
+          b1.velocity.x = 0;
+          b1.velocity.y = 0;
+        }
+      }
+      if (b1.center.y - b1.radius < 0) {
+        b1.center.y = b1.radius;
+        b1.velocity.y = -b1.velocity.y * b1.restitution;
+        b1.velocity.x += (Math.random() - 0.5) * 50;
+        b1.velocity.x *= grav;
+        b1.velocity.y *= grav;
+      }
+      if (b1.center.x + b1.radius > containerRect.width) {
+        b1.center.x = containerRect.width - b1.radius;
+        b1.velocity.x = -b1.velocity.x * b1.restitution;
+        b1.velocity.x *= grav;
+        b1.velocity.y *= grav;
+      }
+      if (b1.center.x - b1.radius < 0) {
+        b1.center.x = b1.radius;
+        b1.velocity.x = -b1.velocity.x * b1.restitution;
+        b1.velocity.x *= grav;
+        b1.velocity.y *= grav;
+      }
+
+      for (let j = i + 1; j < bubbles.length; j++) {
+        const b2 = bubbles[j];
+        if (checkBubbleCollision(b1, b2)) {
+          resolveBubbleCollision(b1, b2);
+        }
+      }
+    }
+  }
+
+  let lastFrameTime = performance.now();
 
   let bubbles: Bubble[] = $derived(
     Array.from({ length: 50 }, (_, i) => {
-      const x = new Tween(Math.random() * containerRect.width);
-      const y = new Tween(Math.random() * containerRect.height);
+      const radius = Math.random() * 20 + 5;
       return {
         id: i,
-        x,
-        y,
-        velocity: new Vector(
-          (Math.random() - 0.5) * 20,
-          (Math.random() - 0.5) * 20,
-        ),
-        size: Math.random() * 20 + 5,
+        center: {
+          x: Math.random() * containerRect.width,
+          y: Math.random() * containerRect.height,
+        },
+        radius,
+        mass: radius / 20,
+        velocity: {
+          x: (Math.random() - 0.5) * 200,
+          y: (Math.random() - 0.5) * 200,
+        },
+        restitution: 0.8,
         color: `rgba(${Math.random() * 255},${Math.random() * 255},${Math.random() * 255},0.3)`,
       };
     }),
   );
-  $inspect(container?.getBoundingClientRect());
-  $inspect(bubbles);
 
-  let lastFrameTime = 0;
-  let startTime = 0;
+  function gameLoop() {
+    const currentTime = performance.now();
+    const deltaTime = (currentTime - lastFrameTime) / 1000;
+    lastFrameTime = currentTime;
 
-  onMount(() => {
-    startTime = performance.now();
-    lastFrameTime = startTime;
-    requestAnimationFrame(update);
-  });
+    animateBubbles(deltaTime);
 
-  function update(time: number) {
-    // if (!ctx) return;
+    for (let i = 0; i < bubbles.length; i++) {
+      const circleElement = document.getElementById(
+        `circle${i}`,
+      )! as unknown as SVGCircleElement;
+      if (circleElement) {
+        circleElement.setAttribute("cx", bubbles[i].center.x.toString());
+        circleElement.setAttribute("cy", bubbles[i].center.y.toString());
+      }
+    }
 
-    const deltaTime = time - lastFrameTime; // Time since the last frame
-    lastFrameTime = time;
-
-    const elapsed = time - startTime; // Total elapsed time
-
-    bubbles.forEach((b) => {
-      b.x.set(b.x.current + b.velocity.x);
-      b.y.set(b.y.current + b.velocity.y);
-    });
-
-    // // Clear the canvas
-    // ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    // // Example: Draw a rectangle that moves based on elapsed time.
-    // const x = Math.sin(elapsed / 1000) * 100 + 150; // Example animation
-    // ctx.fillStyle = 'blue';
-    // ctx.fillRect(x, 50, 50, 50);
-
-    //  // Display the elapsed time
-    // ctx.fillStyle = 'black';
-    // ctx.fillText(`Elapsed Time: ${elapsed.toFixed(0)}ms`, 10, 10);
-
-    requestAnimationFrame(update);
+    requestAnimationFrame(gameLoop);
   }
 
-  function moveBubbles() {
-    bubbles.forEach((b) => {
-      b.x.set(b.x.current + 200, { duration: 1000 });
-    });
+  if (browser) {
+    gameLoop();
   }
-
-  onMount(() => {
-    startTime = performance.now();
-    lastFrameTime = startTime;
-    requestAnimationFrame(update);
-  });
 </script>
 
 <div class="container">
@@ -96,9 +212,10 @@
       {#each bubbles as bubble (bubble.id)}
         <!-- use animatebubble -->
         <circle
-          cx={bubble.x.current}
-          cy={bubble.y.current}
-          r={bubble.size}
+          id="circle{bubble.id}"
+          cx={bubble.center.x}
+          cy={bubble.center.y}
+          r={bubble.radius}
           fill={bubble.color}
         />
       {/each}
@@ -125,7 +242,7 @@
       </h1>
 
       <div class="button-container">
-        <button class="explore-button" onclick={moveBubbles}>
+        <button class="explore-button" onclick={arrangeBubbles}>
           <span class="button-text">Explore the Bubbles</span>
           <span class="button-arrow">→</span>
         </button>
