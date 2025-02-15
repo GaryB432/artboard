@@ -59,7 +59,3 @@ a.button:hover {
   background-color: #8cb7f2;
   padding: 6px;
 }
-
-button {
-  outline: 1px solid red;
-}

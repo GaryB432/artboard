@@ -21,6 +21,10 @@
       description: "animations ported from the old polyfill site",
     },
     {
+      path: "bubbles",
+      description: "svelte-kit animation and motion inspired by v0 template",
+    },
+    {
       path: "walking-blob",
       description:
         "borrowed and sveltized from https://codepen.io/danwilson/pen/WvXRYg",
