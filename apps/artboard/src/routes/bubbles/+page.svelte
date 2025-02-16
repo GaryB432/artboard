@@ -254,9 +254,9 @@
       </button>
     </div>
   </div>
-</div>
-<div class="button-box">
-  <Controls></Controls>
+  <div class="button-box">
+    <Controls></Controls>
+  </div>
 </div>
 
 <style>
@@ -278,7 +278,7 @@
     position: relative;
     min-height: 85vh;
     width: 100%;
-    /* height: 100%; */
+    height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -389,6 +389,9 @@
   }
 
   .button-box {
-    height: fit-content;
+    position: absolute;
+    border: thin solid lime;
+    top: 0.75rem;
+    right: 0.75rem;
   }
 </style>
