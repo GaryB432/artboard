@@ -1,5 +1,6 @@
 <script lang="ts">
   import { browser } from "$app/environment";
+  import Controls from "./Controls.svelte";
 
   interface Point {
     x: number;
@@ -16,6 +17,7 @@
     velocity: Point;
   }
 
+  let playing = $state(true);
   let title = $state("Floating Bubbles");
   let container: SVGSVGElement | undefined = $state();
   let containerRect: DOMRect = $derived(
@@ -81,17 +83,21 @@
   }
 
   function arrangeBubbles() {
-    const cols = 10;
-    const mr = containerRect.width / (cols - 1);
+    const cols = 5;
+    // const mr = Math.max(containerRect.width, containerRect.height) * (1 / cols);
+    const mr = 50;
+    const rowsNeeded = Math.ceil(bubbles.length / cols);
+
     const topLeft: Point = {
-      x: (containerRect.width - cols * mr) * 0.5,
-      y: (containerRect.height - (bubbles.length / cols) * mr) * 0.5,
+      // x: (containerRect.width - rowsNeeded * mr) * 0.5,
+
+      x: (containerRect.width - (cols - 1) * mr) * 0.5,
+      y: (containerRect.height - (rowsNeeded - 1) * mr) * 0.5,
     };
 
     bubbles.forEach((b, i) => {
       const r = Math.floor(i / cols);
       const c = i % cols;
-
       b.center = { x: topLeft.x + c * mr, y: topLeft.y + r * mr };
       b.velocity = { x: 0, y: 0 };
     });
@@ -240,14 +246,16 @@
           </span>
         {/each}
       </h1>
-
-      <div class="button-container">
-        <button class="explore-button" onclick={arrangeBubbles}>
-          <span class="button-text">Explore the Bubbles</span>
-          <span class="button-arrow">→</span>
-        </button>
-      </div>
     </div>
+    <div class="button-container">
+      <button class="explore-button" onclick={arrangeBubbles}>
+        <span class="button-text">Explore the Bubbles</span>
+        <span class="button-arrow">→</span>
+      </button>
+    </div>
+  </div>
+  <div class="button-box">
+    <Controls></Controls>
   </div>
 </div>
 
@@ -269,8 +277,8 @@
   .container {
     position: relative;
     min-height: 85vh;
-    height: 100%;
     width: 100%;
+    height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -378,5 +386,12 @@
   .explore-button:hover .button-arrow {
     opacity: 1;
     transform: translateX(6px);
+  }
+
+  .button-box {
+    position: absolute;
+    border: thin solid lime;
+    top: 0.75rem;
+    right: 0.75rem;
   }
 </style>
