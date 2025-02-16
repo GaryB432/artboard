@@ -16,6 +16,7 @@
     velocity: Point;
   }
 
+  let playing = $state(true);
   let title = $state("Floating Bubbles");
   let container: SVGSVGElement | undefined = $state();
   let containerRect: DOMRect = $derived(
@@ -81,17 +82,21 @@
   }
 
   function arrangeBubbles() {
-    const cols = 10;
-    const mr = containerRect.width / (cols - 1);
+    const cols = 5;
+    // const mr = Math.max(containerRect.width, containerRect.height) * (1 / cols);
+    const mr = 50;
+    const rowsNeeded = Math.ceil(bubbles.length / cols);
+
     const topLeft: Point = {
-      x: (containerRect.width - cols * mr) * 0.5,
-      y: (containerRect.height - (bubbles.length / cols) * mr) * 0.5,
+      // x: (containerRect.width - rowsNeeded * mr) * 0.5,
+
+      x: (containerRect.width - (cols - 1) * mr) * 0.5,
+      y: (containerRect.height - (rowsNeeded - 1) * mr) * 0.5,
     };
 
     bubbles.forEach((b, i) => {
       const r = Math.floor(i / cols);
       const c = i % cols;
-
       b.center = { x: topLeft.x + c * mr, y: topLeft.y + r * mr };
       b.velocity = { x: 0, y: 0 };
     });
@@ -249,9 +254,15 @@
       </div>
     </div>
   </div>
+  <div class="button-box">
+    coming soon
+  </div>
 </div>
 
 <style>
+  * {
+    border: thin solid lime;
+  }
   @keyframes -global-spring-in {
     0% {
       transform: scale(0);
