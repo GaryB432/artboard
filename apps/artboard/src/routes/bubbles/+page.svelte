@@ -1,5 +1,6 @@
 <script lang="ts">
   import { browser } from "$app/environment";
+  import Controls from "./Controls.svelte";
 
   interface Point {
     x: number;
@@ -245,24 +246,20 @@
           </span>
         {/each}
       </h1>
-
-      <div class="button-container">
-        <button class="explore-button" onclick={arrangeBubbles}>
-          <span class="button-text">Explore the Bubbles</span>
-          <span class="button-arrow">→</span>
-        </button>
-      </div>
+    </div>
+    <div class="button-container">
+      <button class="explore-button" onclick={arrangeBubbles}>
+        <span class="button-text">Explore the Bubbles</span>
+        <span class="button-arrow">→</span>
+      </button>
     </div>
   </div>
-  <div class="button-box">
-    coming soon
-  </div>
+</div>
+<div class="button-box">
+  <Controls></Controls>
 </div>
 
 <style>
-  * {
-    border: thin solid lime;
-  }
   @keyframes -global-spring-in {
     0% {
       transform: scale(0);
@@ -280,8 +277,8 @@
   .container {
     position: relative;
     min-height: 85vh;
-    height: 100%;
     width: 100%;
+    /* height: 100%; */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -389,5 +386,9 @@
   .explore-button:hover .button-arrow {
     opacity: 1;
     transform: translateX(6px);
+  }
+
+  .button-box {
+    height: fit-content;
   }
 </style>
