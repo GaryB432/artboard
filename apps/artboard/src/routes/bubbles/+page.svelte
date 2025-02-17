@@ -25,7 +25,7 @@
     container ? container.getBoundingClientRect() : new DOMRect(0, 0, 0, 0),
   );
 
-  const gravity = 9.8;
+  let gravity = $state(9.8);
 
   function checkBubbleCollision(c1: Bubble, c2: Bubble): boolean {
     const dx = c2.center.x - c1.center.x;
@@ -261,6 +261,7 @@
       onupdate={(d: any) => {
         console.log(d.gravity);
         console.log(d.initialVelocity);
+        gravity = controlledGravity / 100;
       }}
     ></Controls>
   </div>
