@@ -1,13 +1,49 @@
-<script>
-	let name = $state(`Controls`);
-	let message = $derived(`${name} coming soon`);
+<script lang="ts">
+  let name = $state(`Controls`);
+  let message = $derived(`${name} coming soon`);
+
+  let {
+    initialVelocity = $bindable<number>(),
+    gravity = $bindable<number>(),
+    onupdate = $bindable<() => void>(),
+  } = $props();
 </script>
 
 <article>
-	{message}
+  {message}
 </article>
 
+<div class="panel">
+  <div>Gravity</div>
+  <input
+    type="range"
+    name="gravity"
+    id="gravity"
+    bind:value={gravity}
+    onchange={() => {
+      onupdate({ gravity, initialVelocity });
+    }}
+  />
+  <div>Initial Velocity</div>
+  <input
+    type="range"
+    name="velocity"
+    id="velocity"
+    bind:value={initialVelocity}
+    onchange={() => {
+      onupdate({ gravity, initialVelocity });
+    }}
+  />
+</div>
+<div>
+  {gravity}
+  {initialVelocity}
+</div>
+
 <style>
+  input[type="range"] {
+    all: revert;
+  }
   article {
     --some-color: rgba(0, 0, 0, 0.2);
     box-shadow:

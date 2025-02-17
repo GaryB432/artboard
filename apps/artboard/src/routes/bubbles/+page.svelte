@@ -18,6 +18,7 @@
   }
 
   let playing = $state(true);
+  let controlledGravity = $state(9.8);
   let title = $state("Floating Bubbles");
   let container: SVGSVGElement | undefined = $state();
   let containerRect: DOMRect = $derived(
@@ -255,8 +256,15 @@
     </div>
   </div>
   <div class="button-box">
-    <Controls></Controls>
+    <Controls
+      gravity={controlledGravity}
+      onupdate={(d: any) => {
+        console.log(d.gravity);
+        console.log(d.initialVelocity);
+      }}
+    ></Controls>
   </div>
+  {controlledGravity}
 </div>
 
 <style>
@@ -392,6 +400,7 @@
     position: absolute;
     border: thin solid lime;
     top: 0.75rem;
+    height: 100%;
     right: 0.75rem;
   }
 </style>
