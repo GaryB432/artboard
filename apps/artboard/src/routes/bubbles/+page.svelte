@@ -1,6 +1,6 @@
 <script lang="ts">
   import { browser } from "$app/environment";
-  import Controls from "./Controls.svelte";
+  import { bubblesState } from "./state.svelte";
 
   interface Point {
     x: number;
@@ -18,14 +18,13 @@
   }
 
   let playing = $state(true);
-  let controlledGravity = $state(9.8);
   let title = $state("Floating Bubbles");
   let container: SVGSVGElement | undefined = $state();
   let containerRect: DOMRect = $derived(
     container ? container.getBoundingClientRect() : new DOMRect(0, 0, 0, 0),
   );
 
-  let gravity = $state(9.8);
+  // let gravity = $state(9.8);
 
   function checkBubbleCollision(c1: Bubble, c2: Bubble): boolean {
     const dx = c2.center.x - c1.center.x;
@@ -100,24 +99,29 @@
       const r = Math.floor(i / cols);
       const c = i % cols;
       b.center = { x: topLeft.x + c * mr, y: topLeft.y + r * mr };
-      b.velocity = { x: 0, y: 0 };
+
+      b.velocity = {
+        x: (Math.random() - 0.5) * bubblesState.initialVelocity,
+        y: (Math.random() - 0.5) * bubblesState.initialVelocity,
+      };
     });
   }
 
   function animateBubbles(deltaTime: number) {
+    const scaledDeltaTime = deltaTime * bubblesState.animationSpeed;
     for (let i = 0; i < bubbles.length; i++) {
       const b1 = bubbles[i];
 
-      const grav = gravity * 0.1;
+      const grav = bubblesState.gravity * 0.1;
 
       const acceleration: Point = { x: 0, y: 0 };
-      acceleration.y += gravity / b1.mass;
+      acceleration.y += bubblesState.gravity / b1.mass;
 
-      b1.velocity.x += acceleration.x * deltaTime;
-      b1.velocity.y += acceleration.y * deltaTime;
+      b1.velocity.x += acceleration.x * scaledDeltaTime;
+      b1.velocity.y += acceleration.y * scaledDeltaTime;
 
-      b1.center.x += b1.velocity.x * deltaTime;
-      b1.center.y += b1.velocity.y * deltaTime;
+      b1.center.x += b1.velocity.x * scaledDeltaTime;
+      b1.center.y += b1.velocity.y * scaledDeltaTime;
 
       const bottomEdge = containerRect.height;
       if (b1.center.y + b1.radius > bottomEdge) {
@@ -179,8 +183,8 @@
         radius,
         mass: radius / 20,
         velocity: {
-          x: (Math.random() - 0.5) * 200,
-          y: (Math.random() - 0.5) * 200,
+          x: (Math.random() - 0.5) * bubblesState.initialVelocity,
+          y: (Math.random() - 0.5) * bubblesState.initialVelocity,
         },
         restitution: 0.8,
         color: `rgba(${Math.random() * 255},${Math.random() * 255},${Math.random() * 255},0.3)`,
@@ -255,7 +259,7 @@
       </button>
     </div>
   </div>
-  <div class="button-box">
+  <!-- <div class="button-box">
     <Controls
       gravity={controlledGravity}
       onupdate={(d: any) => {
@@ -265,7 +269,7 @@
       }}
     ></Controls>
   </div>
-  {controlledGravity}
+  {controlledGravity} -->
 </div>
 
 <style>
