@@ -1,6 +1,11 @@
 <script lang="ts">
-  import { browser } from "$app/environment";
+  import { Tween } from "svelte/motion";
   import Controls from "./Controls.svelte";
+  import { bubblesState } from "./state.svelte";
+
+  import { shuffle } from "$lib/utils/misc";
+
+  import { onMount } from "svelte";
 
   interface Point {
     x: number;
@@ -8,13 +13,14 @@
   }
 
   interface Bubble {
-    center: Point;
+    center: Tween<Point>;
     color: string;
     id: number;
+    // lerpProgress: number;
     mass: number;
     radius: number;
     restitution: number;
-    velocity: Point;
+    targetCenter: Point | null;
   }
 
   let playing = $state(true);
@@ -24,73 +30,22 @@
     container ? container.getBoundingClientRect() : new DOMRect(0, 0, 0, 0),
   );
 
-  const gravity = 9.8;
-
-  function checkBubbleCollision(c1: Bubble, c2: Bubble): boolean {
-    const dx = c2.center.x - c1.center.x;
-    const dy = c2.center.y - c1.center.y;
-    const distance = Math.sqrt(dx * dx + dy * dy);
-    return distance < c1.radius + c2.radius;
+  function randomize() {
+    for (let i = 0; i < bubbles.length; i++) {
+      const b = bubbles[i];
+      b.targetCenter = {
+        x: Math.random() * containerRect.width,
+        y: Math.random() * containerRect.height,
+      };
+    }
   }
 
-  function resolveBubbleCollision(c1: Bubble, c2: Bubble) {
-    // Calculate the vector between the centers of the two circles
-    const dx = c2.center.x - c1.center.x;
-    const dy = c2.center.y - c1.center.y;
-    const distance = Math.sqrt(dx * dx + dy * dy);
-
-    // Calculate the collision normal (unit vector pointing from c1 to c2)
-    const normalX = dx / distance;
-    const normalY = dy / distance;
-
-    // Calculate the relative velocity of the two circles
-    const relativeVelocityX = c2.velocity.x - c1.velocity.x;
-    const relativeVelocityY = c2.velocity.y - c1.velocity.y;
-
-    // Calculate the dot product of the relative velocity and the collision normal.
-    // This tells us how much the circles are moving *towards* each other.
-    const dotProduct =
-      relativeVelocityX * normalX + relativeVelocityY * normalY;
-
-    // If the dot product is positive, the circles are moving away from each other,
-    // so there's no collision to resolve.
-    if (dotProduct > 0) return;
-
-    // Elasticity: Controls how "bouncy" the collision is.
-    // 0.0: Completely inelastic (circles stick together).
-    // 1.0: Perfectly elastic (no energy loss).
-    const elasticity = 0.8; // Adjust this value for different bounciness
-
-    // Calculate the impulse (change in momentum) needed to separate the circles.
-    // This formula takes into account the masses and elasticity.
-    const impulse =
-      (-(1 + elasticity) * dotProduct) / (1 / c1.mass + 1 / c2.mass);
-
-    // Update the velocities of the circles based on the impulse and their masses.
-    // The impulse is distributed proportionally to the inverse of their masses.
-    c1.velocity.x -= (impulse * normalX) / c1.mass;
-    c1.velocity.y -= (impulse * normalY) / c1.mass;
-    c2.velocity.x += (impulse * normalX) / c2.mass;
-    c2.velocity.y += (impulse * normalY) / c2.mass;
-
-    // Separate the circles to prevent them from sticking together.
-    // The amount of separation is proportional to their masses.
-    const overlap = c1.radius + c2.radius - distance;
-    c1.center.x -= (overlap * normalX * c2.mass) / (c1.mass + c2.mass);
-    c1.center.y -= (overlap * normalY * c2.mass) / (c1.mass + c2.mass);
-    c2.center.x += (overlap * normalX * c1.mass) / (c1.mass + c2.mass);
-    c2.center.y += (overlap * normalY * c1.mass) / (c1.mass + c2.mass);
-  }
-
-  function arrangeBubbles() {
-    const cols = 5;
-    // const mr = Math.max(containerRect.width, containerRect.height) * (1 / cols);
-    const mr = 50;
+  function lineUp() {
+    const cols = 10;
+    const mr = containerRect.width * (1 / cols) - 20;
     const rowsNeeded = Math.ceil(bubbles.length / cols);
 
     const topLeft: Point = {
-      // x: (containerRect.width - rowsNeeded * mr) * 0.5,
-
       x: (containerRect.width - (cols - 1) * mr) * 0.5,
       y: (containerRect.height - (rowsNeeded - 1) * mr) * 0.5,
     };
@@ -98,118 +53,52 @@
     bubbles.forEach((b, i) => {
       const r = Math.floor(i / cols);
       const c = i % cols;
-      b.center = { x: topLeft.x + c * mr, y: topLeft.y + r * mr };
-      b.velocity = { x: 0, y: 0 };
+      b.targetCenter = { x: topLeft.x + c * mr, y: topLeft.y + r * mr };
     });
+    shuffle(bubbles);
   }
 
-  function animateBubbles(deltaTime: number) {
+  function draw() {
     for (let i = 0; i < bubbles.length; i++) {
-      const b1 = bubbles[i];
-
-      const grav = gravity * 0.1;
-
-      const acceleration: Point = { x: 0, y: 0 };
-      acceleration.y += gravity / b1.mass;
-
-      b1.velocity.x += acceleration.x * deltaTime;
-      b1.velocity.y += acceleration.y * deltaTime;
-
-      b1.center.x += b1.velocity.x * deltaTime;
-      b1.center.y += b1.velocity.y * deltaTime;
-
-      const bottomEdge = containerRect.height;
-      if (b1.center.y + b1.radius > bottomEdge) {
-        b1.center.y = bottomEdge - b1.radius;
-        b1.velocity.y = -b1.velocity.y * b1.restitution;
-        b1.velocity.x += (Math.random() - 0.5) * 50;
-        b1.velocity.x *= grav;
-        b1.velocity.y *= grav;
-
-        if (
-          Math.abs(b1.velocity.y) < 1 &&
-          Math.abs(b1.velocity.x) < 1 &&
-          b1.center.y + b1.radius > bottomEdge - 5
-        ) {
-          b1.velocity.x = 0;
-          b1.velocity.y = 0;
-        }
-      }
-      if (b1.center.y - b1.radius < 0) {
-        b1.center.y = b1.radius;
-        b1.velocity.y = -b1.velocity.y * b1.restitution;
-        b1.velocity.x += (Math.random() - 0.5) * 50;
-        b1.velocity.x *= grav;
-        b1.velocity.y *= grav;
-      }
-      if (b1.center.x + b1.radius > containerRect.width) {
-        b1.center.x = containerRect.width - b1.radius;
-        b1.velocity.x = -b1.velocity.x * b1.restitution;
-        b1.velocity.x *= grav;
-        b1.velocity.y *= grav;
-      }
-      if (b1.center.x - b1.radius < 0) {
-        b1.center.x = b1.radius;
-        b1.velocity.x = -b1.velocity.x * b1.restitution;
-        b1.velocity.x *= grav;
-        b1.velocity.y *= grav;
-      }
-
-      for (let j = i + 1; j < bubbles.length; j++) {
-        const b2 = bubbles[j];
-        if (checkBubbleCollision(b1, b2)) {
-          resolveBubbleCollision(b1, b2);
-        }
+      const b = bubbles[i];
+      if (b.targetCenter) {
+        b.center.set(
+          {
+            x: b.targetCenter.x,
+            y: b.targetCenter.y,
+          },
+          { duration: 5000, delay: i * 10 },
+        );
       }
     }
   }
 
-  let lastFrameTime = performance.now();
+  let bubbles: Bubble[] = $state([]);
 
-  let bubbles: Bubble[] = $derived(
-    Array.from({ length: 50 }, (_, i) => {
+  onMount(() => {
+    bubbles = Array.from({ length: 50 }, (_, i) => {
       const radius = Math.random() * 20 + 5;
-      return {
+      const center = new Tween({
+        x: containerRect.width / 2,
+        y: containerRect.height / 4,
+      });
+      const bubble: Bubble = {
         id: i,
-        center: {
-          x: Math.random() * containerRect.width,
-          y: Math.random() * containerRect.height,
-        },
+        center,
+        targetCenter: null,
         radius,
         mass: radius / 20,
-        velocity: {
-          x: (Math.random() - 0.5) * 200,
-          y: (Math.random() - 0.5) * 200,
-        },
         restitution: 0.8,
         color: `rgba(${Math.random() * 255},${Math.random() * 255},${Math.random() * 255},0.3)`,
       };
-    }),
-  );
-
-  function gameLoop() {
-    const currentTime = performance.now();
-    const deltaTime = (currentTime - lastFrameTime) / 1000;
-    lastFrameTime = currentTime;
-
-    animateBubbles(deltaTime);
-
-    for (let i = 0; i < bubbles.length; i++) {
-      const circleElement = document.getElementById(
-        `circle${i}`,
-      )! as unknown as SVGCircleElement;
-      if (circleElement) {
-        circleElement.setAttribute("cx", bubbles[i].center.x.toString());
-        circleElement.setAttribute("cy", bubbles[i].center.y.toString());
-      }
-    }
-
-    requestAnimationFrame(gameLoop);
-  }
-
-  if (browser) {
-    gameLoop();
-  }
+      return bubble;
+    });
+    setTimeout(() => {
+      randomize();
+      draw();
+    }, 10);
+    draw();
+  });
 </script>
 
 <div class="container">
@@ -219,8 +108,8 @@
         <!-- use animatebubble -->
         <circle
           id="circle{bubble.id}"
-          cx={bubble.center.x}
-          cy={bubble.center.y}
+          cx={bubble.center.current.x}
+          cy={bubble.center.current.y}
           r={bubble.radius}
           fill={bubble.color}
         />
@@ -248,14 +137,17 @@
       </h1>
     </div>
     <div class="button-container">
-      <button class="explore-button" onclick={arrangeBubbles}>
+      <button
+        class="explore-button"
+        onclick={(e) => {
+          lineUp();
+          draw();
+        }}
+      >
         <span class="button-text">Explore the Bubbles</span>
         <span class="button-arrow">→</span>
       </button>
     </div>
-  </div>
-  <div class="button-box">
-    <Controls></Controls>
   </div>
 </div>
 
@@ -386,12 +278,5 @@
   .explore-button:hover .button-arrow {
     opacity: 1;
     transform: translateX(6px);
-  }
-
-  .button-box {
-    position: absolute;
-    border: thin solid lime;
-    top: 0.75rem;
-    right: 0.75rem;
   }
 </style>

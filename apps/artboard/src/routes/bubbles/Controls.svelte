@@ -1,13 +1,41 @@
-<script>
-	let name = $state(`Controls`);
-	let message = $derived(`${name} coming soon`);
+<script lang="ts">
+  import { bubblesState } from "./state.svelte";
+  let name = $state(`Controls`);
+  let message = $derived(`Don't touch the ${name} yet!`);
+
+  // let {
+  //   initialVelocity,
+  //   gravity,
+  // }: { initialVelocity: number; gravity: number } = $props();
 </script>
 
 <article>
-	{message}
+  {message}
 </article>
 
+<div class="panel">
+  <div>Speed</div>
+  <input
+    type="range"
+    min="-100"
+    max="100"
+    bind:value={bubblesState.animationSpeed}
+  />
+  <div>Gravity</div>
+  <input type="range" min="-100" max="100" bind:value={bubblesState.gravity} />
+  <div>Initial Velocity</div>
+  <input
+    type="range"
+    min="-100"
+    max="100"
+    bind:value={bubblesState.initialVelocity}
+  />
+</div>
+
 <style>
+  input[type="range"] {
+    all: revert;
+  }
   article {
     --some-color: rgba(0, 0, 0, 0.2);
     box-shadow:
