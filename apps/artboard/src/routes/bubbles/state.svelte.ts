@@ -1,7 +1,7 @@
 class BubblesState {
-  private _animationSpeed = $state(0.01);
-  private _gravity = $state(9.8);
-  private _initialVelocity = $state(200);
+  private _animationSpeed = $state(0);
+  private _gravity = $state(0);
+  private _initialVelocity = $state(0);
 
   public get animationSpeed(): number {
     return this._animationSpeed;

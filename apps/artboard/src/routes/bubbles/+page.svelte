@@ -18,9 +18,9 @@
     velocity: Point;
   }
 
-  const sss = $derived(bubblesState.animationSpeed * 0.01);
-  const ggg = $derived(bubblesState.gravity * 0.01 + 9.8);
-  const vvv = $derived(bubblesState.initialVelocity * 0.01 + 200);
+  const scaledAnimationSpeed = $derived(bubblesState.animationSpeed * 0.09);
+  const scaledGravity = $derived(bubblesState.gravity * 0.1 + 9.8);
+  const scaledVelocity = $derived(bubblesState.initialVelocity * 2 + 200);
 
   let playing = $state(true);
   let title = $state("Floating Bubbles");
@@ -106,21 +106,21 @@
       b.center = { x: topLeft.x + c * mr, y: topLeft.y + r * mr };
 
       b.velocity = {
-        x: (Math.random() - 0.5) * vvv,
-        y: (Math.random() - 0.5) * vvv,
+        x: (Math.random() - 0.5) * scaledVelocity,
+        y: (Math.random() - 0.5) * scaledVelocity,
       };
     });
   }
 
   function animateBubbles(deltaTime: number) {
-    const scaledDeltaTime = deltaTime * sss;
+    const scaledDeltaTime = deltaTime * scaledAnimationSpeed;
     for (let i = 0; i < bubbles.length; i++) {
       const b1 = bubbles[i];
 
-      const grav = ggg * 0.1;
+      const grav = scaledGravity * 0.1;
 
       const acceleration: Point = { x: 0, y: 0 };
-      acceleration.y += ggg / b1.mass;
+      acceleration.y += scaledGravity / b1.mass;
 
       b1.velocity.x += acceleration.x * scaledDeltaTime;
       b1.velocity.y += acceleration.y * scaledDeltaTime;
@@ -188,8 +188,8 @@
         radius,
         mass: radius / 20,
         velocity: {
-          x: (Math.random() - 0.5) * vvv,
-          y: (Math.random() - 0.5) * vvv,
+          x: (Math.random() - 0.5) * scaledVelocity,
+          y: (Math.random() - 0.5) * scaledVelocity,
         },
         restitution: 0.8,
         color: `rgba(${Math.random() * 255},${Math.random() * 255},${Math.random() * 255},0.3)`,
@@ -267,7 +267,9 @@
   <div class="button-box">
     <Controls></Controls>
   </div>
-  {vvv}
+  {scaledGravity}
+  {scaledAnimationSpeed}
+  {scaledVelocity}
 </div>
 
 <style>

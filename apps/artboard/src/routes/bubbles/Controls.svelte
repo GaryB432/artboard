@@ -14,6 +14,13 @@
 </article>
 
 <div class="panel">
+  <div>Speed</div>
+  <input
+    type="range"
+    min="-100"
+    max="100"
+    bind:value={bubblesState.animationSpeed}
+  />
   <div>Gravity</div>
   <input type="range" min="-100" max="100" bind:value={bubblesState.gravity} />
   <div>Initial Velocity</div>
@@ -23,10 +30,6 @@
     max="100"
     bind:value={bubblesState.initialVelocity}
   />
-</div>
-<div>
-  {bubblesState.gravity}
-  {bubblesState.initialVelocity}
 </div>
 
 <style>
