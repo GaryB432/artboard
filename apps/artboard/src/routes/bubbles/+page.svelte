@@ -23,21 +23,11 @@
     targetCenter: Point | null;
   }
 
-  // const scaledAnimationSpeed = $derived(bubblesState.animationSpeed * 0.09);
-  // const scaledGravity = $derived(bubblesState.gravity * 0.1 + 9.8);
-  // const scaledVelocity = $derived(bubblesState.initialVelocity * 2 + 200);
-
-  let playing = $state(true);
   let title = $state("Floating Bubbles");
   let container: SVGSVGElement | undefined = $state();
   let containerRect: DOMRect = $derived(
     container ? container.getBoundingClientRect() : new DOMRect(0, 0, 0, 0),
   );
-
-  // Grid Functions
-  const gridSpacing = 50;
-  const gridStartX = 50;
-  const gridStartY = 50;
 
   function randomize() {
     for (let i = 0; i < bubbles.length; i++) {
@@ -47,13 +37,11 @@
         y: Math.random() * containerRect.height,
       };
     }
-    // shuffle(bubbles);
   }
 
   function lineUp() {
     const cols = 10;
     const mr = containerRect.width * (1 / cols) - 20;
-    // const mr = 150;
     const rowsNeeded = Math.ceil(bubbles.length / cols);
 
     const topLeft: Point = {
@@ -292,13 +280,5 @@
   .explore-button:hover .button-arrow {
     opacity: 1;
     transform: translateX(6px);
-  }
-
-  .button-box {
-    position: absolute;
-    border: thin solid lime;
-    top: 0.75rem;
-    height: 100%;
-    right: 0.75rem;
   }
 </style>
