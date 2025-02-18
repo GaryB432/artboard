@@ -11,17 +11,16 @@
     center: Point;
     color: string;
     id: number;
-    lerpProgress: number;
+    // lerpProgress: number;
     mass: number;
     radius: number;
     restitution: number;
     targetCenter: Point | null;
-    velocity: Point;
   }
 
   // const scaledAnimationSpeed = $derived(bubblesState.animationSpeed * 0.09);
   // const scaledGravity = $derived(bubblesState.gravity * 0.1 + 9.8);
-  const scaledVelocity = $derived(bubblesState.initialVelocity * 2 + 200);
+  // const scaledVelocity = $derived(bubblesState.initialVelocity * 2 + 200);
 
   let playing = $state(true);
   let title = $state("Floating Bubbles");
@@ -47,23 +46,23 @@
     const normalX = dx / distance;
     const normalY = dy / distance;
 
-    const relativeVelocityX = c2.velocity.x - c1.velocity.x;
-    const relativeVelocityY = c2.velocity.y - c1.velocity.y;
+    // const relativeVelocityX = c2.velocity.x - c1.velocity.x;
+    // const relativeVelocityY = c2.velocity.y - c1.velocity.y;
 
-    const dotProduct =
-      relativeVelocityX * normalX + relativeVelocityY * normalY;
+    // const dotProduct =
+    //   relativeVelocityX * normalX + relativeVelocityY * normalY;
 
-    if (dotProduct > 0) return;
+    // if (dotProduct > 0) return;
 
-    const elasticity = 0.8;
+    // const elasticity = 0.8;
 
-    const impulse =
-      (-(1 + elasticity) * dotProduct) / (1 / c1.mass + 1 / c2.mass);
+    // const impulse =
+    //   (-(1 + elasticity) * dotProduct) / (1 / c1.mass + 1 / c2.mass);
 
-    c1.velocity.x -= (impulse * normalX) / c1.mass;
-    c1.velocity.y -= (impulse * normalY) / c1.mass;
-    c2.velocity.x += (impulse * normalX) / c2.mass;
-    c2.velocity.y += (impulse * normalY) / c2.mass;
+    // c1.velocity.x -= (impulse * normalX) / c1.mass;
+    // c1.velocity.y -= (impulse * normalY) / c1.mass;
+    // c2.velocity.x += (impulse * normalX) / c2.mass;
+    // c2.velocity.y += (impulse * normalY) / c2.mass;
 
     const overlap = c1.radius + c2.radius - distance;
     c1.center.x -= (overlap * normalX * c2.mass) / (c1.mass + c2.mass);
@@ -87,7 +86,7 @@
         });
       }
     }
-    return positions;
+    return positions.slice(0, bubbles.length);
   }
 
   function assignGridPositions(gridPositions: Point[]) {
@@ -96,7 +95,7 @@
 
     for (let i = 0; i < bubbles.length; i++) {
       bubbles[i].targetCenter = shuffledPositions[i % shuffledPositions.length];
-      bubbles[i].lerpProgress = 0;
+      // bubbles[i].lerpProgress = 0;
     }
     console.log(shuffledPositions.length, bubbles.length);
   }
@@ -200,23 +199,19 @@
   let bubbles: Bubble[] = $derived(
     Array.from({ length: 5 }, (_, i) => {
       const radius = Math.random() * 20 + 5;
-      return {
+      const bubble: Bubble = {
         id: i,
         center: {
           x: Math.random() * containerRect.width,
           y: Math.random() * containerRect.height,
         },
-        lerpProgress: 0,
         targetCenter: null,
         radius,
         mass: radius / 20,
-        velocity: {
-          x: (Math.random() - 0.5) * scaledVelocity,
-          y: (Math.random() - 0.5) * scaledVelocity,
-        },
         restitution: 0.8,
         color: `rgba(${Math.random() * 255},${Math.random() * 255},${Math.random() * 255},0.3)`,
       };
+      return bubble;
     }),
   );
 
@@ -244,7 +239,7 @@
     // Render (SVG updates)
 
     // animateBubbles(deltaTime);
-    console.log(bubbles.length)
+    console.log(bubbles.length);
 
     for (let i = 0; i < bubbles.length; i++) {
       const circleElement = document.getElementById(
@@ -329,22 +324,34 @@
           const numCols = 5;
           const numRows = 4;
           const gridPositions = generateGridPositions(numCols, numRows);
-          assignGridPositions(gridPositions);
           console.log(gridPositions);
-
-          animationSteps = []; // Clear previous steps
-          currentStepIndex = 0;
+          assignGridPositions(gridPositions);
+          console.log(bubbles);
 
           for (const bubble of bubbles) {
-            const stepsForBubble = calculateBubbleSteps(
-              bubble.center,
-              bubble.targetCenter ?? bubble.center,
-              3,
-            ); // 3 steps: halfway, halfway, target
-            animationSteps.push(...stepsForBubble); // Add the steps
+            for (let f = 0; f < 2; f++) {
+              console.log(bubble.targetCenter, f);
+            }
           }
 
-          animateNextStep(); // Start the animation
+          // console.log(gridPositions);
+
+          // animationSteps = []; // Clear previous steps
+          // currentStepIndex = 0;
+
+          // for (const bubble of bubbles) {
+          //   const stepsForBubble = calculateBubbleSteps(
+          //     bubble.center,
+          //     bubble.targetCenter ?? bubble.center,
+          //     3,
+          //   ); // 3 steps: halfway, halfway, target
+          //   console.log(stepsForBubble);
+          //   animationSteps.push(...stepsForBubble); // Add the steps
+          // }
+
+          // console.log(animationSteps.length);
+
+          // animateNextStep(); // Start the animation
         }}
       >
         <span class="button-text">Explore the Bubbles</span>
@@ -355,8 +362,6 @@
   <div class="button-box">
     <Controls></Controls>
   </div>
-
-  {scaledVelocity}
 </div>
 
 <style>
