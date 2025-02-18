@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { browser } from "$app/environment";
-  import { deflate } from "zlib";
   import Controls from "./Controls.svelte";
   import { bubblesState } from "./state.svelte";
 
@@ -114,8 +112,8 @@
   let animationSpeed = 1;
   let gravity = 9.8;
 
-  function animateBubbles(deltaTime: number): void {
-    const scaledDeltaTime = deltaTime * animationSpeed;
+  function animateBubbles(): void {
+    // const scaledDeltaTime = deltaTime * animationSpeed;
 
     for (let i = 0; i < bubbles.length; i++) {
       const c1 = bubbles[i];
@@ -123,11 +121,11 @@
       const acceleration: Point = { x: 0, y: 0 };
       acceleration.y += gravity / c1.mass;
 
-      c1.velocity.x += acceleration.x * scaledDeltaTime;
-      c1.velocity.y += acceleration.y * scaledDeltaTime;
+      c1.velocity.x += acceleration.x;
+      c1.velocity.y += acceleration.y;
 
-      c1.center.x += c1.velocity.x * scaledDeltaTime;
-      c1.center.y += c1.velocity.y * scaledDeltaTime;
+      c1.center.x += c1.velocity.x;
+      c1.center.y += c1.velocity.y;
 
       // Boundary checks (using scaledDeltaTime)
       const bottomEdge = containerRect.height;
@@ -236,32 +234,14 @@
     return steps;
   }
 
-  // function animateNextStep(bubbles: Bubble[], rectangle: DOMRect) {
-  //   if (currentStepIndex < animationSteps.length) {
-  //     for (let i = 0; i < bubbles.length; i++) {
-  //       bubbles[i].center = animationSteps[currentStepIndex];
-  //     }
-  //     animateBubbles(bubbles, rectangle);
-
-  //     currentStepIndex++;
-  //     setTimeout(() => {
-  //       animateNextStep(bubbles, rectangle); // Schedule the next step
-  //     }, animationDuration / animationSteps.length); // Delay between steps
-  //   }
-  // }
-
-  let animationInterval: number | null = null; // Store the interval ID
-  // let animationDuration = 2000; // Total animation duration (milliseconds)
-  let startTime: number | null = null;
-
   function drawBubblesFrame() {
-    const deltaTime = animationSpeed / 1000; // Calculate deltaTime in seconds
+    // const deltaTime = animationSpeed / 1000; // Calculate deltaTime in seconds
     // animateBubbles(deltaTime); // Call animateBubbles
     // console.log(deltaTime);
 
     // Render (SVG updates)
 
-    animateBubbles(deltaTime);
+    // animateBubbles(deltaTime);
 
     for (let i = 0; i < bubbles.length; i++) {
       const circleElement = document.getElementById(
@@ -274,10 +254,8 @@
     }
   }
 
-  function animateNextStep(stepStartTime: number) {
+  function animateNextStep() {
     if (currentStepIndex < animationSteps.length) {
-      const currentTime = performance.now();
-      const deltaTime = (currentTime - stepStartTime) / 1000;
       for (let i = 0; i < bubbles.length; i++) {
         bubbles[i].center = animationSteps[currentStepIndex];
       }
@@ -285,7 +263,7 @@
 
       currentStepIndex++;
       setTimeout(() => {
-        animateNextStep(performance.now()); // Schedule the next step
+        animateNextStep(); // Schedule the next step
       }, animationDuration / animationSteps.length); // Delay between steps
     }
   }
