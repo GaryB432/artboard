@@ -1,11 +1,8 @@
 <script lang="ts">
-  import { Tween } from "svelte/motion";
-  import Controls from "./Controls.svelte";
-  import { bubblesState } from "./state.svelte";
-
   import { shuffle } from "$lib/utils/misc";
-
+  import easingsFunctions from "@libraries/graphics/easings";
   import { onMount } from "svelte";
+  import { Tween } from "svelte/motion";
 
   interface Point {
     x: number;
@@ -31,12 +28,18 @@
   );
 
   function randomize() {
-    for (let i = 0; i < bubbles.length; i++) {
-      const b = bubbles[i];
+    const getRandomInboundsPositionFor = (b: Bubble) => {
       b.targetCenter = {
         x: Math.random() * containerRect.width,
         y: Math.random() * containerRect.height,
       };
+      if (outOfBounds(b)) {
+        getRandomInboundsPositionFor(b);
+      }
+    };
+    for (let i = 0; i < bubbles.length; i++) {
+      const b = bubbles[i];
+      getRandomInboundsPositionFor(b);
     }
   }
 
@@ -67,7 +70,11 @@
             x: b.targetCenter.x,
             y: b.targetCenter.y,
           },
-          { duration: 5000, delay: i * 10 },
+          {
+            duration: 5000,
+            delay: i * 10,
+            easing: easingsFunctions["easeOutExpo"],
+          },
         );
       }
     }
@@ -99,6 +106,15 @@
     }, 10);
     draw();
   });
+
+  function outOfBounds(b: Bubble): boolean {
+    if (!b.targetCenter) return false;
+    if (b.targetCenter.x < b.radius) return true;
+    if (b.targetCenter.y < b.radius) return true;
+    if (b.targetCenter.x + b.radius > containerRect.width) return true;
+    if (b.targetCenter.y + b.radius > containerRect.height) return true;
+    return false;
+  }
 </script>
 
 <div class="container">
