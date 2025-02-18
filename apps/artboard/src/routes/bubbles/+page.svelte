@@ -1,5 +1,6 @@
 <script lang="ts">
   import { browser } from "$app/environment";
+  import Controls from "./Controls.svelte";
   import { bubblesState } from "./state.svelte";
 
   interface Point {
@@ -16,6 +17,10 @@
     restitution: number;
     velocity: Point;
   }
+
+  const sss = $derived(bubblesState.animationSpeed * 0.01);
+  const ggg = $derived(bubblesState.gravity * 0.01 + 9.8);
+  const vvv = $derived(bubblesState.initialVelocity * 0.01 + 200);
 
   let playing = $state(true);
   let title = $state("Floating Bubbles");
@@ -101,21 +106,21 @@
       b.center = { x: topLeft.x + c * mr, y: topLeft.y + r * mr };
 
       b.velocity = {
-        x: (Math.random() - 0.5) * bubblesState.initialVelocity,
-        y: (Math.random() - 0.5) * bubblesState.initialVelocity,
+        x: (Math.random() - 0.5) * vvv,
+        y: (Math.random() - 0.5) * vvv,
       };
     });
   }
 
   function animateBubbles(deltaTime: number) {
-    const scaledDeltaTime = deltaTime * bubblesState.animationSpeed;
+    const scaledDeltaTime = deltaTime * sss;
     for (let i = 0; i < bubbles.length; i++) {
       const b1 = bubbles[i];
 
-      const grav = bubblesState.gravity * 0.1;
+      const grav = ggg * 0.1;
 
       const acceleration: Point = { x: 0, y: 0 };
-      acceleration.y += bubblesState.gravity / b1.mass;
+      acceleration.y += ggg / b1.mass;
 
       b1.velocity.x += acceleration.x * scaledDeltaTime;
       b1.velocity.y += acceleration.y * scaledDeltaTime;
@@ -183,8 +188,8 @@
         radius,
         mass: radius / 20,
         velocity: {
-          x: (Math.random() - 0.5) * bubblesState.initialVelocity,
-          y: (Math.random() - 0.5) * bubblesState.initialVelocity,
+          x: (Math.random() - 0.5) * vvv,
+          y: (Math.random() - 0.5) * vvv,
         },
         restitution: 0.8,
         color: `rgba(${Math.random() * 255},${Math.random() * 255},${Math.random() * 255},0.3)`,
@@ -259,17 +264,10 @@
       </button>
     </div>
   </div>
-  <!-- <div class="button-box">
-    <Controls
-      gravity={controlledGravity}
-      onupdate={(d: any) => {
-        console.log(d.gravity);
-        console.log(d.initialVelocity);
-        gravity = controlledGravity / 100;
-      }}
-    ></Controls>
+  <div class="button-box">
+    <Controls></Controls>
   </div>
-  {controlledGravity} -->
+  {vvv}
 </div>
 
 <style>

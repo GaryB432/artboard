@@ -1,12 +1,12 @@
 <script lang="ts">
+  import { bubblesState } from "./state.svelte";
   let name = $state(`Controls`);
-  let message = $derived(`${name} coming soon`);
+  let message = $derived(`Don't touch the ${name} yet!`);
 
-  let {
-    initialVelocity = $bindable<number>(),
-    gravity = $bindable<number>(),
-    onupdate = $bindable<() => void>(),
-  } = $props();
+  // let {
+  //   initialVelocity,
+  //   gravity,
+  // }: { initialVelocity: number; gravity: number } = $props();
 </script>
 
 <article>
@@ -15,29 +15,18 @@
 
 <div class="panel">
   <div>Gravity</div>
-  <input
-    type="range"
-    name="gravity"
-    id="gravity"
-    bind:value={gravity}
-    onchange={() => {
-      onupdate({ gravity, initialVelocity });
-    }}
-  />
+  <input type="range" min="-100" max="100" bind:value={bubblesState.gravity} />
   <div>Initial Velocity</div>
   <input
     type="range"
-    name="velocity"
-    id="velocity"
-    bind:value={initialVelocity}
-    onchange={() => {
-      onupdate({ gravity, initialVelocity });
-    }}
+    min="-100"
+    max="100"
+    bind:value={bubblesState.initialVelocity}
   />
 </div>
 <div>
-  {gravity}
-  {initialVelocity}
+  {bubblesState.gravity}
+  {bubblesState.initialVelocity}
 </div>
 
 <style>
