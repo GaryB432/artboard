@@ -3,6 +3,10 @@
   import Controls from "./Controls.svelte";
   import { bubblesState } from "./state.svelte";
 
+  import { shuffle } from "$lib/utils/misc";
+
+  import { onMount } from "svelte";
+
   interface Point {
     x: number;
     y: number;
@@ -35,8 +39,21 @@
   const gridStartX = 50;
   const gridStartY = 50;
 
-  function generateGridPositions(numCols: number, numRows: number) {
-    // const positions: Point[] = [];
+  function randomize() {
+    for (let i = 0; i < bubbles.length; i++) {
+      const b = bubbles[i];
+      b.targetCenter = {
+        x: Math.random() * containerRect.width,
+        y: Math.random() * containerRect.height,
+      };
+    }
+    shuffle(bubbles);
+  }
+
+  function lineUp() {
+    const numCols = 5;
+    const numRows = 4;
+
     for (let row = 0; row < numRows; row++) {
       for (let col = 0; col < numCols; col++) {
         const b = col + row * numRows;
@@ -47,49 +64,12 @@
           };
       }
     }
-    // return positions.slice(0, bubbles.length);
   }
-
-  function assignGridPositions(gridPositions: Point[]) {
-    const shuffledPositions = [...gridPositions];
-
-    for (let i = 0; i < bubbles.length; i++) {
-      bubbles[i].targetCenter = shuffledPositions[i % shuffledPositions.length];
-    }
-    console.log(shuffledPositions.length, bubbles.length);
-  }
-
-  function shuffleArray(array: any[]): any[] {
-    const newArray = [...array];
-    for (let i = newArray.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
-    }
-    return newArray;
-  }
-
-  function lerp(start: Point, end: Point, t: number): Point {
-    const x = start.x + (end.x - start.x) * t;
-    const y = start.y + (end.y - start.y) * t;
-    return { x, y };
-  }
-
-  function randomize() {
-    for (let i = 0; i < bubbles.length; i++) {
-      const b = bubbles[i];
-      b.targetCenter = {
-        x: Math.random() * containerRect.x,
-        y: Math.random() * containerRect.y,
-      };
-    }
-  }
-
-  function lineUp() {}
 
   function draw() {
     for (let i = 0; i < bubbles.length; i++) {
       const b = bubbles[i];
-      if (b.center && b.targetCenter) {
+      if (b.targetCenter) {
         b.center.set(
           {
             x: b.targetCenter.x,
@@ -101,8 +81,10 @@
     }
   }
 
-  let bubbles: Bubble[] = $derived(
-    Array.from({ length: 5 }, (_, i) => {
+  let bubbles: Bubble[] = $state([]);
+
+  onMount(() => {
+    bubbles = Array.from({ length: 50 }, (_, i) => {
       const radius = Math.random() * 20 + 5;
       const center = new Tween({
         x: containerRect.width / 2,
@@ -118,8 +100,13 @@
         color: `rgba(${Math.random() * 255},${Math.random() * 255},${Math.random() * 255},0.3)`,
       };
       return bubble;
-    }),
-  );
+    });
+    setTimeout(() => {
+      randomize();
+      draw();
+    }, 500);
+    draw();
+  });
 </script>
 
 <div class="container">
@@ -161,11 +148,6 @@
       <button
         class="explore-button"
         onclick={(e) => {
-          console.log(e);
-          const numCols = 5;
-          const numRows = 4;
-          const gridPositions = generateGridPositions(numCols, numRows);
-          console.log(gridPositions);
           lineUp();
           draw();
           // assignGridPositions(gridPositions);
