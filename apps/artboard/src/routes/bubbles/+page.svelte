@@ -47,23 +47,26 @@
         y: Math.random() * containerRect.height,
       };
     }
-    shuffle(bubbles);
+    // shuffle(bubbles);
   }
 
   function lineUp() {
-    const numCols = 5;
-    const numRows = 4;
+    shuffle(bubbles);
+    const cols = 10;
+    // const mr = Math.max(containerRect.width, containerRect.height) * (1 / cols);
+    const mr = 100;
+    const rowsNeeded = Math.ceil(bubbles.length / cols);
 
-    for (let row = 0; row < numRows; row++) {
-      for (let col = 0; col < numCols; col++) {
-        const b = col + row * numRows;
-        if (b < bubbles.length)
-          bubbles[b].targetCenter = {
-            x: gridStartX + col * gridSpacing,
-            y: gridStartY + row * gridSpacing,
-          };
-      }
-    }
+    const topLeft: Point = {
+      x: (containerRect.width - (cols - 1) * mr) * 0.5,
+      y: (containerRect.height - (rowsNeeded - 1) * mr) * 0.5,
+    };
+
+    bubbles.forEach((b, i) => {
+      const r = Math.floor(i / cols);
+      const c = i % cols;
+      b.targetCenter = { x: topLeft.x + c * mr, y: topLeft.y + r * mr };
+    });
   }
 
   function draw() {
@@ -75,7 +78,7 @@
             x: b.targetCenter.x,
             y: b.targetCenter.y,
           },
-          { duration: 1000 },
+          { duration: 1000, delay: i * 100 },
         );
       }
     }
@@ -88,7 +91,7 @@
       const radius = Math.random() * 20 + 5;
       const center = new Tween({
         x: containerRect.width / 2,
-        y: containerRect.height / 2,
+        y: containerRect.height / 4,
       });
       const bubble: Bubble = {
         id: i,
@@ -150,14 +153,6 @@
         onclick={(e) => {
           lineUp();
           draw();
-          // assignGridPositions(gridPositions);
-          // console.log(bubbles);
-
-          // for (const bubble of bubbles) {
-          //   for (let f = 0; f < 2; f++) {
-          //     console.log(bubble.targetCenter, f);
-          //   }
-          // }
         }}
       >
         <span class="button-text">Explore the Bubbles</span>
@@ -165,9 +160,9 @@
       </button>
     </div>
   </div>
-  <div class="button-box">
+  <!-- <div class="button-box">
     <Controls></Controls>
-  </div>
+  </div> -->
 </div>
 
 <style>
