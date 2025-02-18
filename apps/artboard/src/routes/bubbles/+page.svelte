@@ -12,9 +12,11 @@
     center: Point;
     color: string;
     id: number;
+    lerpProgress: number;
     mass: number;
     radius: number;
     restitution: number;
+    targetCenter: Point | null;
     velocity: Point;
   }
 
@@ -39,47 +41,31 @@
   }
 
   function resolveBubbleCollision(c1: Bubble, c2: Bubble) {
-    // Calculate the vector between the centers of the two circles
     const dx = c2.center.x - c1.center.x;
     const dy = c2.center.y - c1.center.y;
     const distance = Math.sqrt(dx * dx + dy * dy);
 
-    // Calculate the collision normal (unit vector pointing from c1 to c2)
     const normalX = dx / distance;
     const normalY = dy / distance;
 
-    // Calculate the relative velocity of the two circles
     const relativeVelocityX = c2.velocity.x - c1.velocity.x;
     const relativeVelocityY = c2.velocity.y - c1.velocity.y;
 
-    // Calculate the dot product of the relative velocity and the collision normal.
-    // This tells us how much the circles are moving *towards* each other.
     const dotProduct =
       relativeVelocityX * normalX + relativeVelocityY * normalY;
 
-    // If the dot product is positive, the circles are moving away from each other,
-    // so there's no collision to resolve.
     if (dotProduct > 0) return;
 
-    // Elasticity: Controls how "bouncy" the collision is.
-    // 0.0: Completely inelastic (circles stick together).
-    // 1.0: Perfectly elastic (no energy loss).
-    const elasticity = 0.8; // Adjust this value for different bounciness
+    const elasticity = 0.8;
 
-    // Calculate the impulse (change in momentum) needed to separate the circles.
-    // This formula takes into account the masses and elasticity.
     const impulse =
       (-(1 + elasticity) * dotProduct) / (1 / c1.mass + 1 / c2.mass);
 
-    // Update the velocities of the circles based on the impulse and their masses.
-    // The impulse is distributed proportionally to the inverse of their masses.
     c1.velocity.x -= (impulse * normalX) / c1.mass;
     c1.velocity.y -= (impulse * normalY) / c1.mass;
     c2.velocity.x += (impulse * normalX) / c2.mass;
     c2.velocity.y += (impulse * normalY) / c2.mass;
 
-    // Separate the circles to prevent them from sticking together.
-    // The amount of separation is proportional to their masses.
     const overlap = c1.radius + c2.radius - distance;
     c1.center.x -= (overlap * normalX * c2.mass) / (c1.mass + c2.mass);
     c1.center.y -= (overlap * normalY * c2.mass) / (c1.mass + c2.mass);
@@ -87,94 +73,132 @@
     c2.center.y += (overlap * normalY * c1.mass) / (c1.mass + c2.mass);
   }
 
-  function arrangeBubbles() {
-    const cols = 5;
-    // const mr = Math.max(containerRect.width, containerRect.height) * (1 / cols);
-    const mr = 50;
-    const rowsNeeded = Math.ceil(bubbles.length / cols);
+  // Grid Functions
+  const gridSpacing = 50;
+  const gridStartX = 50;
+  const gridStartY = 50;
 
-    const topLeft: Point = {
-      // x: (containerRect.width - rowsNeeded * mr) * 0.5,
-
-      x: (containerRect.width - (cols - 1) * mr) * 0.5,
-      y: (containerRect.height - (rowsNeeded - 1) * mr) * 0.5,
-    };
-
-    bubbles.forEach((b, i) => {
-      const r = Math.floor(i / cols);
-      const c = i % cols;
-      b.center = { x: topLeft.x + c * mr, y: topLeft.y + r * mr };
-
-      b.velocity = {
-        x: (Math.random() - 0.5) * scaledVelocity,
-        y: (Math.random() - 0.5) * scaledVelocity,
-      };
-    });
+  function generateGridPositions(numCols: number, numRows: number): Point[] {
+    const positions: Point[] = [];
+    for (let row = 0; row < numRows; row++) {
+      for (let col = 0; col < numCols; col++) {
+        positions.push({
+          x: gridStartX + col * gridSpacing,
+          y: gridStartY + row * gridSpacing,
+        });
+      }
+    }
+    return positions;
   }
 
-  function animateBubbles(deltaTime: number) {
-    const scaledDeltaTime = deltaTime * scaledAnimationSpeed;
-    for (let i = 0; i < bubbles.length; i++) {
-      const b1 = bubbles[i];
+  function assignGridPositions(bubbles: Bubble[], gridPositions: Point[]) {
+    const shuffledPositions = shuffleArray(gridPositions);
 
-      const grav = scaledGravity * 0.1;
+    for (let i = 0; i < bubbles.length; i++) {
+      bubbles[i].targetCenter = shuffledPositions[i % shuffledPositions.length];
+      bubbles[i].lerpProgress = 0;
+    }
+  }
+
+  function shuffleArray(array: any[]): any[] {
+    const newArray = [...array];
+    for (let i = newArray.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+    }
+    return newArray;
+  }
+
+  // Animation and Lerp
+  let animationSpeed = 1;
+  let gravity = 9.8;
+
+  function animateBubbles(
+    // bubbles: Bubble[],
+    deltaTime: number,
+    rectangle: DOMRect,
+  ): void {
+    const scaledDeltaTime = deltaTime * animationSpeed;
+
+    for (let i = 0; i < bubbles.length; i++) {
+      const c1 = bubbles[i];
 
       const acceleration: Point = { x: 0, y: 0 };
-      acceleration.y += scaledGravity / b1.mass;
+      acceleration.y += gravity / c1.mass;
 
-      b1.velocity.x += acceleration.x * scaledDeltaTime;
-      b1.velocity.y += acceleration.y * scaledDeltaTime;
+      c1.velocity.x += acceleration.x * scaledDeltaTime;
+      c1.velocity.y += acceleration.y * scaledDeltaTime;
 
-      b1.center.x += b1.velocity.x * scaledDeltaTime;
-      b1.center.y += b1.velocity.y * scaledDeltaTime;
+      c1.center.x += c1.velocity.x * scaledDeltaTime;
+      c1.center.y += c1.velocity.y * scaledDeltaTime;
 
-      const bottomEdge = containerRect.height;
-      if (b1.center.y + b1.radius > bottomEdge) {
-        b1.center.y = bottomEdge - b1.radius;
-        b1.velocity.y = -b1.velocity.y * b1.restitution;
-        b1.velocity.x += (Math.random() - 0.5) * 50;
-        b1.velocity.x *= grav;
-        b1.velocity.y *= grav;
+      // Boundary checks (using scaledDeltaTime)
+      const bottomEdge = rectangle.height;
+      if (c1.center.y + c1.radius > bottomEdge) {
+        c1.center.y = bottomEdge - c1.radius;
+        c1.velocity.y = -c1.velocity.y * c1.restitution;
+        c1.velocity.x += (Math.random() - 0.5) * 50;
+        c1.velocity.x *= 0.98;
+        c1.velocity.y *= 0.98;
 
         if (
-          Math.abs(b1.velocity.y) < 1 &&
-          Math.abs(b1.velocity.x) < 1 &&
-          b1.center.y + b1.radius > bottomEdge - 5
+          Math.abs(c1.velocity.y) < 1 &&
+          Math.abs(c1.velocity.x) < 1 &&
+          c1.center.y + c1.radius > bottomEdge - 5
         ) {
-          b1.velocity.x = 0;
-          b1.velocity.y = 0;
+          c1.velocity.x = 0;
+          c1.velocity.y = 0;
         }
       }
-      if (b1.center.y - b1.radius < 0) {
-        b1.center.y = b1.radius;
-        b1.velocity.y = -b1.velocity.y * b1.restitution;
-        b1.velocity.x += (Math.random() - 0.5) * 50;
-        b1.velocity.x *= grav;
-        b1.velocity.y *= grav;
+      if (c1.center.y - c1.radius < 0) {
+        c1.center.y = c1.radius;
+        c1.velocity.y = -c1.velocity.y * c1.restitution;
+        c1.velocity.x += (Math.random() - 0.5) * 50;
+        c1.velocity.x *= 0.98;
+        c1.velocity.y *= 0.98;
       }
-      if (b1.center.x + b1.radius > containerRect.width) {
-        b1.center.x = containerRect.width - b1.radius;
-        b1.velocity.x = -b1.velocity.x * b1.restitution;
-        b1.velocity.x *= grav;
-        b1.velocity.y *= grav;
+      if (c1.center.x + c1.radius > rectangle.width) {
+        c1.center.x = rectangle.width - c1.radius;
+        c1.velocity.x = -c1.velocity.x * c1.restitution;
+        c1.velocity.x *= 0.98;
+        c1.velocity.y *= 0.98;
       }
-      if (b1.center.x - b1.radius < 0) {
-        b1.center.x = b1.radius;
-        b1.velocity.x = -b1.velocity.x * b1.restitution;
-        b1.velocity.x *= grav;
-        b1.velocity.y *= grav;
+      if (c1.center.x - c1.radius < 0) {
+        c1.center.x = c1.radius;
+        c1.velocity.x = -c1.velocity.x * c1.restitution;
+        c1.velocity.x *= 0.98;
+        c1.velocity.y *= 0.98;
       }
 
+      // Collision detection (using scaledDeltaTime)
       for (let j = i + 1; j < bubbles.length; j++) {
-        const b2 = bubbles[j];
-        if (checkBubbleCollision(b1, b2)) {
-          resolveBubbleCollision(b1, b2);
+        const c2 = bubbles[j];
+        if (checkBubbleCollision(c1, c2)) {
+          resolveBubbleCollision(c1, c2);
+        }
+      }
+
+      // Lerp to grid position
+      if (c1.targetCenter) {
+        c1.lerpProgress += 0.01 * animationSpeed;
+
+        if (c1.lerpProgress >= 1) {
+          c1.center = c1.targetCenter;
+          c1.targetCenter = null;
+        } else {
+          c1.center = lerp(c1.center, c1.targetCenter, c1.lerpProgress);
         }
       }
     }
   }
 
-  let lastFrameTime = performance.now();
+  function lerp(start: Point, end: Point, t: number): Point {
+    const x = start.x + (end.x - start.x) * t;
+    const y = start.y + (end.y - start.y) * t;
+    return { x, y };
+  }
+
+  // let lastFrameTime = performance.now();
 
   let bubbles: Bubble[] = $derived(
     Array.from({ length: 50 }, (_, i) => {
@@ -185,6 +209,8 @@
           x: Math.random() * containerRect.width,
           y: Math.random() * containerRect.height,
         },
+        lerpProgress: 0,
+        targetCenter: null,
         radius,
         mass: radius / 20,
         velocity: {
@@ -197,29 +223,29 @@
     }),
   );
 
-  function gameLoop() {
-    const currentTime = performance.now();
-    const deltaTime = (currentTime - lastFrameTime) / 1000;
-    lastFrameTime = currentTime;
+  // function gameLoop() {
+  //   const currentTime = performance.now();
+  //   const deltaTime = (currentTime - lastFrameTime) / 1000;
+  //   lastFrameTime = currentTime;
 
-    animateBubbles(deltaTime);
+  //   animateBubbles(deltaTime);
 
-    for (let i = 0; i < bubbles.length; i++) {
-      const circleElement = document.getElementById(
-        `circle${i}`,
-      )! as unknown as SVGCircleElement;
-      if (circleElement) {
-        circleElement.setAttribute("cx", bubbles[i].center.x.toString());
-        circleElement.setAttribute("cy", bubbles[i].center.y.toString());
-      }
-    }
+  //   for (let i = 0; i < bubbles.length; i++) {
+  //     const circleElement = document.getElementById(
+  //       `circle${i}`,
+  //     )! as unknown as SVGCircleElement;
+  //     if (circleElement) {
+  //       circleElement.setAttribute("cx", bubbles[i].center.x.toString());
+  //       circleElement.setAttribute("cy", bubbles[i].center.y.toString());
+  //     }
+  //   }
 
-    requestAnimationFrame(gameLoop);
-  }
+  //   requestAnimationFrame(gameLoop);
+  // }
 
-  if (browser) {
-    gameLoop();
-  }
+  // if (browser) {
+  //   gameLoop();
+  // }
 </script>
 
 <div class="container">
@@ -258,7 +284,16 @@
       </h1>
     </div>
     <div class="button-container">
-      <button class="explore-button" onclick={arrangeBubbles}>
+      <button
+        class="explore-button"
+        onclick={(e) => {
+          console.log(e);
+          const numCols = 5; // Adjust number of columns
+          const numRows = 4; // Adjust number of rows
+          const gridPositions = generateGridPositions(numCols, numRows);
+          assignGridPositions(bubbles, gridPositions);
+        }}
+      >
         <span class="button-text">Explore the Bubbles</span>
         <span class="button-arrow">→</span>
       </button>
