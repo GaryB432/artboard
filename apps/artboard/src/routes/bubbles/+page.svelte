@@ -1,5 +1,6 @@
 <script lang="ts">
   import { browser } from "$app/environment";
+  import { deflate } from "zlib";
   import Controls from "./Controls.svelte";
   import { bubblesState } from "./state.svelte";
 
@@ -253,12 +254,14 @@
   // let animationDuration = 2000; // Total animation duration (milliseconds)
   let startTime: number | null = null;
 
-  function animateBubblesStep() {
+  function drawBubblesFrame() {
     const deltaTime = animationSpeed / 1000; // Calculate deltaTime in seconds
     // animateBubbles(deltaTime); // Call animateBubbles
-    console.log(deltaTime);
+    // console.log(deltaTime);
 
     // Render (SVG updates)
+
+    animateBubbles(deltaTime);
 
     for (let i = 0; i < bubbles.length; i++) {
       const circleElement = document.getElementById(
@@ -271,16 +274,18 @@
     }
   }
 
-  function animateNextStep() {
+  function animateNextStep(stepStartTime: number) {
     if (currentStepIndex < animationSteps.length) {
+      const currentTime = performance.now();
+      const deltaTime = (currentTime - stepStartTime) / 1000;
       for (let i = 0; i < bubbles.length; i++) {
         bubbles[i].center = animationSteps[currentStepIndex];
       }
-      animateBubblesStep();
+      drawBubblesFrame();
 
       currentStepIndex++;
       setTimeout(() => {
-        animateNextStep(); // Schedule the next step
+        animateNextStep(performance.now()); // Schedule the next step
       }, animationDuration / animationSteps.length); // Delay between steps
     }
   }
