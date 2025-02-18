@@ -51,10 +51,9 @@
   }
 
   function lineUp() {
-    shuffle(bubbles);
     const cols = 10;
-    // const mr = Math.max(containerRect.width, containerRect.height) * (1 / cols);
-    const mr = 100;
+    const mr = containerRect.width * (1 / cols) - 20;
+    // const mr = 150;
     const rowsNeeded = Math.ceil(bubbles.length / cols);
 
     const topLeft: Point = {
@@ -67,6 +66,7 @@
       const c = i % cols;
       b.targetCenter = { x: topLeft.x + c * mr, y: topLeft.y + r * mr };
     });
+    shuffle(bubbles);
   }
 
   function draw() {
@@ -78,7 +78,7 @@
             x: b.targetCenter.x,
             y: b.targetCenter.y,
           },
-          { duration: 1000, delay: i * 100 },
+          { duration: 5000, delay: i * 10 },
         );
       }
     }
@@ -107,7 +107,7 @@
     setTimeout(() => {
       randomize();
       draw();
-    }, 500);
+    }, 10);
     draw();
   });
 </script>
