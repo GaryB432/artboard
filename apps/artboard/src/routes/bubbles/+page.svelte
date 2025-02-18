@@ -19,8 +19,8 @@
     velocity: Point;
   }
 
-  const scaledAnimationSpeed = $derived(bubblesState.animationSpeed * 0.09);
-  const scaledGravity = $derived(bubblesState.gravity * 0.1 + 9.8);
+  // const scaledAnimationSpeed = $derived(bubblesState.animationSpeed * 0.09);
+  // const scaledGravity = $derived(bubblesState.gravity * 0.1 + 9.8);
   const scaledVelocity = $derived(bubblesState.initialVelocity * 2 + 200);
 
   let playing = $state(true);
@@ -90,13 +90,15 @@
     return positions;
   }
 
-  function assignGridPositions(bubbles: Bubble[], gridPositions: Point[]) {
-    const shuffledPositions = shuffleArray(gridPositions);
+  function assignGridPositions(gridPositions: Point[]) {
+    // const shuffledPositions = shuffleArray(gridPositions);
+    const shuffledPositions = [...gridPositions];
 
     for (let i = 0; i < bubbles.length; i++) {
       bubbles[i].targetCenter = shuffledPositions[i % shuffledPositions.length];
       bubbles[i].lerpProgress = 0;
     }
+    console.log(shuffledPositions.length, bubbles.length);
   }
 
   function shuffleArray(array: any[]): any[] {
@@ -112,80 +114,80 @@
   let animationSpeed = 1;
   let gravity = 9.8;
 
-  function animateBubbles(): void {
-    // const scaledDeltaTime = deltaTime * animationSpeed;
+  // function animatecBubbles(): void {
+  //   // const scaledDeltaTime = deltaTime * animationSpeed;
 
-    for (let i = 0; i < bubbles.length; i++) {
-      const c1 = bubbles[i];
+  //   for (let i = 0; i < bubbles.length; i++) {
+  //     const c1 = bubbles[i];
 
-      const acceleration: Point = { x: 0, y: 0 };
-      acceleration.y += gravity / c1.mass;
+  //     const acceleration: Point = { x: 0, y: 0 };
+  //     acceleration.y += gravity / c1.mass;
 
-      c1.velocity.x += acceleration.x;
-      c1.velocity.y += acceleration.y;
+  //     c1.velocity.x += acceleration.x;
+  //     c1.velocity.y += acceleration.y;
 
-      c1.center.x += c1.velocity.x;
-      c1.center.y += c1.velocity.y;
+  //     c1.center.x += c1.velocity.x;
+  //     c1.center.y += c1.velocity.y;
 
-      // Boundary checks (using scaledDeltaTime)
-      const bottomEdge = containerRect.height;
-      if (c1.center.y + c1.radius > bottomEdge) {
-        c1.center.y = bottomEdge - c1.radius;
-        c1.velocity.y = -c1.velocity.y * c1.restitution;
-        c1.velocity.x += (Math.random() - 0.5) * 50;
-        c1.velocity.x *= 0.98;
-        c1.velocity.y *= 0.98;
+  //     // Boundary checks (using scaledDeltaTime)
+  //     const bottomEdge = containerRect.height;
+  //     if (c1.center.y + c1.radius > bottomEdge) {
+  //       c1.center.y = bottomEdge - c1.radius;
+  //       c1.velocity.y = -c1.velocity.y * c1.restitution;
+  //       c1.velocity.x += (Math.random() - 0.5) * 50;
+  //       c1.velocity.x *= 0.98;
+  //       c1.velocity.y *= 0.98;
 
-        if (
-          Math.abs(c1.velocity.y) < 1 &&
-          Math.abs(c1.velocity.x) < 1 &&
-          c1.center.y + c1.radius > bottomEdge - 5
-        ) {
-          c1.velocity.x = 0;
-          c1.velocity.y = 0;
-        }
-      }
-      if (c1.center.y - c1.radius < 0) {
-        c1.center.y = c1.radius;
-        c1.velocity.y = -c1.velocity.y * c1.restitution;
-        c1.velocity.x += (Math.random() - 0.5) * 50;
-        c1.velocity.x *= 0.98;
-        c1.velocity.y *= 0.98;
-      }
-      if (c1.center.x + c1.radius > containerRect.width) {
-        c1.center.x = containerRect.width - c1.radius;
-        c1.velocity.x = -c1.velocity.x * c1.restitution;
-        c1.velocity.x *= 0.98;
-        c1.velocity.y *= 0.98;
-      }
-      if (c1.center.x - c1.radius < 0) {
-        c1.center.x = c1.radius;
-        c1.velocity.x = -c1.velocity.x * c1.restitution;
-        c1.velocity.x *= 0.98;
-        c1.velocity.y *= 0.98;
-      }
+  //       if (
+  //         Math.abs(c1.velocity.y) < 1 &&
+  //         Math.abs(c1.velocity.x) < 1 &&
+  //         c1.center.y + c1.radius > bottomEdge - 5
+  //       ) {
+  //         c1.velocity.x = 0;
+  //         c1.velocity.y = 0;
+  //       }
+  //     }
+  //     if (c1.center.y - c1.radius < 0) {
+  //       c1.center.y = c1.radius;
+  //       c1.velocity.y = -c1.velocity.y * c1.restitution;
+  //       c1.velocity.x += (Math.random() - 0.5) * 50;
+  //       c1.velocity.x *= 0.98;
+  //       c1.velocity.y *= 0.98;
+  //     }
+  //     if (c1.center.x + c1.radius > containerRect.width) {
+  //       c1.center.x = containerRect.width - c1.radius;
+  //       c1.velocity.x = -c1.velocity.x * c1.restitution;
+  //       c1.velocity.x *= 0.98;
+  //       c1.velocity.y *= 0.98;
+  //     }
+  //     if (c1.center.x - c1.radius < 0) {
+  //       c1.center.x = c1.radius;
+  //       c1.velocity.x = -c1.velocity.x * c1.restitution;
+  //       c1.velocity.x *= 0.98;
+  //       c1.velocity.y *= 0.98;
+  //     }
 
-      // Collision detection (using scaledDeltaTime)
-      for (let j = i + 1; j < bubbles.length; j++) {
-        const c2 = bubbles[j];
-        if (checkBubbleCollision(c1, c2)) {
-          resolveBubbleCollision(c1, c2);
-        }
-      }
+  //     // Collision detection (using scaledDeltaTime)
+  //     for (let j = i + 1; j < bubbles.length; j++) {
+  //       const c2 = bubbles[j];
+  //       if (checkBubbleCollision(c1, c2)) {
+  //         resolveBubbleCollision(c1, c2);
+  //       }
+  //     }
 
-      // Lerp to grid position
-      if (c1.targetCenter) {
-        c1.lerpProgress += 0.01 * animationSpeed;
+  //     // Lerp to grid position
+  //     if (c1.targetCenter) {
+  //       c1.lerpProgress += 0.01 * animationSpeed;
 
-        if (c1.lerpProgress >= 1) {
-          c1.center = c1.targetCenter;
-          c1.targetCenter = null;
-        } else {
-          c1.center = lerp(c1.center, c1.targetCenter, c1.lerpProgress);
-        }
-      }
-    }
-  }
+  //       if (c1.lerpProgress >= 1) {
+  //         c1.center = c1.targetCenter;
+  //         c1.targetCenter = null;
+  //       } else {
+  //         c1.center = lerp(c1.center, c1.targetCenter, c1.lerpProgress);
+  //       }
+  //     }
+  //   }
+  // }
 
   function lerp(start: Point, end: Point, t: number): Point {
     const x = start.x + (end.x - start.x) * t;
@@ -196,7 +198,7 @@
   // let lastFrameTime = performance.now();
 
   let bubbles: Bubble[] = $derived(
-    Array.from({ length: 50 }, (_, i) => {
+    Array.from({ length: 5 }, (_, i) => {
       const radius = Math.random() * 20 + 5;
       return {
         id: i,
@@ -242,6 +244,7 @@
     // Render (SVG updates)
 
     // animateBubbles(deltaTime);
+    console.log(bubbles.length)
 
     for (let i = 0; i < bubbles.length; i++) {
       const circleElement = document.getElementById(
@@ -256,6 +259,7 @@
 
   function animateNextStep() {
     if (currentStepIndex < animationSteps.length) {
+      // animateBubbles();
       for (let i = 0; i < bubbles.length; i++) {
         bubbles[i].center = animationSteps[currentStepIndex];
       }
@@ -325,7 +329,8 @@
           const numCols = 5;
           const numRows = 4;
           const gridPositions = generateGridPositions(numCols, numRows);
-          assignGridPositions(bubbles, gridPositions);
+          assignGridPositions(gridPositions);
+          console.log(gridPositions);
 
           animationSteps = []; // Clear previous steps
           currentStepIndex = 0;
@@ -350,8 +355,7 @@
   <div class="button-box">
     <Controls></Controls>
   </div>
-  {scaledGravity}
-  {scaledAnimationSpeed}
+
   {scaledVelocity}
 </div>
 
