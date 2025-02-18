@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { Tween } from "svelte/motion";
   import Controls from "./Controls.svelte";
   import { bubblesState } from "./state.svelte";
 
@@ -8,7 +9,7 @@
   }
 
   interface Bubble {
-    center: Point;
+    center: Tween<Point>;
     color: string;
     id: number;
     // lerpProgress: number;
@@ -34,17 +35,19 @@
   const gridStartX = 50;
   const gridStartY = 50;
 
-  function generateGridPositions(numCols: number, numRows: number): Point[] {
-    const positions: Point[] = [];
+  function generateGridPositions(numCols: number, numRows: number) {
+    // const positions: Point[] = [];
     for (let row = 0; row < numRows; row++) {
       for (let col = 0; col < numCols; col++) {
-        positions.push({
-          x: gridStartX + col * gridSpacing,
-          y: gridStartY + row * gridSpacing,
-        });
+        const b = col + row * numRows;
+        if (b < bubbles.length)
+          bubbles[b].targetCenter = {
+            x: gridStartX + col * gridSpacing,
+            y: gridStartY + row * gridSpacing,
+          };
       }
     }
-    return positions.slice(0, bubbles.length);
+    // return positions.slice(0, bubbles.length);
   }
 
   function assignGridPositions(gridPositions: Point[]) {
@@ -71,17 +74,43 @@
     return { x, y };
   }
 
-  // let lastFrameTime = performance.now();
+  function randomize() {
+    for (let i = 0; i < bubbles.length; i++) {
+      const b = bubbles[i];
+      b.targetCenter = {
+        x: Math.random() * containerRect.x,
+        y: Math.random() * containerRect.y,
+      };
+    }
+  }
+
+  function lineUp() {}
+
+  function draw() {
+    for (let i = 0; i < bubbles.length; i++) {
+      const b = bubbles[i];
+      if (b.center && b.targetCenter) {
+        b.center.set(
+          {
+            x: b.targetCenter.x,
+            y: b.targetCenter.y,
+          },
+          { duration: 1000 },
+        );
+      }
+    }
+  }
 
   let bubbles: Bubble[] = $derived(
     Array.from({ length: 5 }, (_, i) => {
       const radius = Math.random() * 20 + 5;
+      const center = new Tween({
+        x: containerRect.width / 2,
+        y: containerRect.height / 2,
+      });
       const bubble: Bubble = {
         id: i,
-        center: {
-          x: Math.random() * containerRect.width,
-          y: Math.random() * containerRect.height,
-        },
+        center,
         targetCenter: null,
         radius,
         mass: radius / 20,
@@ -100,8 +129,8 @@
         <!-- use animatebubble -->
         <circle
           id="circle{bubble.id}"
-          cx={bubble.center.x}
-          cy={bubble.center.y}
+          cx={bubble.center.current.x}
+          cy={bubble.center.current.y}
           r={bubble.radius}
           fill={bubble.color}
         />
@@ -137,14 +166,16 @@
           const numRows = 4;
           const gridPositions = generateGridPositions(numCols, numRows);
           console.log(gridPositions);
-          assignGridPositions(gridPositions);
-          console.log(bubbles);
+          lineUp();
+          draw();
+          // assignGridPositions(gridPositions);
+          // console.log(bubbles);
 
-          for (const bubble of bubbles) {
-            for (let f = 0; f < 2; f++) {
-              console.log(bubble.targetCenter, f);
-            }
-          }
+          // for (const bubble of bubbles) {
+          //   for (let f = 0; f < 2; f++) {
+          //     console.log(bubble.targetCenter, f);
+          //   }
+          // }
         }}
       >
         <span class="button-text">Explore the Bubbles</span>
