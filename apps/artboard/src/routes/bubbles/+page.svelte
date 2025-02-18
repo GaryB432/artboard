@@ -113,11 +113,7 @@
   let animationSpeed = 1;
   let gravity = 9.8;
 
-  function animateBubbles(
-    // bubbles: Bubble[],
-    deltaTime: number,
-    rectangle: DOMRect,
-  ): void {
+  function animateBubbles(deltaTime: number): void {
     const scaledDeltaTime = deltaTime * animationSpeed;
 
     for (let i = 0; i < bubbles.length; i++) {
@@ -133,7 +129,7 @@
       c1.center.y += c1.velocity.y * scaledDeltaTime;
 
       // Boundary checks (using scaledDeltaTime)
-      const bottomEdge = rectangle.height;
+      const bottomEdge = containerRect.height;
       if (c1.center.y + c1.radius > bottomEdge) {
         c1.center.y = bottomEdge - c1.radius;
         c1.velocity.y = -c1.velocity.y * c1.restitution;
@@ -157,8 +153,8 @@
         c1.velocity.x *= 0.98;
         c1.velocity.y *= 0.98;
       }
-      if (c1.center.x + c1.radius > rectangle.width) {
-        c1.center.x = rectangle.width - c1.radius;
+      if (c1.center.x + c1.radius > containerRect.width) {
+        c1.center.x = containerRect.width - c1.radius;
         c1.velocity.x = -c1.velocity.x * c1.restitution;
         c1.velocity.x *= 0.98;
         c1.velocity.y *= 0.98;
@@ -223,22 +219,77 @@
     }),
   );
 
+  let animationSteps: Point[] = []; // Array to store intermediate steps
+  let currentStepIndex = 0;
+  let animationDuration = 2000; // Total animation duration (milliseconds)
+
+  function calculateBubbleSteps(
+    start: Point,
+    end: Point,
+    numSteps: number,
+  ): Point[] {
+    const steps: Point[] = [];
+    for (let i = 1; i <= numSteps; i++) {
+      steps.push(lerp(start, end, i / numSteps)); // Calculate intermediate points
+    }
+    return steps;
+  }
+
+  // function animateNextStep(bubbles: Bubble[], rectangle: DOMRect) {
+  //   if (currentStepIndex < animationSteps.length) {
+  //     for (let i = 0; i < bubbles.length; i++) {
+  //       bubbles[i].center = animationSteps[currentStepIndex];
+  //     }
+  //     animateBubbles(bubbles, rectangle);
+
+  //     currentStepIndex++;
+  //     setTimeout(() => {
+  //       animateNextStep(bubbles, rectangle); // Schedule the next step
+  //     }, animationDuration / animationSteps.length); // Delay between steps
+  //   }
+  // }
+
+  let animationInterval: number | null = null; // Store the interval ID
+  // let animationDuration = 2000; // Total animation duration (milliseconds)
+  let startTime: number | null = null;
+
+  function animateBubblesStep() {
+    const deltaTime = animationSpeed / 1000; // Calculate deltaTime in seconds
+    // animateBubbles(deltaTime); // Call animateBubbles
+    console.log(deltaTime);
+
+    // Render (SVG updates)
+
+    for (let i = 0; i < bubbles.length; i++) {
+      const circleElement = document.getElementById(
+        `circle${i}`,
+      )! as unknown as SVGCircleElement;
+      if (circleElement) {
+        circleElement.setAttribute("cx", bubbles[i].center.x.toString());
+        circleElement.setAttribute("cy", bubbles[i].center.y.toString());
+      }
+    }
+  }
+
+  function animateNextStep() {
+    if (currentStepIndex < animationSteps.length) {
+      for (let i = 0; i < bubbles.length; i++) {
+        bubbles[i].center = animationSteps[currentStepIndex];
+      }
+      animateBubblesStep();
+
+      currentStepIndex++;
+      setTimeout(() => {
+        animateNextStep(); // Schedule the next step
+      }, animationDuration / animationSteps.length); // Delay between steps
+    }
+  }
   // function gameLoop() {
   //   const currentTime = performance.now();
   //   const deltaTime = (currentTime - lastFrameTime) / 1000;
   //   lastFrameTime = currentTime;
 
   //   animateBubbles(deltaTime);
-
-  //   for (let i = 0; i < bubbles.length; i++) {
-  //     const circleElement = document.getElementById(
-  //       `circle${i}`,
-  //     )! as unknown as SVGCircleElement;
-  //     if (circleElement) {
-  //       circleElement.setAttribute("cx", bubbles[i].center.x.toString());
-  //       circleElement.setAttribute("cy", bubbles[i].center.y.toString());
-  //     }
-  //   }
 
   //   requestAnimationFrame(gameLoop);
   // }
@@ -288,10 +339,24 @@
         class="explore-button"
         onclick={(e) => {
           console.log(e);
-          const numCols = 5; // Adjust number of columns
-          const numRows = 4; // Adjust number of rows
+          const numCols = 5;
+          const numRows = 4;
           const gridPositions = generateGridPositions(numCols, numRows);
           assignGridPositions(bubbles, gridPositions);
+
+          animationSteps = []; // Clear previous steps
+          currentStepIndex = 0;
+
+          for (const bubble of bubbles) {
+            const stepsForBubble = calculateBubbleSteps(
+              bubble.center,
+              bubble.targetCenter ?? bubble.center,
+              3,
+            ); // 3 steps: halfway, halfway, target
+            animationSteps.push(...stepsForBubble); // Add the steps
+          }
+
+          animateNextStep(); // Start the animation
         }}
       >
         <span class="button-text">Explore the Bubbles</span>
