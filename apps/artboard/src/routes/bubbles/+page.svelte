@@ -29,48 +29,6 @@
     container ? container.getBoundingClientRect() : new DOMRect(0, 0, 0, 0),
   );
 
-  // let gravity = $state(9.8);
-
-  function checkBubbleCollision(c1: Bubble, c2: Bubble): boolean {
-    const dx = c2.center.x - c1.center.x;
-    const dy = c2.center.y - c1.center.y;
-    const distance = Math.sqrt(dx * dx + dy * dy);
-    return distance < c1.radius + c2.radius;
-  }
-
-  function resolveBubbleCollision(c1: Bubble, c2: Bubble) {
-    const dx = c2.center.x - c1.center.x;
-    const dy = c2.center.y - c1.center.y;
-    const distance = Math.sqrt(dx * dx + dy * dy);
-
-    const normalX = dx / distance;
-    const normalY = dy / distance;
-
-    // const relativeVelocityX = c2.velocity.x - c1.velocity.x;
-    // const relativeVelocityY = c2.velocity.y - c1.velocity.y;
-
-    // const dotProduct =
-    //   relativeVelocityX * normalX + relativeVelocityY * normalY;
-
-    // if (dotProduct > 0) return;
-
-    // const elasticity = 0.8;
-
-    // const impulse =
-    //   (-(1 + elasticity) * dotProduct) / (1 / c1.mass + 1 / c2.mass);
-
-    // c1.velocity.x -= (impulse * normalX) / c1.mass;
-    // c1.velocity.y -= (impulse * normalY) / c1.mass;
-    // c2.velocity.x += (impulse * normalX) / c2.mass;
-    // c2.velocity.y += (impulse * normalY) / c2.mass;
-
-    const overlap = c1.radius + c2.radius - distance;
-    c1.center.x -= (overlap * normalX * c2.mass) / (c1.mass + c2.mass);
-    c1.center.y -= (overlap * normalY * c2.mass) / (c1.mass + c2.mass);
-    c2.center.x += (overlap * normalX * c1.mass) / (c1.mass + c2.mass);
-    c2.center.y += (overlap * normalY * c1.mass) / (c1.mass + c2.mass);
-  }
-
   // Grid Functions
   const gridSpacing = 50;
   const gridStartX = 50;
@@ -90,12 +48,10 @@
   }
 
   function assignGridPositions(gridPositions: Point[]) {
-    // const shuffledPositions = shuffleArray(gridPositions);
     const shuffledPositions = [...gridPositions];
 
     for (let i = 0; i < bubbles.length; i++) {
       bubbles[i].targetCenter = shuffledPositions[i % shuffledPositions.length];
-      // bubbles[i].lerpProgress = 0;
     }
     console.log(shuffledPositions.length, bubbles.length);
   }
@@ -108,85 +64,6 @@
     }
     return newArray;
   }
-
-  // Animation and Lerp
-  let animationSpeed = 1;
-  let gravity = 9.8;
-
-  // function animatecBubbles(): void {
-  //   // const scaledDeltaTime = deltaTime * animationSpeed;
-
-  //   for (let i = 0; i < bubbles.length; i++) {
-  //     const c1 = bubbles[i];
-
-  //     const acceleration: Point = { x: 0, y: 0 };
-  //     acceleration.y += gravity / c1.mass;
-
-  //     c1.velocity.x += acceleration.x;
-  //     c1.velocity.y += acceleration.y;
-
-  //     c1.center.x += c1.velocity.x;
-  //     c1.center.y += c1.velocity.y;
-
-  //     // Boundary checks (using scaledDeltaTime)
-  //     const bottomEdge = containerRect.height;
-  //     if (c1.center.y + c1.radius > bottomEdge) {
-  //       c1.center.y = bottomEdge - c1.radius;
-  //       c1.velocity.y = -c1.velocity.y * c1.restitution;
-  //       c1.velocity.x += (Math.random() - 0.5) * 50;
-  //       c1.velocity.x *= 0.98;
-  //       c1.velocity.y *= 0.98;
-
-  //       if (
-  //         Math.abs(c1.velocity.y) < 1 &&
-  //         Math.abs(c1.velocity.x) < 1 &&
-  //         c1.center.y + c1.radius > bottomEdge - 5
-  //       ) {
-  //         c1.velocity.x = 0;
-  //         c1.velocity.y = 0;
-  //       }
-  //     }
-  //     if (c1.center.y - c1.radius < 0) {
-  //       c1.center.y = c1.radius;
-  //       c1.velocity.y = -c1.velocity.y * c1.restitution;
-  //       c1.velocity.x += (Math.random() - 0.5) * 50;
-  //       c1.velocity.x *= 0.98;
-  //       c1.velocity.y *= 0.98;
-  //     }
-  //     if (c1.center.x + c1.radius > containerRect.width) {
-  //       c1.center.x = containerRect.width - c1.radius;
-  //       c1.velocity.x = -c1.velocity.x * c1.restitution;
-  //       c1.velocity.x *= 0.98;
-  //       c1.velocity.y *= 0.98;
-  //     }
-  //     if (c1.center.x - c1.radius < 0) {
-  //       c1.center.x = c1.radius;
-  //       c1.velocity.x = -c1.velocity.x * c1.restitution;
-  //       c1.velocity.x *= 0.98;
-  //       c1.velocity.y *= 0.98;
-  //     }
-
-  //     // Collision detection (using scaledDeltaTime)
-  //     for (let j = i + 1; j < bubbles.length; j++) {
-  //       const c2 = bubbles[j];
-  //       if (checkBubbleCollision(c1, c2)) {
-  //         resolveBubbleCollision(c1, c2);
-  //       }
-  //     }
-
-  //     // Lerp to grid position
-  //     if (c1.targetCenter) {
-  //       c1.lerpProgress += 0.01 * animationSpeed;
-
-  //       if (c1.lerpProgress >= 1) {
-  //         c1.center = c1.targetCenter;
-  //         c1.targetCenter = null;
-  //       } else {
-  //         c1.center = lerp(c1.center, c1.targetCenter, c1.lerpProgress);
-  //       }
-  //     }
-  //   }
-  // }
 
   function lerp(start: Point, end: Point, t: number): Point {
     const x = start.x + (end.x - start.x) * t;
@@ -214,71 +91,6 @@
       return bubble;
     }),
   );
-
-  let animationSteps: Point[] = []; // Array to store intermediate steps
-  let currentStepIndex = 0;
-  let animationDuration = 2000; // Total animation duration (milliseconds)
-
-  function calculateBubbleSteps(
-    start: Point,
-    end: Point,
-    numSteps: number,
-  ): Point[] {
-    const steps: Point[] = [];
-    for (let i = 1; i <= numSteps; i++) {
-      steps.push(lerp(start, end, i / numSteps)); // Calculate intermediate points
-    }
-    return steps;
-  }
-
-  function drawBubblesFrame() {
-    // const deltaTime = animationSpeed / 1000; // Calculate deltaTime in seconds
-    // animateBubbles(deltaTime); // Call animateBubbles
-    // console.log(deltaTime);
-
-    // Render (SVG updates)
-
-    // animateBubbles(deltaTime);
-    console.log(bubbles.length);
-
-    for (let i = 0; i < bubbles.length; i++) {
-      const circleElement = document.getElementById(
-        `circle${i}`,
-      )! as unknown as SVGCircleElement;
-      if (circleElement) {
-        circleElement.setAttribute("cx", bubbles[i].center.x.toString());
-        circleElement.setAttribute("cy", bubbles[i].center.y.toString());
-      }
-    }
-  }
-
-  function animateNextStep() {
-    if (currentStepIndex < animationSteps.length) {
-      // animateBubbles();
-      for (let i = 0; i < bubbles.length; i++) {
-        bubbles[i].center = animationSteps[currentStepIndex];
-      }
-      drawBubblesFrame();
-
-      currentStepIndex++;
-      setTimeout(() => {
-        animateNextStep(); // Schedule the next step
-      }, animationDuration / animationSteps.length); // Delay between steps
-    }
-  }
-  // function gameLoop() {
-  //   const currentTime = performance.now();
-  //   const deltaTime = (currentTime - lastFrameTime) / 1000;
-  //   lastFrameTime = currentTime;
-
-  //   animateBubbles(deltaTime);
-
-  //   requestAnimationFrame(gameLoop);
-  // }
-
-  // if (browser) {
-  //   gameLoop();
-  // }
 </script>
 
 <div class="container">
@@ -333,25 +145,6 @@
               console.log(bubble.targetCenter, f);
             }
           }
-
-          // console.log(gridPositions);
-
-          // animationSteps = []; // Clear previous steps
-          // currentStepIndex = 0;
-
-          // for (const bubble of bubbles) {
-          //   const stepsForBubble = calculateBubbleSteps(
-          //     bubble.center,
-          //     bubble.targetCenter ?? bubble.center,
-          //     3,
-          //   ); // 3 steps: halfway, halfway, target
-          //   console.log(stepsForBubble);
-          //   animationSteps.push(...stepsForBubble); // Add the steps
-          // }
-
-          // console.log(animationSteps.length);
-
-          // animateNextStep(); // Start the animation
         }}
       >
         <span class="button-text">Explore the Bubbles</span>
