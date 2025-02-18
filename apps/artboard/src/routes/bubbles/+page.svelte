@@ -23,6 +23,7 @@
     targetCenter: Point | null;
   }
 
+  let playing = $state(true);
   let title = $state("Floating Bubbles");
   let container: SVGSVGElement | undefined = $state();
   let containerRect: DOMRect = $derived(
@@ -147,6 +148,15 @@
         <span class="button-arrow">→</span>
       </button>
     </div>
+    <div class="button-container">
+      <button class="explore-button" onclick={arrangeBubbles}>
+        <span class="button-text">Explore the Bubbles</span>
+        <span class="button-arrow">→</span>
+      </button>
+    </div>
+  </div>
+  <div class="button-box">
+    <Controls></Controls>
   </div>
   <!-- <div class="button-box">
     <Controls></Controls>
@@ -280,5 +290,12 @@
   .explore-button:hover .button-arrow {
     opacity: 1;
     transform: translateX(6px);
+  }
+
+  .button-box {
+    position: absolute;
+    border: thin solid lime;
+    top: 0.75rem;
+    right: 0.75rem;
   }
 </style>
