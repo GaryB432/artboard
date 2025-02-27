@@ -1,22 +1,34 @@
 <script lang="ts">
+  import { Tween } from "svelte/motion";
   import type { Vec2 } from "three";
 
+  type Vween2 = {
+    x: Tween<number>;
+    y: Tween<number>;
+  };
+
   interface Boid {
-    pos: Vec2;
+    pos: Vween2;
+    next?: Vec2;
   }
 
-  let boids: Boid[] = $state([
-    { pos: { x: 0, y: 4 } },
-    { pos: { x: 10, y: 24 } },
-    { pos: { x: 20, y: 44 } },
-  ]);
+  let qbs = new Array(3).fill(null).map((_, i) => {
+    return {
+      pos: {
+        x: new Tween(Math.random() * 100),
+        y: new Tween(Math.random() * 100),
+      },
+    };
+  });
+
+  let boids: Boid[] = $state(qbs);
 
   function randomOne() {
     for (const b of boids) {
       // b.pos.x = 10;
-      b.pos.x = Math.random() * 100;
-      b.pos.y = Math.random() * 100;
-      boids = [...boids];
+      b.pos.x.set(Math.random() * 100);
+      b.pos.y.set(Math.random() * 100);
+      // boids = [...boids];
     }
     // const b = Array(15).map<Boid>((a, b) => {
     //   return { pos: { x: b * 20, y: b * 20 } };
@@ -39,7 +51,7 @@
   <div class="board">
     <svg viewBox="0 0 100 100">
       {#each boids as b}
-        <circle cx={b.pos.x} cy={b.pos.y} r="2" />
+        <circle cx={b.pos.x.current} cy={b.pos.y.current} r="2" />
       {/each}
     </svg>
   </div>
