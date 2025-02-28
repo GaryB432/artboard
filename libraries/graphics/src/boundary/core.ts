@@ -1,5 +1,9 @@
 import { Vector } from "@artboard/vector";
-import { Intersection } from "../main";
+
+type Intersection = {
+  segment: Segment;
+  point: Vector;
+};
 
 export type Rectangle = {
   top: Segment;

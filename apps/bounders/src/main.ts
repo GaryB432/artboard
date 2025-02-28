@@ -1,6 +1,9 @@
 import { Vector } from "@artboard/vector";
-import { createRay } from "./boundary/claude.ts";
-import { getBoundaryPoint, type Segment } from "./boundary/core.ts";
+import { createRay } from "../../../libraries/graphics/src/boundary/claude";
+import {
+  getBoundaryPoint,
+  type Segment,
+} from "../../../libraries/graphics/src/boundary/core";
 import { setupCounter } from "./counter.ts";
 import "./style.css";
 import typescriptLogo from "./typescript.svg";
@@ -19,11 +22,6 @@ const rectOrigin = new Vector(200, 150);
 const rect = new DOMRect(rectOrigin.x, rectOrigin.y, rectSize.x, rectSize.y);
 
 let subject: Vector | null = null;
-
-export type Intersection = {
-  segment: Segment;
-  point: Vector;
-};
 
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);

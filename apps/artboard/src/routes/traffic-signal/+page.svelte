@@ -1,7 +1,7 @@
 <script lang="ts">
   import { createCircle, createRect } from "@libraries/graphics/svg/element";
 
-  import { Vector } from "$lib/vector/vector";
+  import { Vector } from "@artboard/vector";
   import { onMount } from "svelte";
 
   let svg: SVGSVGElement | null = null;

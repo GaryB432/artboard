@@ -1,4 +1,4 @@
-import { Vector } from "../../../../libraries/vector/src";
+import { Vector } from "../../../vector/src";
 import { Segment } from "./core";
 
 /**
