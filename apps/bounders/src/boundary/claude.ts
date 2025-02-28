@@ -31,7 +31,7 @@ export function createRay(
  * @param edge Which edge to use: "top", "right", "bottom", or "left"
  * @returns Line segment represented by start and end vectors
  */
-export function createRectSegment(
+function createRectSegment(
   rect: DOMRect,
   edge: "top" | "right" | "bottom" | "left",
 ): Segment {
@@ -65,7 +65,7 @@ export function createRectSegment(
  * @param ray Ray defined by origin point and direction
  * @returns The intersection point or null if no intersection
  */
-export function ΘcomputeIntersection(
+function ΘcomputeIntersection(
   rectSegment: Segment,
   ray: Segment,
 ): Vector | null {
@@ -75,18 +75,6 @@ export function ΘcomputeIntersection(
 
   const denominator = b.y * a.x - b.x * a.y;
   console.log(JSON.stringify({ a, b, c, denominator, rectSegment, ray }));
-
-  const l = {
-    a: { x: -400, y: 0 },
-    b: { x: -150.0000000000001, y: 259.8076211353315 },
-    c: { x: 197.015625, y: -148 },
-    denominator: -103923.0484541326,
-    rectSegment: { from: { x: 400, y: 300 }, to: { x: 0, y: 300 } },
-    ray: {
-      from: { x: 597.015625, y: 152 },
-      to: { x: 447.0156249999999, y: 411.8076211353315 },
-    },
-  };
 
   if (Math.abs(denominator) < 0.0001) {
     return null; // Lines are parallel
@@ -112,7 +100,7 @@ export function ΘcomputeIntersection(
  * @param ray The ray used to determine direction
  * @returns The point at the specified distance before intersection
  */
-export function getPointBefore(
+function getPointBefore(
   distance: number,
   intersection: Vector,
   ray: Segment,
