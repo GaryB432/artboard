@@ -1,4 +1,4 @@
-import { Vector } from "../../../libraries/vector/src";
+import { Vector } from "@artboard/vector";
 import { createRay } from "./boundary/claude.ts";
 import { getBoundaryPoint, type Segment } from "./boundary/core.ts";
 import { setupCounter } from "./counter.ts";

@@ -1,5 +1,5 @@
-import { Intersection } from "src/main";
-import { Vector } from "../../../../libraries/vector/src";
+import { Vector } from "@artboard/vector";
+import { Intersection } from "../main";
 
 export type Rectangle = {
   top: Segment;

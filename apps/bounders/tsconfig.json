@@ -21,10 +21,10 @@
     "noUnusedParameters": false,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
-    "baseUrl": ".",
+    "baseUrl": "../../",
     "paths": {
       "@artboard/vector": [
-        "/home/gary/repos/artboard/libraries/vector/src"
+        "libraries/vector/src"
       ]
     }
   },

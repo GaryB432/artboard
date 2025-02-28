@@ -1,3 +1,4 @@
+import path from "path";
 import { coverageConfigDefaults, defineConfig } from "vitest/config";
 
 export default defineConfig({
@@ -6,6 +7,11 @@ export default defineConfig({
       scss: {
         api: "modern",
       },
+    },
+  },
+  resolve: {
+    alias: {
+      "@artboard/vector": path.resolve(__dirname, "../../libraries/vector/src"),
     },
   },
   test: {
@@ -19,10 +25,6 @@ export default defineConfig({
         "tools/**",
         ...coverageConfigDefaults.exclude,
       ],
-    },
-
-    alias: {
-      "@artboard/vector": "/home/gary/repos/artboard/libraries/vector/src",
     },
   },
 });
