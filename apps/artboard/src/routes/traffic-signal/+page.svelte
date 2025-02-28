@@ -25,7 +25,7 @@
     const center = new Vector(
       svg.width.baseVal.value,
       svg.height.baseVal.value,
-    ).multiplyScaler(0.5);
+    ).scale(0.5);
 
     const lenses = ["red", "yellow", "green"].map((fill) => ({
       stroke: "black",
