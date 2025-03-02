@@ -35,6 +35,49 @@ export function makeRectangle(rect: DOMRect): Rectangle {
   };
 }
 
+export function pointOnLineAtAngle(
+  startPoint: Vector,
+  endPoint: Vector,
+  angle: number,
+  distance: number,
+): Vector {
+  // Calculate the direction vector
+
+  const directionX = endPoint.x - startPoint.x;
+
+  const directionY = endPoint.y - startPoint.y;
+  const direction = endPoint.sub(startPoint);
+
+  // Rotate the direction vector by the given angle
+
+  const rotatedX = directionX * Math.cos(angle) - directionY * Math.sin(angle);
+
+  const rotatedY = directionX * Math.sin(angle) + directionY * Math.cos(angle);
+
+  const rotated = new Vector(rotatedX, rotatedY);
+
+  // Calculate the new point based on the distance
+
+  const newX = startPoint.x + rotatedX * distance;
+
+  const newY = startPoint.y + rotatedY * distance;
+  const nw = startPoint.clone().add(rotated.scale(distance));
+
+  return nw;
+}
+
+// // Example usage:
+
+// const start = { x: 0, y: 0 };
+
+// const end = { x: 10, y: 0 };
+
+// const angleInRadians = Math.PI / 4; // 45 degrees
+
+// const newPoint = pointOnLineAtAngle(start, end, angleInRadians, 5);
+
+// console.log(newPoint); // Output: { x: 5, y: 5 }
+
 export function findLineIntersection(l1: Segment, l2: Segment): Vector | null {
   const int = checkLineIntersection(
     l1.from.x,
