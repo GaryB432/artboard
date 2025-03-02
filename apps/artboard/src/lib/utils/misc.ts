@@ -25,6 +25,14 @@ export function shuffle<T>(array: T[]): T[] {
   return array;
 }
 
+export function getRandomElement<T>(array: T[]): T {
+  if (array.length === 0) {
+    throw new Error("empty array");
+  }
+  const randomIndex = Math.floor(Math.random() * array.length);
+  return array[randomIndex];
+}
+
 export function vectorMin(v: Vector2): number {
   return Math.min(v.x, v.y);
 }
