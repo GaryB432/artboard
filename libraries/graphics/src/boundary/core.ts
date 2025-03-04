@@ -14,23 +14,23 @@ export type Rectangle = {
 
 export type Segment = { from: Vector; to: Vector };
 
-export function makeRectangle(rect: DOMRect): Rectangle {
+export function makeRectangle(rect: DOMRect, padding = 0): Rectangle {
   return {
     top: {
-      from: new Vector(rect.left, rect.top),
-      to: new Vector(rect.right, rect.top),
+      from: new Vector(rect.left + padding, rect.top + padding),
+      to: new Vector(rect.right - padding, rect.top + padding),
     },
     right: {
-      from: new Vector(rect.right, rect.top),
-      to: new Vector(rect.right, rect.bottom),
+      from: new Vector(rect.right - padding, rect.top + padding),
+      to: new Vector(rect.right - padding, rect.bottom - padding),
     },
     bottom: {
-      from: new Vector(rect.right, rect.bottom),
-      to: new Vector(rect.left, rect.bottom),
+      from: new Vector(rect.right - padding, rect.bottom - padding),
+      to: new Vector(rect.left + padding, rect.bottom - padding),
     },
     left: {
-      from: new Vector(rect.left, rect.bottom),
-      to: new Vector(rect.left, rect.top),
+      from: new Vector(rect.left + padding, rect.bottom - padding),
+      to: new Vector(rect.left + padding, rect.top + padding),
     },
   };
 }
