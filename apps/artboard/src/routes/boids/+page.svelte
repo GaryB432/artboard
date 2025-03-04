@@ -1,8 +1,13 @@
 <script lang="ts">
   import { getRandomElement } from "$lib/utils/misc";
-  import { type Rectangle, makeRectangle } from "@artboard/graphics";
+  import {
+    type Rectangle,
+    makeRectangle,
+    pointOnLineAtAngle,
+  } from "@artboard/graphics";
   import { Vector } from "@artboard/vector";
   import { Tween } from "svelte/motion";
+  import { elasticInOut, elasticOut } from "svelte/easing";
 
   type TweenedSegment = {
     from: Tween<Vector>;
@@ -14,7 +19,8 @@
     rad: number;
     speed: number;
     to: Vector;
-    edge?: EdgeName;
+    path: Motion[];
+    // edge?: EdgeName;
   }
 
   const margin = 10;
@@ -39,24 +45,71 @@
     to: new Tween<Vector>(rectCenter.clone(), { duration: 200 }),
   });
 
+  type Motion = {
+    to: Vector;
+    duration: number;
+  };
+
+  export function getRandomElementExcluding<T>(array: T[], exclude: T[]): T {
+    return getRandomElement(
+      array.filter((a) => exclude.length === 0 || !exclude.includes(a)),
+    );
+  }
+
+  // function getRandomElementExcluding() {}
+
   let boids: Boid[] = $state(
     new Array(3).fill(null).map<Boid>((_, i) => {
-      return {
+      // let edgen: EdgeName = ;
+      let fromEdge: EdgeName | null = null;
+      let rad = Math.random() * 15 + 5;
+      const path = new Array(10).fill(0).map<Motion>((_, i) => {
+        let nextEdge: EdgeName;
+
+        //       let boidEdge: EdgeName
+
+        nextEdge = getRandomElementExcluding(
+          ["top", "right", "bottom", "left"],
+          fromEdge ? [fromEdge] : [],
+        );
+        fromEdge = nextEdge;
+
+        const edge: EdgeName = nextEdge;
+
+        // boidEdge = nextEdge;
+
+        const boundaryRect = makeRectangle(container, rad);
+
+        // let currentBoundary = boundaryRect[edgen];
+
+        // const from = boid.pos.current;
+
+        const angle = Math.PI / 4;
+
+        const to = getRandomPointOnLine(boundaryRect[edge]);
+        const duration = 1000;
+        return {
+          angle,
+          edge,
+          to,
+          duration,
+        };
+      });
+      const newLocal: Boid = {
         pos: new Tween<Vector>(rectCenter.clone()),
-        rad: Math.random() * 15 + 5,
+        rad,
         speed: 1,
         to: rectCenter.clone(),
+        path,
       };
+      return newLocal;
     }),
   );
 
-  function getRandomPointOnLine(s: { from: Vector; to: Vector }) {
+  function getRandomPointOnLine(segment: { from: Vector; to: Vector }) {
     const t = Math.random();
-
-    // Calculate the x and y coordinates of the random point using linear interpolation (lerp)
-    const x = s.from.x + t * (s.to.x - s.from.x);
-    const y = s.from.y + t * (s.to.y - s.from.y);
-
+    const x = segment.from.x + t * (segment.to.x - segment.from.x);
+    const y = segment.from.y + t * (segment.to.y - segment.from.y);
     return new Vector(x, y);
   }
 
@@ -65,56 +118,16 @@
   // const wallGenerator = nextWallGenerator(["top", "right", "bottom", "left"]);
 
   async function advance(): Promise<void> {
-    // return new Promise((a, b) => {
-    //   a();
-    // });
-    // const boid = boids[0];
+    Promise.all(boids.map((b) => b.pos.set(rectCenter, { duration: 0 })));
 
-    boids.forEach((boid) => {
-      // let nw: IteratorResult<keyof Rectangle, void>;
-      // do {
-      //   nw = wallGenerator.next();
-      // } while (!nw.done && nw.value === boid.edge);
-
-      // if (nw.done) {
-      //   throw new Error("should not run out");
-      // }
-
-      // boid.edge = nw.value!;
-
-      let nextEdge: EdgeName;
-
-      nextEdge = getRandomElement(
-        ["top", "right", "bottom", "left"].filter(
-          (g) => g !== boid.edge,
-        ) as EdgeName[],
-      );
-
-      boid.edge = nextEdge;
-
-      let boundaryRect = makeRectangle(container, boid.rad);
-
-      let currentBoundary = boundaryRect[boid.edge];
-
-      // const from = boid.pos.current;
-
-      boid.to = getRandomPointOnLine(currentBoundary);
-
-      if (
-        boid.to.distanceTo(currentBoundary.from) < boid.rad ||
-        boid.to.distanceTo(currentBoundary.to) < boid.rad
-      ) {
-        console.warn("bounds");
+    boids.forEach(async (boid, i, f) => {
+      for (const m of boid.path) {
+        await boid.pos.set(m.to, {
+          duration: (m.duration / f.length) * (i + 1),
+        });
       }
+      // await boid.pos.set(rectCenter, { duration: 500, easing: elasticOut });
     });
-
-    const mots = boids.map((b) => b.pos.set(b.to));
-
-    void (await Promise.all(mots));
-
-    // for (const boid of boids) {
-    //   void (await boid.pos.set(boid.to, { duration: 500 }));
-    // }
   }
 
   function* infiniteRandomIntegerFeed(): Generator<
@@ -150,6 +163,8 @@
       count++;
     }
   }
+
+  $inspect(boids);
 </script>
 
 <svelte:head>
@@ -170,9 +185,14 @@
       >
       </rect>
       {#each boids as b}
-        <circle cx={b.pos.current.x} cy={b.pos.current.y} r={b.rad} />
-        <text x={b.pos.current.x} y={b.pos.current.y} class="small">
-          ({b.pos.current.x + 8}, {b.pos.current.y + 8})
+        {@const { pos, rad } = b}
+        {@const pathEnd = b.path.at(-1)}
+        <circle cx={pos.current.x} cy={pos.current.y} r={rad} />
+        <text x={pos.current.x + rad + 2} y={pos.current.y} class="small">
+          ({pos.current.x.toFixed(3)}, {pos.current.y.toFixed(2)})
+        </text>
+        <text x={pos.current.x + rad + 2} y={pos.current.y + 13} class="small">
+          ({pathEnd?.duration})
         </text>
       {/each}
       <line
@@ -188,6 +208,14 @@
   <nav class="button-bar">
     <button onclick={advance}>Random</button>
   </nav>
+  <div class="table">
+    {#each boids as b}
+      <div class="small">
+        {b.pos.current.x}
+      </div>
+    {/each}
+  </div>
+  <pre class="small">{JSON.stringify(boids, undefined, 2)}</pre>
 </div>
 
 <style>
