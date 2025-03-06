@@ -25,6 +25,12 @@ export function shuffle<T>(array: T[]): T[] {
   return array;
 }
 
+export function getRandomElementExcluding<T>(array: T[], exclude: T[]): T {
+  return getRandomElement(
+    array.filter((a) => exclude.length === 0 || !exclude.includes(a)),
+  );
+}
+
 export function getRandomElement<T>(array: T[]): T {
   if (array.length === 0) {
     throw new Error("empty array");
