@@ -1,13 +1,7 @@
 <script lang="ts">
-  import { getRandomElement } from "$lib/utils/misc";
-  import {
-    type Rectangle,
-    makeRectangle,
-    pointOnLineAtAngle,
-  } from "@artboard/graphics";
+  import { getBouncyPathForCircle, type Motion } from "$lib/boundary/motion";
   import { Vector } from "@artboard/vector";
   import { Tween } from "svelte/motion";
-  import { elasticInOut, elasticOut } from "svelte/easing";
 
   type TweenedSegment = {
     from: Tween<Vector>;
@@ -15,12 +9,13 @@
   };
 
   interface Boid {
+    id: number;
+    done: boolean;
     pos: Tween<Vector>;
     rad: number;
     speed: number;
     to: Vector;
     path: Motion[];
-    // edge?: EdgeName;
   }
 
   const margin = 10;
@@ -45,88 +40,45 @@
     to: new Tween<Vector>(rectCenter.clone(), { duration: 200 }),
   });
 
-  type Motion = {
-    to: Vector;
-    duration: number;
-  };
-
-  export function getRandomElementExcluding<T>(array: T[], exclude: T[]): T {
-    return getRandomElement(
-      array.filter((a) => exclude.length === 0 || !exclude.includes(a)),
-    );
-  }
-
-  // function getRandomElementExcluding() {}
-
   let boids: Boid[] = $state(
-    new Array(3).fill(null).map<Boid>((_, i) => {
-      // let edgen: EdgeName = ;
-      let fromEdge: EdgeName | null = null;
-      let rad = Math.random() * 15 + 5;
-      const path = new Array(10).fill(0).map<Motion>((_, i) => {
-        let nextEdge: EdgeName;
+    new Array(3).fill(null).map<Boid>((_, id) => {
+      let rad = Math.random() * 8 + 5;
 
-        //       let boidEdge: EdgeName
-
-        nextEdge = getRandomElementExcluding(
-          ["top", "right", "bottom", "left"],
-          fromEdge ? [fromEdge] : [],
-        );
-        fromEdge = nextEdge;
-
-        const edge: EdgeName = nextEdge;
-
-        // boidEdge = nextEdge;
-
-        const boundaryRect = makeRectangle(container, rad);
-
-        // let currentBoundary = boundaryRect[edgen];
-
-        // const from = boid.pos.current;
-
-        const angle = Math.PI / 4;
-
-        const to = getRandomPointOnLine(boundaryRect[edge]);
-        const duration = 1000;
-        return {
-          angle,
-          edge,
-          to,
-          duration,
-        };
-      });
-      const newLocal: Boid = {
+      return {
+        id,
         pos: new Tween<Vector>(rectCenter.clone()),
         rad,
         speed: 1,
         to: rectCenter.clone(),
-        path,
+        done: false,
+        path: [],
+        // pathLength: 10,
+        // pathDuration: 1000,
       };
-      return newLocal;
     }),
   );
-
-  function getRandomPointOnLine(segment: { from: Vector; to: Vector }) {
-    const t = Math.random();
-    const x = segment.from.x + t * (segment.to.x - segment.from.x);
-    const y = segment.from.y + t * (segment.to.y - segment.from.y);
-    return new Vector(x, y);
-  }
-
-  type EdgeName = keyof Rectangle;
-
-  // const wallGenerator = nextWallGenerator(["top", "right", "bottom", "left"]);
 
   async function advance(): Promise<void> {
     Promise.all(boids.map((b) => b.pos.set(rectCenter, { duration: 0 })));
 
     boids.forEach(async (boid, i, f) => {
+      boid.path = getBouncyPathForCircle(
+        container,
+        Math.random() * 5000 + 1000,
+        10,
+        boid.rad,
+      );
+      const toBottom: Motion = {
+        duration: 3000,
+        to: new Vector(boid.path.at(-1)!.to.x, container.bottom - boid.rad),
+      };
+      boid.path.push(toBottom);
       for (const m of boid.path) {
         await boid.pos.set(m.to, {
-          duration: (m.duration / f.length) * (i + 1),
+          duration: m.duration,
         });
       }
-      // await boid.pos.set(rectCenter, { duration: 500, easing: elasticOut });
+      boid.done = true;
     });
   }
 
@@ -163,74 +115,102 @@
       count++;
     }
   }
-
-  $inspect(boids);
 </script>
 
 <svelte:head>
   <title>artboard - boids</title>
 </svelte:head>
 
-<div class="main">
-  <div class="board">
-    <svg width="400" height="300" viewBox="0 0 400 300">
-      <rect
-        x={container.x}
-        y={container.y}
-        width={container.width}
-        height={container.height}
-        fill="none"
-        stroke="blue"
-        stroke-width="1"
-      >
-      </rect>
-      {#each boids as b}
-        {@const { pos, rad } = b}
-        {@const pathEnd = b.path.at(-1)}
-        <circle cx={pos.current.x} cy={pos.current.y} r={rad} />
-        <text x={pos.current.x + rad + 2} y={pos.current.y} class="small">
-          ({pos.current.x.toFixed(3)}, {pos.current.y.toFixed(2)})
-        </text>
-        <text x={pos.current.x + rad + 2} y={pos.current.y + 13} class="small">
-          ({pathEnd?.duration})
-        </text>
-      {/each}
-      <line
-        x1={greenSegw.from.current.x}
-        y1={greenSegw.from.current.y}
-        x2={greenSegw.to.current.x}
-        y2={greenSegw.to.current.y}
-        stroke="green"
-        stroke-width="1"
-      />
-    </svg>
-  </div>
-  <nav class="button-bar">
-    <button onclick={advance}>Random</button>
-  </nav>
+<div class="top">
+  <svg
+    width="800"
+    height="600"
+    style="width: 640px; height: 480px"
+    viewBox="0 0 400 300"
+  >
+    <rect
+      x={container.x}
+      y={container.y}
+      width={container.width}
+      height={container.height}
+      fill="none"
+      stroke="blue"
+      stroke-width="1"
+    >
+    </rect>
+    {#each boids as b}
+      {@const { pos, rad } = b}
+      {@const pathEnd = b.path.at(-1)}
+      <circle cx={pos.current.x} cy={pos.current.y} r={rad} />
+      <text x={pos.current.x + rad + 2} y={pos.current.y} class="small">
+        ({pos.current.x.toFixed(3)}, {pos.current.y.toFixed(2)})
+      </text>
+      <text x={pos.current.x + rad + 2} y={pos.current.y + 13} class="small">
+        ({pathEnd?.duration})
+      </text>
+    {/each}
+    <line
+      x1={greenSegw.from.current.x}
+      y1={greenSegw.from.current.y}
+      x2={greenSegw.to.current.x}
+      y2={greenSegw.to.current.y}
+      stroke="green"
+      stroke-width="1"
+    />
+  </svg>
   <div class="table">
     {#each boids as b}
-      <div class="small">
+      <div class:done={b.done} class="small">
         {b.pos.current.x}
       </div>
     {/each}
   </div>
-  <pre class="small">{JSON.stringify(boids, undefined, 2)}</pre>
 </div>
+<nav class="button-bar">
+  <button onclick={advance}>Bounce</button>
+  <button>Align</button>
+  <label>
+    <input type="checkbox" />
+    Extra Fun
+  </label>
+</nav>
+<pre class="small">{JSON.stringify(boids, undefined, 2)}</pre>
 
 <style>
-  .board {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1em;
+  /* 
+
+  * {
+    outline: thin solid lime;
   }
-  .board svg {
+
+ */
+
+  .button-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2em;
+  }
+
+  .top {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    gap: 1em;
+    justify-content: center;
+  }
+
+  .table {
+    width: 10em;
+  }
+
+  svg {
     display: block;
     border: thin solid silver;
-    height: 400px;
-    width: 600px;
+    width: 800px;
+    height: 600px;
   }
+
   .small {
     font: italic 9px sans-serif;
   }
