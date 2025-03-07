@@ -5,6 +5,7 @@ import { makeRectangle, type Rectangle } from "@libraries/graphics";
 export type EdgeName = keyof Rectangle;
 
 export type Motion = {
+  delay: number;
   duration: number;
   to: Vector;
 };
@@ -35,6 +36,7 @@ export function getBouncyPathForCircle(
     return {
       angle,
       edge,
+      delay: 0,
       to,
       duration: duration / plenth,
     };

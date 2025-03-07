@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { GridPath } from "$lib/boundary/grid-path";
   import { getBouncyPathForCircle, type Motion } from "$lib/boundary/motion";
   import { Vector } from "@artboard/vector";
   import { Tween } from "svelte/motion";
@@ -21,7 +22,7 @@
   const margin = 10;
   const maxSpeed = 1000;
 
-  const basisRect = new DOMRect(0, 0, 400, 300);
+  const basisRect = new DOMRect(0, 0, 800, 600);
 
   let container = new DOMRect(
     basisRect.x + margin,
@@ -41,7 +42,7 @@
   });
 
   let boids: Boid[] = $state(
-    new Array(3).fill(null).map<Boid>((_, id) => {
+    new Array(29).fill(null).map<Boid>((_, id) => {
       let rad = Math.random() * 8 + 5;
 
       return {
@@ -58,6 +59,31 @@
     }),
   );
 
+  async function organize(): Promise<void> {
+    // Promise.all(boids.map((b) => b.pos.set(rectCenter, { duration: 0 })));
+
+    boids.forEach(async (boid, i, f) => {
+      const gp = new GridPath(
+        {
+          ...boid,
+          pos: new Vector(boid.pos.current.x, boid.pos.current.y),
+        },
+        container,
+        5,
+      );
+      boid.path = gp.create(2, i);
+      // boid.path = [toCenter];
+      console.log($state.snapshot(boid.path))
+
+      for (const m of boid.path) {
+        await boid.pos.set(m.to, {
+          duration: m.duration,
+        });
+        console.log('wait dammit')
+      }
+    });
+  }
+
   async function advance(): Promise<void> {
     Promise.all(boids.map((b) => b.pos.set(rectCenter, { duration: 0 })));
 
@@ -65,16 +91,18 @@
       boid.path = getBouncyPathForCircle(
         container,
         Math.random() * 5000 + 1000,
-        10,
+        3,
         boid.rad,
       );
       const toBottom: Motion = {
+        delay: 0,
         duration: 3000,
         to: new Vector(boid.path.at(-1)!.to.x, container.bottom - boid.rad),
       };
       boid.path.push(toBottom);
       for (const m of boid.path) {
         await boid.pos.set(m.to, {
+          delay: m.delay,
           duration: m.duration,
         });
       }
@@ -125,8 +153,8 @@
   <svg
     width="800"
     height="600"
-    style="width: 640px; height: 480px"
-    viewBox="0 0 400 300"
+    style="width: 800px; height: 600px"
+    viewBox="0 0 800 600"
   >
     <rect
       x={container.x}
@@ -168,7 +196,7 @@
 </div>
 <nav class="button-bar">
   <button onclick={advance}>Bounce</button>
-  <button>Align</button>
+  <button onclick={organize}>Organize</button>
   <label>
     <input type="checkbox" />
     Extra Fun
@@ -198,6 +226,7 @@
     flex-direction: row;
     gap: 1em;
     justify-content: center;
+    align-items: center;
   }
 
   .table {
