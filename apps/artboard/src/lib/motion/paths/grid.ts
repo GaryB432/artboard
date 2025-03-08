@@ -50,7 +50,7 @@ export class GridPath {
     ];
     const shifted = b.map((m) => {
       const to = m.to.add(this.gridCorner);
-      console.log(this.gridCorner);
+      // console.log(this.gridCorner);
       return { ...m, to };
     });
     // const shifted = b;

@@ -1,3 +1,5 @@
+
+
 export class Center {
   public constructor(private counter: number) {}
   public add(a: number): number {
@@ -8,3 +10,4 @@ export class Center {
     return `Center says: hello to ${name}`;
   }
 }
+
