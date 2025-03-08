@@ -1,7 +1,7 @@
 <script lang="ts">
   import { createCircle, createRect } from "@libraries/graphics/svg/element";
 
-  import { Vector } from "$lib/vector/vector";
+  import { Vector } from "@artboard/vector";
   import { onMount } from "svelte";
 
   let svg: SVGSVGElement | null = null;
@@ -25,7 +25,7 @@
     const center = new Vector(
       svg.width.baseVal.value,
       svg.height.baseVal.value,
-    ).multiplyScaler(0.5);
+    ).scale(0.5);
 
     const lenses = ["red", "yellow", "green"].map((fill) => ({
       stroke: "black",

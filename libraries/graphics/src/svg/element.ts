@@ -1,5 +1,5 @@
-import { names } from "$lib/utils/names";
-import type { Vector } from "$lib/vector/vector";
+// import { names } from "$lib/utils/names";
+import type { Vector } from "@artboard/vector";
 
 function createElement<K extends keyof SVGElementTagNameMap>(
   qualifiedName: K,
@@ -28,7 +28,8 @@ function addPresentationAttributes<K extends keyof SVGElementTagNameMap>(
   style: Partial<CSSStyleDeclaration>,
 ): SVGElementTagNameMap[K] {
   Object.entries(style).forEach(([k, v]) =>
-    ele.setAttribute(names(k).fileName, v ? v.toString() : ""),
+    // ele.setAttribute(names(k).fileName, v ? v.toString() : ""),
+    ele.setAttribute(k, v ? v.toString() : ""),
   );
   return ele;
 }

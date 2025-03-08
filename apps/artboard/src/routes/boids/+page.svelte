@@ -1,66 +1,262 @@
 <script lang="ts">
-  import type { Vec2 } from "three";
+  import { type Motion } from "$lib/motion/motion";
+  // import { getBouncyPathForCircle } from "$lib/motion/paths/bounce";
+  import { GridPath, BouncePath } from "$lib/motion/paths";
+  import { shuffle } from "$lib/utils/misc";
+  import { Vector } from "@artboard/vector";
+  import { Tween } from "svelte/motion";
+
+  type TweenedSegment = {
+    from: Tween<Vector>;
+    to: Tween<Vector>;
+  };
 
   interface Boid {
-    pos: Vec2;
+    id: number;
+    done: boolean;
+    pos: Tween<Vector>;
+    rad: number;
+    speed: number;
+    to: Vector;
+    path: Motion[];
   }
 
-  let boids: Boid[] = $state([
-    { pos: { x: 0, y: 4 } },
-    { pos: { x: 10, y: 24 } },
-    { pos: { x: 20, y: 44 } },
-  ]);
+  const margin = 10;
+  const maxSpeed = 1000;
 
-  function randomOne() {
-    for (const b of boids) {
-      // b.pos.x = 10;
-      b.pos.x = Math.random() * 100;
-      b.pos.y = Math.random() * 100;
-      boids = [...boids];
+  const basisRect = new DOMRect(0, 0, 800, 600);
+
+  let container = new DOMRect(
+    basisRect.x + margin,
+    basisRect.y + margin,
+    basisRect.width - margin * 2,
+    basisRect.height - margin * 2,
+  );
+
+  let rectCenter = new Vector(
+    container.left + container.width / 2,
+    container.top + container.height / 2,
+  );
+
+  const greenSegw: TweenedSegment = $derived({
+    from: new Tween<Vector>(rectCenter.clone(), { duration: 200 }),
+    to: new Tween<Vector>(rectCenter.clone(), { duration: 200 }),
+  });
+
+  let boids: Boid[] = $state(
+    new Array(28).fill(null).map<Boid>((_, id) => {
+      let rad = Math.floor(Math.random() * 10 + 5);
+
+      return {
+        id,
+        pos: new Tween<Vector>(rectCenter.clone()),
+        rad,
+        speed: 1,
+        to: rectCenter.clone(),
+        done: false,
+        path: [],
+      };
+    }),
+  );
+
+  async function organize(): Promise<void> {
+    // Promise.all(boids.map((b) => b.pos.set(rectCenter, { duration: 0 })));
+
+    boids = shuffle(boids);
+
+    boids.forEach(async (boid, i, f) => {
+      const pos: Vector = boid.pos.current;
+      const gp = new GridPath(
+        {
+          ...boid,
+          pos,
+        },
+        container,
+        5,
+      );
+      boid.path = gp.create(2, i);
+
+      for (const m of boid.path) {
+        // greenSegw.from.set(boid.pos.current);
+        // greenSegw.to.set(m.to);
+        await boid.pos.set(m.to, {
+          duration: m.duration,
+        });
+      }
+    });
+  }
+
+  async function advance(): Promise<void> {
+    Promise.all(boids.map((b) => b.pos.set(rectCenter, { duration: 0 })));
+
+    boids.forEach(async (boid, i, f) => {
+      const pos: Vector = boid.pos.current;
+      const p = new BouncePath(
+        {
+          ...boid,
+          pos,
+        },
+        container,
+      );
+      boid.path = p.create(4);
+
+      // boid.path = getBouncyPathForCircle(
+      //   container,
+      //   Math.random() * 5000 + 1000,
+      //   3,
+      //   boid.rad,
+      // );
+      // const toBottom: Motion = {
+      //   delay: 0,
+      //   duration: 3000,
+      //   to: new Vector(boid.path.at(-1)!.to.x, container.bottom - boid.rad),
+      // };
+      // boid.path.push(toBottom);
+      for (const m of boid.path) {
+        await boid.pos.set(m.to, {
+          delay: m.delay,
+          duration: m.duration,
+        });
+      }
+      boid.done = true;
+    });
+  }
+
+  function* infiniteRandomIntegerFeed(): Generator<
+    number | Promise<unknown>,
+    void,
+    unknown
+  > {
+    while (true) {
+      const randomInteger = Math.floor(Math.random() * Number.MAX_SAFE_INTEGER); // Generates a random integer
+      yield randomInteger;
+      yield new Promise((resolve) => setTimeout(resolve, 5000));
     }
-    // const b = Array(15).map<Boid>((a, b) => {
-    //   return { pos: { x: b * 20, y: b * 20 } };
-    // });
-    // console.log(b);
-    // boids = b;
   }
 
-  // const canvasSize = fitToAspectRatio(
-  //   new Vector2(document.body.clientWidth, document.body.clientHeight - 100),
-  //   aspect
-  // );
+  async function consumeFeed() {
+    const feed = infiniteRandomIntegerFeed();
+
+    while (true) {
+      const value = feed.next().value;
+      if (value instanceof Promise) {
+        await value;
+        continue;
+      }
+      console.log(value);
+    }
+  }
+  // consumeFeed();
+
+  function* finiteRandomIntegerGenerator() {
+    let count = 0;
+    while (count < 5) {
+      yield Math.floor(Math.random() * Number.MAX_SAFE_INTEGER); // Yield a random integer
+      count++;
+    }
+  }
 </script>
 
 <svelte:head>
   <title>artboard - boids</title>
 </svelte:head>
 
-<div class="main">
-  <div class="board">
-    <svg viewBox="0 0 100 100">
-      {#each boids as b}
-        <circle cx={b.pos.x} cy={b.pos.y} r="2" />
-      {/each}
-    </svg>
+<div class="top">
+  <svg width="800" height="600">
+    <rect
+      x={container.x}
+      y={container.y}
+      width={container.width}
+      height={container.height}
+      fill="none"
+      stroke="blue"
+      stroke-width="1"
+    >
+    </rect>
+    {#each boids as b}
+      {@const { pos, rad } = b}
+      {@const pathEnd = b.path.at(-1)}
+      <circle cx={pos.current.x} cy={pos.current.y} r={rad} />
+      <text x={pos.current.x + rad + 2} y={pos.current.y} class="small">
+        ({pos.current.x.toFixed(3)}, {pos.current.y.toFixed(2)})
+      </text>
+      <text x={pos.current.x + rad + 2} y={pos.current.y + 13} class="small">
+        ({pathEnd?.duration})
+      </text>
+    {/each}
+    <line
+      x1={greenSegw.from.current.x}
+      y1={greenSegw.from.current.y}
+      x2={greenSegw.to.current.x}
+      y2={greenSegw.to.current.y}
+      stroke="green"
+      stroke-width="1"
+    />
+  </svg>
+  <div class="table">
+    {#each boids as b}
+      <div class:done={b.done} class="small">
+        {b.pos.current.x}
+      </div>
+      <div class:done={b.done} class="small">
+        {b.pos.current.y}
+      </div>
+    {/each}
   </div>
-  <nav class="button-bar">
-    <button onclick={randomOne}>Random</button>
-  </nav>
 </div>
+<nav class="button-bar">
+  <button onclick={advance}>Bounce</button>
+  <button onclick={organize}>Organize</button>
+  <label>
+    <input type="checkbox" />
+    Extra Fun
+  </label>
+</nav>
+
+<!-- <pre class="small">{JSON.stringify(boids, undefined, 2)}</pre> -->
 
 <style>
-  .board {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1em;
+  /* 
+
+  * {
+    outline: thin solid lime;
   }
-  .board svg {
+
+ */
+
+  .button-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2em;
+  }
+
+  .top {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    gap: 1em;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .table {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    width: 20ch;
+  }
+
+  svg {
     display: block;
     border: thin solid silver;
-    height: 400px;
-    width: 600px;
+    width: 800px;
+    height: 600px;
   }
+
+  .small {
+    font: italic 9px sans-serif;
+  }
+
   @media screen and (min-width: 576px) {
     /* landscape phones */
   }

@@ -10,6 +10,8 @@ const config = {
     alias: {
       "@libraries/radu": "../../libraries/radu/src",
       "@libraries/graphics": "../../libraries/graphics/src",
+      "@artboard/graphics": "../../libraries/graphics/src",
+      "@artboard/vector": "../../libraries/vector/src",
     },
   },
 };
