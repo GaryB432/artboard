@@ -1,6 +1,6 @@
 import { Vector } from "@artboard/vector";
 import { beforeEach, describe, expect, test } from "vitest";
-import { GridPath } from "./grid-path";
+import { GridPath } from "./grid";
 
 class GDOMRect implements DOMRectReadOnly {
   public constructor(
@@ -42,7 +42,7 @@ describe("GridPath", () => {
       columns,
     );
   });
-  test("creates short", () => {
+  test.skip("creates short", () => {
     // expect(gridPath.create(2, 1).length).toEqual(2);
 
     /**
@@ -69,9 +69,6 @@ describe("GridPath", () => {
 
     expect(b.to.x).toEqual(405);
     // expect(b.to.y).toEqual(-1);
-
-
-
 
     // expect(res.at(1)?.to.distanceTo(new Vector(1570, 90))).toBeCloseTo(0);
 

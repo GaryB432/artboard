@@ -1,6 +1,7 @@
 <script lang="ts">
-  import { GridPath } from "$lib/boundary/grid-path";
-  import { getBouncyPathForCircle, type Motion } from "$lib/boundary/motion";
+  import { getBouncyPathForCircle, type Motion } from "$lib/motion/motion";
+  import { GridPath } from "$lib/motion/paths";
+  import { shuffle } from "$lib/utils/misc";
   import { Vector } from "@artboard/vector";
   import { Tween } from "svelte/motion";
 
@@ -42,8 +43,8 @@
   });
 
   let boids: Boid[] = $state(
-    new Array(29).fill(null).map<Boid>((_, id) => {
-      let rad = Math.random() * 8 + 5;
+    new Array(28).fill(null).map<Boid>((_, id) => {
+      let rad = Math.floor(Math.random() * 10 + 5);
 
       return {
         id,
@@ -62,24 +63,44 @@
   async function organize(): Promise<void> {
     // Promise.all(boids.map((b) => b.pos.set(rectCenter, { duration: 0 })));
 
+    boids.forEach((b) => {
+      const ll = b.path.at(-1) ?? "tbd";
+
+      console.log(JSON.stringify({ current: b.pos.current.y, ll }));
+    });
+
+    boids = shuffle(boids);
+
     boids.forEach(async (boid, i, f) => {
+      const savingThePosDammit = boid.pos.current;
+      const lastPathEnd = boid.path.at(-1) ?? { to: boid.pos.current };
+
+      if (lastPathEnd.to!.y !== boid.pos.current.y) {
+        console.error(
+          JSON.stringify({
+            lp: lastPathEnd?.to,
+            ff: boid.pos.current,
+            ll: boid.path.length,
+          }),
+        );
+        throw new Error("wtf");
+      }
+      const pos: Vector = boid.pos.current;
+      console.log(pos);
       const gp = new GridPath(
         {
           ...boid,
-          pos: new Vector(boid.pos.current.x, boid.pos.current.y),
+          pos,
         },
         container,
         5,
       );
       boid.path = gp.create(2, i);
-      // boid.path = [toCenter];
-      console.log($state.snapshot(boid.path))
 
       for (const m of boid.path) {
         await boid.pos.set(m.to, {
           duration: m.duration,
         });
-        console.log('wait dammit')
       }
     });
   }
@@ -150,12 +171,7 @@
 </svelte:head>
 
 <div class="top">
-  <svg
-    width="800"
-    height="600"
-    style="width: 800px; height: 600px"
-    viewBox="0 0 800 600"
-  >
+  <svg width="800" height="600">
     <rect
       x={container.x}
       y={container.y}
@@ -190,6 +206,9 @@
     {#each boids as b}
       <div class:done={b.done} class="small">
         {b.pos.current.x}
+      </div>
+      <div class:done={b.done} class="small">
+        {b.pos.current.y}
       </div>
     {/each}
   </div>
@@ -230,6 +249,9 @@
   }
 
   .table {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1em;
     width: 10em;
   }
 
