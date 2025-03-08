@@ -1,6 +1,6 @@
 import type { EdgeName, Motion } from "$lib/motion/motion";
 import { getRandomElementExcluding } from "$lib/utils/misc";
-import { Vector } from "@artboard/vector";
+import { type Vector } from "@artboard/vector";
 import { makeRectangle } from "@libraries/graphics";
 import { getRandomPointOnLine } from "@libraries/graphics/boundary/core";
 
