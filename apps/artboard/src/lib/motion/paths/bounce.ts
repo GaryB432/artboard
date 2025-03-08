@@ -1,5 +1,3 @@
-
-
 export class Bounce {
   public constructor(private counter: number) {}
   public add(a: number): number {
@@ -10,4 +8,3 @@ export class Bounce {
     return `Bounce says: hello to ${name}`;
   }
 }
-

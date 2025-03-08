@@ -1,5 +1,3 @@
-
-
 export class Scatter {
   public constructor(private counter: number) {}
   public add(a: number): number {
@@ -10,4 +8,3 @@ export class Scatter {
     return `Scatter says: hello to ${name}`;
   }
 }
-
