@@ -1,6 +1,7 @@
 <script lang="ts">
-  import { getBouncyPathForCircle, type Motion } from "$lib/motion/motion";
-  import { GridPath } from "$lib/motion/paths";
+  import { type Motion } from "$lib/motion/motion";
+  // import { getBouncyPathForCircle } from "$lib/motion/paths/bounce";
+  import { GridPath, BouncePath } from "$lib/motion/paths";
   import { shuffle } from "$lib/utils/misc";
   import { Vector } from "@artboard/vector";
   import { Tween } from "svelte/motion";
@@ -54,8 +55,6 @@
         to: rectCenter.clone(),
         done: false,
         path: [],
-        // pathLength: 10,
-        // pathDuration: 1000,
       };
     }),
   );
@@ -63,30 +62,10 @@
   async function organize(): Promise<void> {
     // Promise.all(boids.map((b) => b.pos.set(rectCenter, { duration: 0 })));
 
-    boids.forEach((b) => {
-      const ll = b.path.at(-1) ?? "tbd";
-
-      console.log(JSON.stringify({ current: b.pos.current.y, ll }));
-    });
-
     boids = shuffle(boids);
 
     boids.forEach(async (boid, i, f) => {
-      const savingThePosDammit = boid.pos.current;
-      const lastPathEnd = boid.path.at(-1) ?? { to: boid.pos.current };
-
-      if (lastPathEnd.to!.y !== boid.pos.current.y) {
-        console.error(
-          JSON.stringify({
-            lp: lastPathEnd?.to,
-            ff: boid.pos.current,
-            ll: boid.path.length,
-          }),
-        );
-        throw new Error("wtf");
-      }
       const pos: Vector = boid.pos.current;
-      console.log(pos);
       const gp = new GridPath(
         {
           ...boid,
@@ -98,6 +77,8 @@
       boid.path = gp.create(2, i);
 
       for (const m of boid.path) {
+        // greenSegw.from.set(boid.pos.current);
+        // greenSegw.to.set(m.to);
         await boid.pos.set(m.to, {
           duration: m.duration,
         });
@@ -109,18 +90,28 @@
     Promise.all(boids.map((b) => b.pos.set(rectCenter, { duration: 0 })));
 
     boids.forEach(async (boid, i, f) => {
-      boid.path = getBouncyPathForCircle(
+      const pos: Vector = boid.pos.current;
+      const p = new BouncePath(
+        {
+          ...boid,
+          pos,
+        },
         container,
-        Math.random() * 5000 + 1000,
-        3,
-        boid.rad,
       );
-      const toBottom: Motion = {
-        delay: 0,
-        duration: 3000,
-        to: new Vector(boid.path.at(-1)!.to.x, container.bottom - boid.rad),
-      };
-      boid.path.push(toBottom);
+      boid.path = p.create(4);
+
+      // boid.path = getBouncyPathForCircle(
+      //   container,
+      //   Math.random() * 5000 + 1000,
+      //   3,
+      //   boid.rad,
+      // );
+      // const toBottom: Motion = {
+      //   delay: 0,
+      //   duration: 3000,
+      //   to: new Vector(boid.path.at(-1)!.to.x, container.bottom - boid.rad),
+      // };
+      // boid.path.push(toBottom);
       for (const m of boid.path) {
         await boid.pos.set(m.to, {
           delay: m.delay,
@@ -221,7 +212,8 @@
     Extra Fun
   </label>
 </nav>
-<pre class="small">{JSON.stringify(boids, undefined, 2)}</pre>
+
+<!-- <pre class="small">{JSON.stringify(boids, undefined, 2)}</pre> -->
 
 <style>
   /* 
@@ -251,8 +243,7 @@
   .table {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 1em;
-    width: 10em;
+    width: 20ch;
   }
 
   svg {

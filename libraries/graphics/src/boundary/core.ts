@@ -218,3 +218,13 @@ export function checkLineIntersection(
   // if line1 and line2 are segments, they intersect if both of the above are true
   return result;
 }
+
+export function getRandomPointOnLine(segment: {
+  from: Vector;
+  to: Vector;
+}): Vector {
+  const t = Math.random();
+  const x = segment.from.x + t * (segment.to.x - segment.from.x);
+  const y = segment.from.y + t * (segment.to.y - segment.from.y);
+  return new Vector(x, y);
+}
