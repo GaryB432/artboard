@@ -78,8 +78,10 @@
     boids = shuffle(boids);
     const s = maxRadius + 5;
     boids.forEach((boid, i, f) => {
-      const to = new Vector((i + 1) * s, (i + 1) * s).add(rectPos);
+      // const to = new Vector((i + 1) * s, (i + 1) * s).add(rectPos); // diagonal
       // const path: Motion = { to, duration: 500, delay: i * 50 };
+      const v = new Vector((i + 1) * 20, Math.sin(i) * 20 + rectCenter.y);
+      const to = v.add(rectPos);
       boid.done = false;
       boid.pos
         .set(to, { duration: 500, delay: i * 50 })
