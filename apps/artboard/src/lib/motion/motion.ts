@@ -6,5 +6,6 @@ export type EdgeName = keyof Rectangle;
 export type Motion = {
   delay: number;
   duration: number;
+  easing: (t: number) => number;
   to: Vector;
 };

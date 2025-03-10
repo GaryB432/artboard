@@ -1,4 +1,5 @@
 import { Vector } from "@artboard/vector";
+import { bounceOut, linear } from "svelte/easing";
 import type { Motion } from "../motion";
 
 const boxSize = 75;
@@ -20,7 +21,7 @@ export class GridPath {
   ) {
     this.columns = columns;
     this.gridCorner = new Vector(
-      container.left + (container.width - columns * boxSize) / 2,
+      container.left + (container.width - (columns - 1) * boxSize) / 2,
       container.top + boxSize,
     );
     this.from = item.pos.sub(this.gridCorner);
@@ -33,19 +34,21 @@ export class GridPath {
     const r = Math.floor(ndx / this.columns);
     const c = ndx % this.columns;
 
-    const totalDuration = 1000;
+    const totalDuration = 1500;
     const brake = 0.6;
 
-    const b = [
+    const b: Motion[] = [
       {
         to: new Vector(boxSize * c, this.from.y),
         duration: totalDuration * brake,
         delay: 0,
+        easing: linear,
       },
       {
         to: new Vector(boxSize * c, boxSize * r),
         duration: totalDuration * (1.0 - brake),
         delay: totalDuration * brake,
+        easing: bounceOut,
       },
     ];
     const shifted = b.map((m) => {
