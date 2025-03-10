@@ -307,7 +307,7 @@
 
   svg {
     display: block;
-    border: thin solid var(--blue);
+    border: thin solid black;
     width: 400px;
     height: 300px;
   }
