@@ -23,16 +23,18 @@
 
   const margin = 10;
 
+  let boids: Boid[] = $state([]);
+
   let basis: SVGSVGElement | null = $state(null);
 
-  // let basisRect = $derived(basis ? )
+  // const basisRect = $derived(basis ? )
 
-  let basisRect = $derived.by(() => {
+  const basisRect = $derived.by(() => {
     const r = basis ? basis.getBoundingClientRect() : new DOMRect(0, 0, 0, 0);
     return new DOMRect(0, 0, r.width, r.height);
   });
 
-  let container = $derived(
+  const container = $derived(
     new DOMRect(
       basisRect.x + margin,
       basisRect.y + margin,
@@ -41,19 +43,17 @@
     ),
   );
 
-  let rectPos = $derived(new Vector(container.left, container.top));
-  let rectSize = $derived(new Vector(container.width, container.height));
+  const rectPos = $derived(new Vector(container.left, container.top));
+  const rectSize = $derived(new Vector(container.width, container.height));
 
-  let rectCenter = $derived(rectPos.add(rectSize.scale(0.5)));
+  const rectCenter = $derived(rectPos.add(rectSize.scale(0.5)));
 
   const greenSegw: TweenedSegment = $derived({
     from: new Tween<Vector>(rectCenter.clone()),
     to: new Tween<Vector>(rectCenter.clone()),
   });
 
-  let boids: Boid[] = $state([]);
-
-  let maxRadius = $derived(
+  const maxRadius = $derived(
     boids.reduce((a, b) => {
       return Math.max(a, b.rad);
     }, 0),
@@ -61,7 +61,7 @@
 
   onMount(() => {
     boids = new Array(30).fill(null).map<Boid>((_, id) => {
-      let rad = Math.floor(Math.random() * 10 + 5);
+      const rad = Math.floor(Math.random() * 10 + 5);
 
       return {
         id,
