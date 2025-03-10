@@ -1,9 +1,9 @@
 <script lang="ts">
   import { type Motion } from "$lib/motion/motion";
-  // import { getBouncyPathForCircle } from "$lib/motion/paths/bounce";
-  import { GridPath, BouncePath } from "$lib/motion/paths";
+  import { BouncePath, GridPath } from "$lib/motion/paths";
   import { shuffle } from "$lib/utils/misc";
   import { Vector } from "@artboard/vector";
+  import { quintIn } from "svelte/easing";
   import { Tween } from "svelte/motion";
 
   type TweenedSegment = {
@@ -16,13 +16,11 @@
     done: boolean;
     pos: Tween<Vector>;
     rad: number;
-    speed: number;
     to: Vector;
     path: Motion[];
   }
 
   const margin = 10;
-  const maxSpeed = 1000;
 
   const basisRect = new DOMRect(0, 0, 800, 600);
 
@@ -33,31 +31,49 @@
     basisRect.height - margin * 2,
   );
 
-  let rectCenter = new Vector(
-    container.left + container.width / 2,
-    container.top + container.height / 2,
-  );
+  const rectPos = new Vector(container.left, container.top);
+  const rectSize = new Vector(container.width, container.height);
+
+  const rectCenter = rectPos.add(rectSize.scale(0.5));
 
   const greenSegw: TweenedSegment = $derived({
-    from: new Tween<Vector>(rectCenter.clone(), { duration: 200 }),
-    to: new Tween<Vector>(rectCenter.clone(), { duration: 200 }),
+    from: new Tween<Vector>(rectCenter.clone()),
+    to: new Tween<Vector>(rectCenter.clone()),
   });
 
   let boids: Boid[] = $state(
-    new Array(28).fill(null).map<Boid>((_, id) => {
+    new Array(30).fill(null).map<Boid>((_, id) => {
       let rad = Math.floor(Math.random() * 10 + 5);
 
       return {
         id,
         pos: new Tween<Vector>(rectCenter.clone()),
         rad,
-        speed: 1,
         to: rectCenter.clone(),
-        done: false,
+        done: true,
         path: [],
       };
     }),
   );
+
+  let maxRadius = $derived(
+    boids.reduce((a, b) => {
+      return Math.max(a, b.rad);
+    }, 0),
+  );
+
+  async function scatter(): Promise<void> {
+    boids = shuffle(boids);
+    const s = maxRadius + 5;
+    boids.forEach((boid, i, f) => {
+      const to = new Vector((i + 1) * s, (i + 1) * s).add(rectPos);
+      // const path: Motion = { to, duration: 500, delay: i * 50 };
+      boid.done = false;
+      boid.pos
+        .set(to, { duration: 500, delay: i * 50 })
+        .then(() => (boid.done = true));
+    });
+  }
 
   async function organize(): Promise<void> {
     // Promise.all(boids.map((b) => b.pos.set(rectCenter, { duration: 0 })));
@@ -65,6 +81,7 @@
     boids = shuffle(boids);
 
     boids.forEach(async (boid, i, f) => {
+      boid.done = false;
       const pos: Vector = boid.pos.current;
       const gp = new GridPath(
         {
@@ -81,15 +98,31 @@
         // greenSegw.to.set(m.to);
         await boid.pos.set(m.to, {
           duration: m.duration,
+          easing: m.easing,
         });
       }
+      boid.done = true;
     });
   }
 
-  async function advance(): Promise<void> {
-    Promise.all(boids.map((b) => b.pos.set(rectCenter, { duration: 0 })));
+  async function bounce(): Promise<void> {
+    await Promise.all(
+      boids.map((b, i) => {
+        b.done = false;
+        return b.pos
+          .set(rectCenter, {
+            duration: 500,
+            delay: i * 50,
+            easing: quintIn,
+          })
+          .then(() => {
+            b.done = true;
+          });
+      }),
+    );
 
     boids.forEach(async (boid, i, f) => {
+      boid.done = false;
       const pos: Vector = boid.pos.current;
       const p = new BouncePath(
         {
@@ -98,7 +131,7 @@
         },
         container,
       );
-      boid.path = p.create(4);
+      boid.path = p.create(5);
 
       // boid.path = getBouncyPathForCircle(
       //   container,
@@ -116,6 +149,7 @@
         await boid.pos.set(m.to, {
           delay: m.delay,
           duration: m.duration,
+          easing: m.easing,
         });
       }
       boid.done = true;
@@ -169,7 +203,7 @@
       width={container.width}
       height={container.height}
       fill="none"
-      stroke="blue"
+      stroke="silver"
       stroke-width="1"
     >
     </rect>
@@ -177,12 +211,14 @@
       {@const { pos, rad } = b}
       {@const pathEnd = b.path.at(-1)}
       <circle cx={pos.current.x} cy={pos.current.y} r={rad} />
+      <!-- 
       <text x={pos.current.x + rad + 2} y={pos.current.y} class="small">
         ({pos.current.x.toFixed(3)}, {pos.current.y.toFixed(2)})
       </text>
       <text x={pos.current.x + rad + 2} y={pos.current.y + 13} class="small">
         ({pathEnd?.duration})
       </text>
+ -->
     {/each}
     <line
       x1={greenSegw.from.current.x}
@@ -205,7 +241,8 @@
   </div>
 </div>
 <nav class="button-bar">
-  <button onclick={advance}>Bounce</button>
+  <button onclick={bounce}>Bounce</button>
+  <button onclick={scatter}>Scatter</button>
   <button onclick={organize}>Organize</button>
   <label>
     <input type="checkbox" />
@@ -246,15 +283,29 @@
     width: 20ch;
   }
 
+  .table div {
+    background-color: var(--blue);
+    color: white;
+  }
+
+  .table div.done {
+    background-color: unset;
+    color: unset;
+  }
+
   svg {
     display: block;
-    border: thin solid silver;
+    border: thin solid var(--blue);
     width: 800px;
     height: 600px;
   }
 
+  circle {
+    fill: black;
+  }
+
   .small {
-    font: italic 9px sans-serif;
+    font: 7px sans-serif;
   }
 
   @media screen and (min-width: 576px) {

@@ -33,6 +33,7 @@ function getBouncyPathForCircle(
       delay: 0,
       to,
       duration: duration / plenth,
+      easing: (t: number) => t,
     };
   });
 }
