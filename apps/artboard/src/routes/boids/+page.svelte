@@ -3,6 +3,7 @@
   import { BouncePath, GridPath } from "$lib/motion/paths";
   import { shuffle } from "$lib/utils/misc";
   import { Vector } from "@artboard/vector";
+  import { onMount } from "svelte";
   import { quintIn } from "svelte/easing";
   import { Tween } from "svelte/motion";
 
@@ -22,28 +23,45 @@
 
   const margin = 10;
 
-  const basisRect = new DOMRect(0, 0, 800, 600);
+  let boids: Boid[] = $state([]);
 
-  let container = new DOMRect(
-    basisRect.x + margin,
-    basisRect.y + margin,
-    basisRect.width - margin * 2,
-    basisRect.height - margin * 2,
+  let basis: SVGSVGElement | null = $state(null);
+
+  // const basisRect = $derived(basis ? )
+
+  const basisRect = $derived.by(() => {
+    const r = basis ? basis.getBoundingClientRect() : new DOMRect(0, 0, 0, 0);
+    return new DOMRect(0, 0, r.width, r.height);
+  });
+
+  const container = $derived(
+    new DOMRect(
+      basisRect.x + margin,
+      basisRect.y + margin,
+      basisRect.width - margin * 2,
+      basisRect.height - margin * 2,
+    ),
   );
 
-  const rectPos = new Vector(container.left, container.top);
-  const rectSize = new Vector(container.width, container.height);
+  const rectPos = $derived(new Vector(container.left, container.top));
+  const rectSize = $derived(new Vector(container.width, container.height));
 
-  const rectCenter = rectPos.add(rectSize.scale(0.5));
+  const rectCenter = $derived(rectPos.add(rectSize.scale(0.5)));
 
   const greenSegw: TweenedSegment = $derived({
     from: new Tween<Vector>(rectCenter.clone()),
     to: new Tween<Vector>(rectCenter.clone()),
   });
 
-  let boids: Boid[] = $state(
-    new Array(30).fill(null).map<Boid>((_, id) => {
-      let rad = Math.floor(Math.random() * 10 + 5);
+  const maxRadius = $derived(
+    boids.reduce((a, b) => {
+      return Math.max(a, b.rad);
+    }, 0),
+  );
+
+  onMount(() => {
+    boids = new Array(30).fill(null).map<Boid>((_, id) => {
+      const rad = Math.floor(Math.random() * 10 + 5);
 
       return {
         id,
@@ -53,21 +71,17 @@
         done: true,
         path: [],
       };
-    }),
-  );
-
-  let maxRadius = $derived(
-    boids.reduce((a, b) => {
-      return Math.max(a, b.rad);
-    }, 0),
-  );
+    });
+  });
 
   async function scatter(): Promise<void> {
     boids = shuffle(boids);
     const s = maxRadius + 5;
     boids.forEach((boid, i, f) => {
-      const to = new Vector((i + 1) * s, (i + 1) * s).add(rectPos);
+      // const to = new Vector((i + 1) * s, (i + 1) * s).add(rectPos); // diagonal
       // const path: Motion = { to, duration: 500, delay: i * 50 };
+      const v = new Vector((i + 1) * 20, Math.sin(i) * 20 + rectCenter.y);
+      const to = v.add(rectPos);
       boid.done = false;
       boid.pos
         .set(to, { duration: 500, delay: i * 50 })
@@ -196,7 +210,7 @@
 </svelte:head>
 
 <div class="top">
-  <svg width="800" height="600">
+  <svg bind:this={basis} width="800" height="600">
     <rect
       x={container.x}
       y={container.y}
@@ -295,9 +309,9 @@
 
   svg {
     display: block;
-    border: thin solid var(--blue);
-    width: 800px;
-    height: 600px;
+    border: thin solid black;
+    width: 400px;
+    height: 300px;
   }
 
   circle {
@@ -315,7 +329,10 @@
     /* tablets */
   }
   @media screen and (min-width: 992px) {
-    /* desktops */
+    svg {
+      width: 800px;
+      height: 600px;
+    }
   }
   @media screen and (min-width: 1200px) {
     /* large desktops */
