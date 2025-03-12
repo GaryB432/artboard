@@ -2,7 +2,10 @@ import type { EdgeName, Motion } from "$lib/motion/motion";
 import { getRandomElementExcluding } from "$lib/utils/misc";
 import { type Vector } from "@artboard/vector";
 import { makeRectangle } from "@libraries/graphics";
-import { getRandomPointOnLine } from "@libraries/graphics/boundary/core";
+import {
+  getRandomPointOnLine,
+  scaleSegment,
+} from "@libraries/graphics/boundary/core";
 
 function getBouncyPathForCircle(
   container: DOMRect,
@@ -67,9 +70,14 @@ export class BouncePath {
     if (bounces.length > 1) {
       const lastMotions = bounces.slice(-2);
       const [a, b] = lastMotions;
+      const stop = 0.5;
+      const scaled = scaleSegment({ from: a.to, to: b.to }, stop);
 
-      b.to = a.to.add(b.to).scale(0.5);
-      b.duration *= 0.5;
+      b.to = scaled.to;
+      b.duration /= stop;
+
+      // b.to = a.to.add(b.to);
+      // b.duration *= 0.5;
     }
 
     // const dir =

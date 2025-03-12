@@ -6,6 +6,7 @@
   import { onMount } from "svelte";
   import { quintIn } from "svelte/easing";
   import { Tween } from "svelte/motion";
+  import { scale } from "svelte/transition";
 
   type TweenedSegment = {
     from: Tween<Vector>;
@@ -15,10 +16,10 @@
   interface Boid {
     id: number;
     done: boolean;
+    path: Motion[];
     pos: Tween<Vector>;
     rad: number;
     to: Vector;
-    path: Motion[];
   }
 
   const margin = 10;
@@ -26,6 +27,8 @@
   let boids: Boid[] = $state([]);
 
   let basis: SVGSVGElement | null = $state(null);
+
+  let selected: Vector | null = $state(null);
 
   // const basisRect = $derived(basis ? )
 
@@ -119,21 +122,29 @@
     });
   }
 
-  async function bounce(): Promise<void> {
+  async function gatherUp(): Promise<void> {
     await Promise.all(
-      boids.map((b, i) => {
+      boids.map(async (b, i) => {
         b.done = false;
-        return b.pos
-          .set(rectCenter, {
-            duration: 500,
-            delay: i * 50,
-            easing: quintIn,
-          })
-          .then(() => {
-            b.done = true;
-          });
+        return Promise.resolve<void>(
+          b.pos
+            .set(selected ? selected : rectCenter, {
+              duration: 200,
+              delay: i * 50,
+              easing: quintIn,
+            })
+            .then(() => {
+              b.done = true;
+            }),
+        );
       }),
     );
+  }
+
+  async function bounce(): Promise<void> {
+    await gatherUp();
+
+    selected = null;
 
     boids.forEach(async (boid, i, f) => {
       boid.done = false;
@@ -160,6 +171,8 @@
       // };
       // boid.path.push(toBottom);
       for (const m of boid.path) {
+        // greenSegw.from.set(greenSegw.to.current);
+        // greenSegw.to.set(m.to);
         await boid.pos.set(m.to, {
           delay: m.delay,
           duration: m.duration,
@@ -210,7 +223,19 @@
 </svelte:head>
 
 <div class="top">
-  <svg bind:this={basis} width="800" height="600">
+  <!-- svelte-ignore a11y_no_static_element_interactions -->
+  <!-- svelte-ignore a11y_click_events_have_key_events -->
+  <svg
+    bind:this={basis}
+    width="800"
+    height="600"
+    onclick={(e) => {
+      // const old = selected;
+      const mouseOffset = new Vector(e.offsetX, e.offsetY);
+      selected =
+        selected && selected.distanceTo(mouseOffset) < 10 ? null : mouseOffset;
+    }}
+  >
     <rect
       x={container.x}
       y={container.y}
@@ -242,6 +267,19 @@
       stroke="green"
       stroke-width="1"
     />
+
+    {#if selected}
+      <path
+        in:scale
+        out:scale
+        id="cursor"
+        fill="currentColor"
+        transform="translate({selected.x}, {selected.y})"
+        d="M -9 -1 C -8.5 -5 -5 -8.5 -1 -9 L -1 -11 L 1 -11 L 1 -9 C 5 -8.5 8.5 -5 9 -1 L 11 -1 L 11 1 L 9 1 C 8.5 5 5 8.5 1 9 L 1 11 L -1 11 L -1 9 C -5 8.5 -8.5 5 -9 1 L -11 1 L -11 -1 L -9 -1 Z
+           M -7 -1 L -5 -1 L -5 1 L -7 1 C -6.5 4 -4 6.5 -1 7 L -1 5 L 1 5 L 1 7 C 4 6.5 6.5 4 7 1 L 5 1 L 5 -1 L 7 -1 C 6.5 -4 4 -6.5 1 -7 L 1 -5 L -1 -5 L -1 -7 C -4 -6.5 -6.5 -4 -7 -1 Z
+           M 0 2 C -1 2 -2 1 -2 0 C -2 -1 -1 -2 0 -2 C 1 -2 2 -1 2 0 C 2 1 1 2 0 2 Z"
+      />
+    {/if}
   </svg>
   <div class="table">
     {#each boids as b}
@@ -258,10 +296,6 @@
   <button onclick={bounce}>Bounce</button>
   <button onclick={scatter}>Scatter</button>
   <button onclick={organize}>Organize</button>
-  <label>
-    <input type="checkbox" />
-    Extra Fun
-  </label>
 </nav>
 
 <!-- <pre class="small">{JSON.stringify(boids, undefined, 2)}</pre> -->
@@ -320,6 +354,10 @@
 
   .small {
     font: 7px sans-serif;
+  }
+
+  #cursor {
+    color: var(--blue);
   }
 
   @media screen and (min-width: 576px) {

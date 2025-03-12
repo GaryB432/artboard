@@ -228,3 +228,16 @@ export function getRandomPointOnLine(segment: {
   const y = segment.from.y + t * (segment.to.y - segment.from.y);
   return new Vector(x, y);
 }
+
+export function scaleSegment(segment: Segment, percentage: number): Segment {
+  if (percentage < 0 || percentage > 1) {
+    throw new RangeError("Percentage must be between 0 and 1.");
+  }
+
+  const { from, to } = segment;
+
+  const directionVector = Vector.fromPoints(from, to);
+  const scaledVector = directionVector.scale(percentage);
+
+  return { from, to: from.add(scaledVector) };
+}

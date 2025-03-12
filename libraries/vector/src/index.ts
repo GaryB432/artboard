@@ -48,4 +48,8 @@ export class Vector {
   dot(v: Vector): number {
     return this.x * v.x + this.y * v.y;
   }
+
+  static fromPoints(p1: Vector, p2: Vector): Vector {
+    return new Vector(p2.x - p1.x, p2.y - p1.y);
+  }
 }
