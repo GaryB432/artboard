@@ -63,7 +63,7 @@
   );
 
   onMount(() => {
-    boids = new Array(30).fill(null).map<Boid>((_, id) => {
+    boids = new Array(50).fill(null).map<Boid>((_, id) => {
       const rad = Math.floor(Math.random() * 10 + 5);
 
       return {
@@ -79,12 +79,13 @@
 
   async function scatter(): Promise<void> {
     boids = shuffle(boids);
-    const s = maxRadius + 5;
-    boids.forEach((boid, i, f) => {
-      // const to = new Vector((i + 1) * s, (i + 1) * s).add(rectPos); // diagonal
-      // const path: Motion = { to, duration: 500, delay: i * 50 };
-      const v = new Vector((i + 1) * 20, Math.sin(i) * 20 + rectCenter.y);
-      const to = v.add(rectPos);
+    const inc = (2 * Math.PI) / boids.length;
+    const r = Math.min(container.width, container.height) * 0.4;
+    boids.forEach((boid, i) => {
+      const angle = i * inc;
+      const to = new Vector(Math.cos(angle) * r, Math.sin(angle) * r)
+        .add(rectCenter)
+        .add(rectPos);
       boid.done = false;
       boid.pos
         .set(to, { duration: 500, delay: i * 50 })
@@ -106,7 +107,7 @@
           pos,
         },
         container,
-        5,
+        8,
       );
       boid.path = gp.create(2, i);
 
