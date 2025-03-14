@@ -51,7 +51,7 @@ template.innerHTML = `<style>
   }
   </style>
   <button>
-  <svg viewbox="0 0 36 36">
+  <svg height="36" width="36">
     <path>
       <animate></animate>
     </path>
