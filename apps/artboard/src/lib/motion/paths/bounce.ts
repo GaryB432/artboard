@@ -70,7 +70,7 @@ export class BouncePath {
     if (bounces.length > 1) {
       const lastMotions = bounces.slice(-2);
       const [a, b] = lastMotions;
-      const stop = 0.5;
+      const stop = 0.4;
       const scaled = scaleSegment({ from: a.to, to: b.to }, stop);
 
       b.to = scaled.to;
