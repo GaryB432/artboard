@@ -57,7 +57,7 @@
 </script>
 
 <div class="container">
-  <svg width="1920" height="1080" bind:this={svg}>
+  <svg width="1920" height="1080" viewBox="0 0 1920 1080" bind:this={svg}>
     <circle cx="960" cy="220" r="150" stroke="black" stroke-width="1" fill="red"
     ></circle>
     <circle

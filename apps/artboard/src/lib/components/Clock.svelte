@@ -75,8 +75,7 @@
         version="1.1"
         xmlns="http://www.w3.org/2000/svg"
         xmlns:xlink="http://www.w3.org/1999/xlink"
-        height="46"
-        width="46"
+        viewBox="0 0 46 46"
         xml:space="preserve"
       >
         <g>

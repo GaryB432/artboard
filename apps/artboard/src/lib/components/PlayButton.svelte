@@ -14,7 +14,7 @@
 </script>
 
 <button onclick={togglePlaying} aria-label="Play or Pause">
-  <svg height="36" width="36">
+  <svg viewBox="0 0 36 36">
     <path d={playing ? svgPaths.pause : svgPaths.play} />
   </svg>
 </button>
