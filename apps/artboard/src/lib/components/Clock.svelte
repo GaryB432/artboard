@@ -75,7 +75,6 @@
         height="46"
         width="46"
         viewBox="0 0 46 46"
-        xml:space="preserve"
       >
         <g>
           <path

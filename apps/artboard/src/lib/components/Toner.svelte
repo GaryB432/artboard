@@ -19,7 +19,6 @@
       y="0px"
       viewBox="0 0 46.004 46.004"
       style="enable-background:new 0 0 46.004 46.004;"
-      xml:space="preserve"
     >
       <g>
         <path
