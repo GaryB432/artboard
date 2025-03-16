@@ -79,6 +79,7 @@
 
   async function scatter(): Promise<void> {
     boids = shuffle(boids);
+    const overallDuration = 3000;
     const inc = (2 * Math.PI) / boids.length;
     const r = Math.min(container.width, container.height) * 0.4;
     boids.forEach((boid, i) => {
@@ -87,9 +88,12 @@
         .add(rectCenter)
         .add(rectPos);
       boid.done = false;
+      const delay = i * (overallDuration / boids.length);
       boid.pos
-        .set(to, { duration: 500, delay: i * 50 })
-        .then(() => (boid.done = true));
+        .set(to, { duration: overallDuration - delay, delay })
+        .then(() => {
+          boid.done = true;
+        });
     });
   }
 
